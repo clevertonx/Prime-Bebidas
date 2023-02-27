@@ -14,10 +14,12 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import br.com.prime.prime.models.Usuario;
 import br.com.prime.prime.repository.UsuarioRepository;
 
+@RestController
 @RequestMapping(path = "/usuario")
 public class UsuarioController {
 
@@ -28,7 +30,7 @@ public class UsuarioController {
     public ResponseEntity<List<Usuario>> buscarTodos() {
         Iterable<Usuario> iterable = usuarioRepository.findAll();
         List<Usuario> usuarios = new ArrayList<>();
-        iterable.forEach(null);
+        iterable.forEach(usuarios::add);
         return ResponseEntity.ok().body(usuarios);
     }
 
