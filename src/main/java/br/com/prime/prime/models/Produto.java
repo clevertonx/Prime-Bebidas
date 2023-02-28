@@ -37,6 +37,6 @@ public class Produto {
         if (preço < 1 || preço > 10000) {
             throw new PreçoInvalidoException();
         }
-    }
+    } 
 
 }

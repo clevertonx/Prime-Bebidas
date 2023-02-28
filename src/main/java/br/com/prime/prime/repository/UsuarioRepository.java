@@ -6,8 +6,7 @@ import org.springframework.data.repository.CrudRepository;
 
 import br.com.prime.prime.models.Usuario;
 
-public interface UsuarioRepository extends
-        CrudRepository<Usuario, Long> {
+public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
     public List<Usuario> findByEmailContainingIgnoreCase(String email);
 
     public List<Usuario> findByCnpjContaining(String cnpj);
