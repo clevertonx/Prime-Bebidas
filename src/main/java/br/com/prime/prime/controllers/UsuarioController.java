@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.prime.prime.dto.UsuarioRequestDTO;
 import br.com.prime.prime.models.Usuario;
 import br.com.prime.prime.repository.UsuarioRepository;
 
@@ -40,9 +41,9 @@ public class UsuarioController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Usuario> cadastrar(@RequestBody Usuario usuario) {
-        Usuario usuarioCadastrado = usuarioRepository.save(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioCadastrado);
+    public ResponseEntity<Void> cadastrar(@RequestBody UsuarioRequestDTO usuarioDto) {
+        usuarioRepository.save(usuarioDto.toUsuario());
+        return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
