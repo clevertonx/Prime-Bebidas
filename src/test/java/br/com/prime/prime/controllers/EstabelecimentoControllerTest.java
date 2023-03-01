@@ -60,6 +60,21 @@ public class EstabelecimentoControllerTest {
     }
 
     @Test
+    public void deve_buscar_os_estabelecimentos_cadastrados_pela_cidade() throws Exception {
+        String cidade = "Corumba";
+        ArrayList<Estabelecimento> estabelecimentos = new ArrayList<Estabelecimento>();
+        estabelecimentos.add(new EstabelecimentoBuilder().construir());
+        estabelecimentos.add(new EstabelecimentoBuilder().comCidade(cidade).construir());
+
+        estabelecimentoRepository.saveAll(estabelecimentos);
+
+        this.mockMvc
+                .perform(get("/estabelecimento"))
+                .andExpect(status().isOk())
+                .andExpect(content().string(containsString(cidade)));
+    }
+
+    @Test
     public void deve_remover_um_estabelecimento_pelo_id() throws Exception {
         String nome = "Assai";
         ArrayList<Estabelecimento> estabelecimentos = new ArrayList<Estabelecimento>();
