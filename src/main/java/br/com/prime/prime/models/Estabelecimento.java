@@ -7,7 +7,9 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
+@Accessors(chain = true)
 @Entity
 @Setter
 @Getter

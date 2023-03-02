@@ -16,6 +16,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.prime.prime.dto.EstabelecimentoRequestDTO;
 import br.com.prime.prime.models.Estabelecimento;
 import br.com.prime.prime.repository.EstabelecimentoRepository;
 
@@ -40,8 +41,8 @@ public class EstabelecimentoController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Estabelecimento> cadastrar(@RequestBody Estabelecimento estabelecimento) {
-        estabelecimentoRepository.save(estabelecimento);
+    public ResponseEntity<EstabelecimentoRequestDTO> cadastrar(@RequestBody EstabelecimentoRequestDTO estabelecimentoDto) {
+        estabelecimentoRepository.save(estabelecimentoDto.toEstabelecimento());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
