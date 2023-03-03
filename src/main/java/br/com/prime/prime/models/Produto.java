@@ -7,12 +7,15 @@ import jakarta.persistence.Id;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.experimental.Accessors;
 
+@Accessors(chain = true)
 @NoArgsConstructor
 @Setter
 @Getter
 @Entity
 public class Produto {
+
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
@@ -37,6 +40,6 @@ public class Produto {
         if (preço < 1 || preço > 10000) {
             throw new PreçoInvalidoException();
         }
-    } 
+    }
 
 }
