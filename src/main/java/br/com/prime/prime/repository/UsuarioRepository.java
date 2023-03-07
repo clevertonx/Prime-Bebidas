@@ -10,4 +10,6 @@ public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
     public List<Usuario> findByEmailContainingIgnoreCase(String email);
 
     public List<Usuario> findByCnpjContaining(String cnpj);
+
+    public Usuario saveAndFlush(Usuario usuario);
 }
