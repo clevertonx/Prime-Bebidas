@@ -1,9 +1,11 @@
 package br.com.prime.prime.models;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.Lob;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -24,8 +26,11 @@ public class Produto {
     private String marca;
     private Double preço;
     private Categoria categoria;
+    @Lob
+    @Column(columnDefinition = "MEDIUMBLOB")
+    private String imagem;
 
-    public Produto(String nome, String descricao, String marca, double preço, Categoria categoria)
+    public Produto(String nome, String descricao, String marca, double preço, Categoria categoria, String imagem)
             throws PreçoInvalidoException {
 
         verificarPreçoEntreZeroeDezMil(preço);
@@ -34,6 +39,7 @@ public class Produto {
         this.preço = preço;
         this.categoria = categoria;
         this.marca = marca;
+        this.imagem = imagem;
     }
 
     private void verificarPreçoEntreZeroeDezMil(double preço) throws PreçoInvalidoException {

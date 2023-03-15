@@ -16,6 +16,7 @@ public class ProdutoRequestDTO {
     private String marca;
     private Double preço;
     private Categoria categoria;
+    private String imagem;
 
     public ProdutoRequestDTO(Produto produto) {
         this.nome = produto.getNome();
@@ -23,6 +24,7 @@ public class ProdutoRequestDTO {
         this.marca = produto.getMarca();
         this.preço = produto.getPreço();
         this.categoria = produto.getCategoria();
+        this.imagem = produto.getImagem();
     }
 
     public Produto toProduto() {
@@ -31,6 +33,7 @@ public class ProdutoRequestDTO {
             .setDescricao(this.descricao)
             .setMarca(this.marca)
             .setPreço(this.preço)
-            .setCategoria(this.categoria);
+            .setCategoria(this.categoria)
+            .setImagem(this.imagem);
     }
 }
