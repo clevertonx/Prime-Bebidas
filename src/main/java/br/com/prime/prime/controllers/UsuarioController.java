@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.RestController;
 import br.com.prime.prime.dto.UsuarioRequestDTO;
 import br.com.prime.prime.models.Usuario;
 import br.com.prime.prime.repository.UsuarioRepository;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/usuario")
@@ -41,7 +42,7 @@ public class UsuarioController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> cadastrar(@RequestBody UsuarioRequestDTO usuarioDto) {
+    public ResponseEntity<Void> cadastrar(@RequestBody @Valid UsuarioRequestDTO usuarioDto) {
         usuarioRepository.save(usuarioDto.toUsuario());
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
