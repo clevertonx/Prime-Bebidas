@@ -6,32 +6,23 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.Lob;
-import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
-import lombok.Getter;
+import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 import lombok.experimental.Accessors;
 
-
+@Data
 @Accessors(chain = true)
 @NoArgsConstructor
-@Setter
-@Getter
 @Entity
 public class Produto {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
     private Long id;
-    @NotBlank(message = "Um nome é obrigatório")
     private String nome;
     private String descricao;
-    @NotBlank(message = "Uma marca é obrigatória")
     private String marca;
-    @NotNull(message = "Um valor é obrigatório")
     private Double preço;
-    @NotNull(message = "Uma categoria é obrigatória")
     private Categoria categoria;
     @Lob
     @Column(columnDefinition = "MEDIUMBLOB")
