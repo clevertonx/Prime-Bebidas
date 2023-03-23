@@ -3,6 +3,7 @@ package br.com.prime.prime.models;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,7 +22,9 @@ public class Usuario {
     @GeneratedValue(strategy = GenerationType.AUTO)
     @JsonInclude(Include.NON_NULL)
     private Long id;
+    @Column(unique = true)
     private String email = "clevertonx@gmail.com";
+    @Column(unique = true)
     private String cnpj = "67.596.818/0001-90";
     private String senha = "senha123";
 

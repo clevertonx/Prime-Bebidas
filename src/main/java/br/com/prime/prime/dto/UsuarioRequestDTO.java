@@ -1,4 +1,5 @@
 package br.com.prime.prime.dto;
+
 import org.hibernate.validator.constraints.br.CNPJ;
 
 import br.com.prime.prime.models.Usuario;
