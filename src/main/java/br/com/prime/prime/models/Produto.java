@@ -5,7 +5,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -27,6 +29,10 @@ public class Produto {
     @Lob
     @Column(columnDefinition = "MEDIUMBLOB")
     private String imagem;
+
+    @ManyToOne
+    @JoinColumn(name = "estabelecimento_id")
+    private Estabelecimento estabelecimento;
 
     public Produto(String nome, String descricao, String marca, double preço, Categoria categoria, String imagem)
             throws PreçoInvalidoException {

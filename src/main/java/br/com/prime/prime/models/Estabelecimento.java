@@ -1,9 +1,14 @@
 package br.com.prime.prime.models;
 
+import java.util.List;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -24,6 +29,13 @@ public class Estabelecimento {
     private String cidade;
     private String logradouro;
     private String estado;
+
+    @ManyToOne
+    @JoinColumn(name = "usuario_id")
+    private Usuario usuario;
+
+    @OneToMany(mappedBy = "estabelecimento")
+    private List<Produto> produtos;
 
     public Estabelecimento(String nome, String telefone, String horarioAtendimento, int numero, String cidade,
             String logradouro, String estado) {

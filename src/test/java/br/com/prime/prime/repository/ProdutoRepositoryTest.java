@@ -30,7 +30,7 @@ public class ProdutoRepositoryTest {
     }
 
     @Test
-    public void deve_remover_usuario() throws PreçoInvalidoException {
+    void deve_remover_produto() throws PreçoInvalidoException {
         Produto produto = new ProdutoBuilder().construir();
         produtoRepository.save(produto);
 

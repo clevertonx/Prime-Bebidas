@@ -1,5 +1,7 @@
 package br.com.prime.prime.models;
 
+import java.util.List;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -8,6 +10,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.experimental.Accessors;
@@ -27,8 +30,11 @@ public class Usuario {
     @Column(unique = true)
     private String cnpj = "67.596.818/0001-90";
     private String senha = "senha123";
+    
+    @OneToMany(mappedBy = "usuario")
+    private List<Estabelecimento> estabelecimentos;
 
-    public Usuario(String email, String cnpj, String senha) {
+    public Usuario(String email, String cnpj, String senha, List<Estabelecimento> estabelecimentos) {
         this.email = email;
         this.cnpj = cnpj;
         this.senha = senha;
