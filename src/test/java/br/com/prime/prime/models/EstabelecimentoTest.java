@@ -16,6 +16,7 @@ public class EstabelecimentoTest {
         String cidade = "Campo Grande";
         String logradouro = "Rua tchudusbangu";
         String estado = "MS";
+        String cnpj = "67.596.818/0001-90";
 
         Estabelecimento estabelecimento = new EstabelecimentoBuilder().construir();
 
@@ -26,5 +27,6 @@ public class EstabelecimentoTest {
         Assertions.assertEquals(cidade, estabelecimento.getCidade());
         Assertions.assertEquals(logradouro, estabelecimento.getLogradouro());
         Assertions.assertEquals(estado, estabelecimento.getEstado());
+        Assertions.assertEquals(cnpj, estabelecimento.getCnpj());
     }
 }

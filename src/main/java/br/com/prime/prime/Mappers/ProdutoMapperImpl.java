@@ -14,7 +14,7 @@ public class ProdutoMapperImpl implements ProdutoMapper {
     public Produto produtoRequestParaProduto(ProdutoRequestDTO produtoRequestDTO) throws PreçoInvalidoException {
 
         return new Produto(produtoRequestDTO.getNome(), produtoRequestDTO.getDescricao(), produtoRequestDTO.getMarca(),
-                produtoRequestDTO.getPreço(), produtoRequestDTO.getCategoria(), produtoRequestDTO.getImagem());
+                produtoRequestDTO.getPreço(), produtoRequestDTO.getCategoria(), produtoRequestDTO.getImagem(), produtoRequestDTO.getIdEstabelecimento());
     }
 
     @Override

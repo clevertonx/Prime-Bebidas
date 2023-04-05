@@ -10,13 +10,14 @@ public class EstabelecimentoBuilder {
     String cidade = "Campo Grande";
     String logradouro = "Rua tchudusbangu";
     String estado = "MS";
+    String cnpj = "67.596.818/0001-90";
 
     public EstabelecimentoBuilder() {
 
     }
 
     public Estabelecimento construir() {
-        return new Estabelecimento(nome, telefone, horarioAtendimento, numero, cidade, logradouro, estado);
+        return new Estabelecimento(nome, telefone, horarioAtendimento, numero, cidade, logradouro, estado, cnpj);
     }
 
     public EstabelecimentoBuilder comNome(String nome) {
@@ -51,6 +52,11 @@ public class EstabelecimentoBuilder {
 
     public EstabelecimentoBuilder comEstado(String estado) {
         this.estado = estado;
+        return this;
+    }
+
+    public EstabelecimentoBuilder comCnpj(String cnpj){
+        this.cnpj = cnpj;
         return this;
     }
 }

@@ -49,11 +49,9 @@ public class UsuarioControllerTest {
     public void deve_buscar_os_usuarios_cadastrados() throws Exception {
         String email1 = "cleverton@gmail.com";
         String email2 = "joao@exemplo.com";
-        String cnpj1 = "67.596.818/0001-90";
-        String cnpj2 = "89.526.579/0001-34";
         ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
-        usuarios.add(new UsuarioBuilder().comEmail(email1).comCnpj(cnpj1).construir());
-        usuarios.add(new UsuarioBuilder().comEmail(email2).comCnpj(cnpj2).construir());
+        usuarios.add(new UsuarioBuilder().comEmail(email1).construir());
+        usuarios.add(new UsuarioBuilder().comEmail(email2).construir());
 
         usuarioRepository.saveAll(usuarios);
 
@@ -69,10 +67,9 @@ public class UsuarioControllerTest {
     @Test
     public void deve_remover_um_usuario_pelo_id() throws Exception {
         String email = "gustavopintomurcho@gmail.com";
-        String cnpj = "33.407.857/0001-80";
         ArrayList<Usuario> usuarios = new ArrayList<Usuario>();
         usuarios.add(new UsuarioBuilder().construir());
-        usuarios.add(new UsuarioBuilder().comEmail(email).comCnpj(cnpj).construir());
+        usuarios.add(new UsuarioBuilder().comEmail(email).construir());
 
         usuarioRepository.saveAll(usuarios);
 

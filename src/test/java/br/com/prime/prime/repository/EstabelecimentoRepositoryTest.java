@@ -93,4 +93,15 @@ public class EstabelecimentoRepositoryTest {
 
         Assertions.assertTrue(estabelecimentoRetornado.contains(estabelecimento));
     }
+
+    @Test
+    public void deve_buscar_estabelecimento_pelo_cnpj() {
+        String cnpj = "67.596.818/0001-90";
+        Estabelecimento estabelecimento = new EstabelecimentoBuilder().comCnpj(cnpj).construir();
+        estabelecimentoRepository.save(estabelecimento);
+
+        List<Estabelecimento> estabelecimentoRetornado = estabelecimentoRepository.findByCnpjContaining(cnpj);
+
+        Assertions.assertTrue(estabelecimentoRetornado.contains(estabelecimento));
+    }
 }

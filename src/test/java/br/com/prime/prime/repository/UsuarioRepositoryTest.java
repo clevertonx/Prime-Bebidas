@@ -50,15 +50,4 @@ public class UsuarioRepositoryTest {
         Assertions.assertTrue(usuarioRetornado.contains(usuario));
     }
 
-    @Test
-    public void deve_buscar_usuario_pelo_cnpj() {
-        String cnpj = "67.596.818/0001-90";
-        Usuario usuario = new UsuarioBuilder().comCnpj(cnpj).construir();
-        usuarioRepository.save(usuario);
-
-        List<Usuario> usuarioRetornado = usuarioRepository.findByCnpjContaining(cnpj);
-
-        Assertions.assertTrue(usuarioRetornado.contains(usuario));
-    }
-
 }

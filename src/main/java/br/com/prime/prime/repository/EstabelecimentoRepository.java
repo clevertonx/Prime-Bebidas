@@ -17,4 +17,6 @@ public interface EstabelecimentoRepository extends
     public List<Estabelecimento> findByCidadeContainingIgnoreCase(String cidade);
 
     public List<Estabelecimento> findByEstadoContainingIgnoreCase(String estado);
+
+    public List<Estabelecimento> findByCnpjContaining(String cnpj);
 }

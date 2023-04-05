@@ -23,6 +23,7 @@ public class ProdutoRequestDTO {
     @NotNull(message = "Uma categoria é obrigatória")
     private Categoria categoria;
     private String imagem;
+    private Long idEstabelecimento;
 
     public ProdutoRequestDTO(Produto produto) {
         this.nome = produto.getNome();
@@ -31,6 +32,7 @@ public class ProdutoRequestDTO {
         this.preço = produto.getPreço();
         this.categoria = produto.getCategoria();
         this.imagem = produto.getImagem();
+        this.idEstabelecimento = produto.getIdEstabelecimento();
     }
 
     public Produto toProduto() {
@@ -40,6 +42,7 @@ public class ProdutoRequestDTO {
             .setMarca(this.marca)
             .setPreço(this.preço)
             .setCategoria(this.categoria)
-            .setImagem(this.imagem);
+            .setImagem(this.imagem)
+            .setIdEstabelecimento(this.idEstabelecimento);
     }
 }

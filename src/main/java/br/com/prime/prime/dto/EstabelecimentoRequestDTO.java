@@ -1,5 +1,7 @@
 package br.com.prime.prime.dto;
 
+import org.hibernate.validator.constraints.br.CNPJ;
+
 import br.com.prime.prime.models.Estabelecimento;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
@@ -27,6 +29,10 @@ public class EstabelecimentoRequestDTO {
     private String logradouro;
     @NotBlank(message = "Estado não informado")
     private String estado;
+    @CNPJ(message = "Campo inválido")
+    @NotBlank(message = "CNPJ não informado")
+    private String cnpj;
+    private Long idUsuario;
 
     public EstabelecimentoRequestDTO(Estabelecimento estabelecimento) {
         this.nome = estabelecimento.getNome();
@@ -36,6 +42,8 @@ public class EstabelecimentoRequestDTO {
         this.cidade = estabelecimento.getCidade();
         this.logradouro = estabelecimento.getLogradouro();
         this.estado = estabelecimento.getEstado();
+        this.cnpj = estabelecimento.getCnpj();
+        this.idUsuario = estabelecimento.getIdUsuario();
     }
 
     public Estabelecimento toEstabelecimento() {
@@ -46,6 +54,8 @@ public class EstabelecimentoRequestDTO {
                 .setNumero(this.numero)
                 .setCidade(this.cidade)
                 .setLogradouro(this.logradouro)
-                .setEstado(this.estado);
+                .setEstado(this.estado)
+                .setCnpj(this.cnpj)
+                .setIdUsuario(this.idUsuario);
     }
 }

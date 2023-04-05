@@ -11,13 +11,11 @@ public class UsuarioTest {
             {
 
         String email = "clevertonx@gmail.com";
-        String cnpj = "67.596.818/0001-90";
         String senha = "senha123";
 
         Usuario usuario = new UsuarioBuilder().construir();
 
         Assertions.assertEquals(email, usuario.getEmail());
-        Assertions.assertEquals(cnpj, usuario.getCnpj());
         Assertions.assertEquals(senha, usuario.getSenha());
     }
 }

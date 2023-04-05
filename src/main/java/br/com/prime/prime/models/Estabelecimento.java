@@ -29,6 +29,9 @@ public class Estabelecimento {
     private String cidade;
     private String logradouro;
     private String estado;
+    private String cnpj;
+    private Long idUsuario;
+
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
@@ -38,7 +41,7 @@ public class Estabelecimento {
     private List<Produto> produtos;
 
     public Estabelecimento(String nome, String telefone, String horarioAtendimento, int numero, String cidade,
-            String logradouro, String estado) {
+            String logradouro, String estado, String cnpj) {
 
         this.nome = nome;
         this.telefone = telefone;
@@ -47,6 +50,7 @@ public class Estabelecimento {
         this.cidade = cidade;
         this.logradouro = logradouro;
         this.estado = estado;
+        this.cnpj = cnpj;
     }
 
 }

@@ -12,6 +12,7 @@ public class ProdutoBuilder {
     private Double preço = 89.90;
     private Categoria categoria = Categoria.Destilada;
     private String imagem = Imagem.getBytes();
+    private Long idEstabelecimento;
 
     public ProdutoBuilder()
             throws PreçoInvalidoException {
@@ -20,7 +21,7 @@ public class ProdutoBuilder {
 
     public Produto construir()
             throws PreçoInvalidoException {
-        return new Produto(nome, descricao, marca, preço, categoria, imagem);
+        return new Produto(nome, descricao, marca, preço, categoria, imagem, idEstabelecimento);
     }
 
     public ProdutoBuilder comNome(String nome) {
@@ -50,6 +51,11 @@ public class ProdutoBuilder {
 
     public ProdutoBuilder comImagem(String imagem) {
         this.imagem = imagem;
+        return this;
+    }
+
+    public ProdutoBuilder comIdEstabelecimento(Long idEstabelecimento){
+        this.idEstabelecimento = idEstabelecimento;
         return this;
     }
 }

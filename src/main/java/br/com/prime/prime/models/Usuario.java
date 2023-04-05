@@ -27,16 +27,13 @@ public class Usuario {
     private Long id;
     @Column(unique = true)
     private String email = "clevertonx@gmail.com";
-    @Column(unique = true)
-    private String cnpj = "67.596.818/0001-90";
     private String senha = "senha123";
     
     @OneToMany(mappedBy = "usuario")
     private List<Estabelecimento> estabelecimentos;
 
-    public Usuario(String email, String cnpj, String senha, List<Estabelecimento> estabelecimentos) {
+    public Usuario(String email, String senha, List<Estabelecimento> estabelecimentos) {
         this.email = email;
-        this.cnpj = cnpj;
         this.senha = senha;
     }
 

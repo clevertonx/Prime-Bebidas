@@ -29,12 +29,13 @@ public class Produto {
     @Lob
     @Column(columnDefinition = "MEDIUMBLOB")
     private String imagem;
+    private Long idEstabelecimento;
 
     @ManyToOne
     @JoinColumn(name = "estabelecimento_id")
     private Estabelecimento estabelecimento;
 
-    public Produto(String nome, String descricao, String marca, double preço, Categoria categoria, String imagem)
+    public Produto(String nome, String descricao, String marca, double preço, Categoria categoria, String imagem, Long idEstabelecimento)
             throws PreçoInvalidoException {
 
         verificarPreçoEntreZeroeDezMil(preço);
@@ -44,6 +45,7 @@ public class Produto {
         this.categoria = categoria;
         this.marca = marca;
         this.imagem = imagem;
+        this.idEstabelecimento = idEstabelecimento;
     }
 
     private void verificarPreçoEntreZeroeDezMil(double preço) throws PreçoInvalidoException {
