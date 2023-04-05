@@ -1,6 +1,7 @@
 package br.com.prime.prime.Builders;
 
 import br.com.prime.prime.models.Estabelecimento;
+import br.com.prime.prime.models.Usuario;
 
 public class EstabelecimentoBuilder {
     String nome = "Comper";
@@ -11,13 +12,14 @@ public class EstabelecimentoBuilder {
     String logradouro = "Rua tchudusbangu";
     String estado = "MS";
     String cnpj = "67.596.818/0001-90";
+    Usuario usuario = new UsuarioBuilder().construir();
 
     public EstabelecimentoBuilder() {
 
     }
 
     public Estabelecimento construir() {
-        return new Estabelecimento(nome, telefone, horarioAtendimento, numero, cidade, logradouro, estado, cnpj);
+        return new Estabelecimento(nome, telefone, horarioAtendimento, numero, cidade, logradouro, estado, cnpj, usuario);
     }
 
     public EstabelecimentoBuilder comNome(String nome) {
@@ -59,4 +61,10 @@ public class EstabelecimentoBuilder {
         this.cnpj = cnpj;
         return this;
     }
+
+    public EstabelecimentoBuilder comUsuario(Usuario usuario){
+        this.usuario = usuario;
+        return this;
+    }
+
 }

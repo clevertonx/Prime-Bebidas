@@ -22,8 +22,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.prime.prime.Mappers.ProdutoMapper;
 import br.com.prime.prime.dto.ProdutoRequestDTO;
 import br.com.prime.prime.dto.ProdutoResponseDTO;
+import br.com.prime.prime.models.PreçoInvalidoException;
 import br.com.prime.prime.models.Produto;
 import br.com.prime.prime.repository.ProdutoRepository;
 import jakarta.validation.Valid;
@@ -35,6 +37,9 @@ public class ProdutoController {
 
     @Autowired
     private ProdutoRepository produtoRepository;
+
+    @Autowired
+    private ProdutoMapper produtoMapper;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Produto>> buscarTodos() {
@@ -50,9 +55,9 @@ public class ProdutoController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProdutoResponseDTO> cadastrar(@RequestBody @Valid ProdutoRequestDTO produto) {
+    public ResponseEntity<ProdutoResponseDTO> cadastrar(@RequestBody @Valid ProdutoRequestDTO produto) throws PreçoInvalidoException {
 
-        Produto produtoSalvo = produtoRepository.save(produto.toProduto());
+        Produto produtoSalvo = produtoRepository.save(produtoMapper.produtoRequestParaProduto(produto));
         return ResponseEntity
             .status(HttpStatus.CREATED)
             .body(ProdutoResponseDTO.builder()

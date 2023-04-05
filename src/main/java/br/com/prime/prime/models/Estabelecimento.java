@@ -2,6 +2,7 @@ package br.com.prime.prime.models;
 
 import java.util.List;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -30,10 +31,9 @@ public class Estabelecimento {
     private String logradouro;
     private String estado;
     private String cnpj;
-    private Long idUsuario;
 
 
-    @ManyToOne
+    @ManyToOne(cascade = CascadeType.PERSIST)
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
@@ -41,7 +41,7 @@ public class Estabelecimento {
     private List<Produto> produtos;
 
     public Estabelecimento(String nome, String telefone, String horarioAtendimento, int numero, String cidade,
-            String logradouro, String estado, String cnpj) {
+            String logradouro, String estado, String cnpj, Usuario usuario) {
 
         this.nome = nome;
         this.telefone = telefone;
@@ -51,6 +51,7 @@ public class Estabelecimento {
         this.logradouro = logradouro;
         this.estado = estado;
         this.cnpj = cnpj;
+        this.usuario = usuario;
     }
 
 }

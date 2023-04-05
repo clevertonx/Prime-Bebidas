@@ -43,19 +43,7 @@ public class EstabelecimentoRequestDTO {
         this.logradouro = estabelecimento.getLogradouro();
         this.estado = estabelecimento.getEstado();
         this.cnpj = estabelecimento.getCnpj();
-        this.idUsuario = estabelecimento.getIdUsuario();
+        this.idUsuario = estabelecimento.getUsuario().getId();
     }
 
-    public Estabelecimento toEstabelecimento() {
-        return new Estabelecimento()
-                .setNome(this.nome)
-                .setTelefone(this.telefone)
-                .setHorarioAtendimento(this.horarioAtendimento)
-                .setNumero(this.numero)
-                .setCidade(this.cidade)
-                .setLogradouro(this.logradouro)
-                .setEstado(this.estado)
-                .setCnpj(this.cnpj)
-                .setIdUsuario(this.idUsuario);
-    }
 }

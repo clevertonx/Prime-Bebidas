@@ -12,7 +12,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ProdutoRequestDTO {
-    
+
     @NotBlank(message = "Um nome é obrigatório")
     private String nome;
     private String descricao;
@@ -32,17 +32,7 @@ public class ProdutoRequestDTO {
         this.preço = produto.getPreço();
         this.categoria = produto.getCategoria();
         this.imagem = produto.getImagem();
-        this.idEstabelecimento = produto.getIdEstabelecimento();
+        this.idEstabelecimento = produto.getEstabelecimento().getId();
     }
 
-    public Produto toProduto() {
-        return new Produto()
-            .setNome(this.nome)
-            .setDescricao(this.descricao)
-            .setMarca(this.marca)
-            .setPreço(this.preço)
-            .setCategoria(this.categoria)
-            .setImagem(this.imagem)
-            .setIdEstabelecimento(this.idEstabelecimento);
-    }
 }

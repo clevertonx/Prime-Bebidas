@@ -1,0 +1,29 @@
+package br.com.prime.prime.Mappers;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import br.com.prime.prime.dto.EstabelecimentoRequestDTO;
+import br.com.prime.prime.models.Estabelecimento;
+import br.com.prime.prime.models.Usuario;
+import br.com.prime.prime.repository.UsuarioRepository;
+
+@Component
+public class EstabelecimentoMapperImpl implements EstabelecimentoMapper {
+@Autowired 
+private UsuarioRepository usuarioRepository;
+
+    @Override
+    public Estabelecimento estabelecimentoRequestParaEstabelecimento(
+            EstabelecimentoRequestDTO estabelecimentoRequestDTO) {
+        Usuario usuario = usuarioRepository
+                .findById(estabelecimentoRequestDTO.getIdUsuario())
+                .get();
+        return new Estabelecimento(estabelecimentoRequestDTO.getNome(), estabelecimentoRequestDTO.getTelefone(),
+                estabelecimentoRequestDTO.getHorarioAtendimento(),
+                estabelecimentoRequestDTO.getNumero(), estabelecimentoRequestDTO.getCidade(),
+                estabelecimentoRequestDTO.getLogradouro(), estabelecimentoRequestDTO.getEstado(),
+                estabelecimentoRequestDTO.getCnpj(),
+                usuario);
+    }
+}

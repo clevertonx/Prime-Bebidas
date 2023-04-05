@@ -26,6 +26,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import br.com.prime.prime.Builders.EstabelecimentoBuilder;
+import br.com.prime.prime.Builders.UsuarioBuilder;
 import br.com.prime.prime.models.Estabelecimento;
 import br.com.prime.prime.repository.EstabelecimentoRepository;
 
@@ -47,9 +48,10 @@ public class EstabelecimentoControllerTest {
     @Test
     public void deve_buscar_os_estabelecimentos_cadastrados_pelo_nome() throws Exception {
         String nome = "atacadao";
+        String email = "tom@gmail.com";
         ArrayList<Estabelecimento> estabelecimentos = new ArrayList<Estabelecimento>();
         estabelecimentos.add(new EstabelecimentoBuilder().construir());
-        estabelecimentos.add(new EstabelecimentoBuilder().comNome(nome).construir());
+        estabelecimentos.add(new EstabelecimentoBuilder().comNome(nome).comUsuario(new UsuarioBuilder().comEmail(email).construir()).construir());
 
         estabelecimentoRepository.saveAll(estabelecimentos);
 

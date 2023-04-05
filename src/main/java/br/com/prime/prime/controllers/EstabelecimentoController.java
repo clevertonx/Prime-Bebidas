@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.prime.prime.Mappers.EstabelecimentoMapper;
 import br.com.prime.prime.dto.EstabelecimentoRequestDTO;
 import br.com.prime.prime.models.Estabelecimento;
 import br.com.prime.prime.repository.EstabelecimentoRepository;
@@ -33,6 +34,9 @@ public class EstabelecimentoController {
 
     @Autowired
     private EstabelecimentoRepository estabelecimentoRepository;
+
+    @Autowired
+    private EstabelecimentoMapper estabelecimentoMapper;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Estabelecimento>> buscarTodos() {
@@ -49,7 +53,7 @@ public class EstabelecimentoController {
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EstabelecimentoRequestDTO> cadastrar(@RequestBody @Valid EstabelecimentoRequestDTO estabelecimentoDto) {
-        estabelecimentoRepository.save(estabelecimentoDto.toEstabelecimento());
+        estabelecimentoRepository.save(estabelecimentoMapper.estabelecimentoRequestParaEstabelecimento(estabelecimentoDto));
         return ResponseEntity.status(HttpStatus.CREATED).build();
     }
 
