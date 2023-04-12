@@ -14,7 +14,7 @@ public class ProdutoResponseDTO {
     private String nome;
     private String descricao;
     private String marca;
-    private Double preço;
+    private Double preco;
     private String imagem;
 
 }

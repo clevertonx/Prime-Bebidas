@@ -19,13 +19,15 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.prime.prime.Mappers.ProdutoMapper;
+import br.com.prime.prime.Services.ProdutoService;
 import br.com.prime.prime.dto.ProdutoRequestDTO;
 import br.com.prime.prime.dto.ProdutoResponseDTO;
-import br.com.prime.prime.models.PreçoInvalidoException;
+import br.com.prime.prime.models.PrecoInvalidoException;
 import br.com.prime.prime.models.Produto;
 import br.com.prime.prime.repository.ProdutoRepository;
 import jakarta.validation.Valid;
@@ -41,6 +43,9 @@ public class ProdutoController {
     @Autowired
     private ProdutoMapper produtoMapper;
 
+    @Autowired
+    private ProdutoService produtoService;
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Produto>> buscarTodos() {
         Iterable<Produto> iterable = produtoRepository.findAll();
@@ -49,13 +54,19 @@ public class ProdutoController {
         return ResponseEntity.ok().body(produtos);
     }
 
+    @GetMapping(path="/buscarPorNome", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<List<ProdutoResponseDTO>> buscarPorNome(@RequestParam(required = false, name = "nome") String nome) {
+    List<Produto> produtos = produtoRepository.findByNomeContainingIgnoreCase(nome);
+    return ResponseEntity.ok(produtoService.buscarPorNome(nome));
+}
+
     @DeleteMapping(path = "/{id}")
     public void remover(@PathVariable Long id) {
         produtoRepository.deleteById(id);
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<ProdutoResponseDTO> cadastrar(@RequestBody @Valid ProdutoRequestDTO produto) throws PreçoInvalidoException {
+    public ResponseEntity<ProdutoResponseDTO> cadastrar(@RequestBody @Valid ProdutoRequestDTO produto) throws PrecoInvalidoException {
 
         Produto produtoSalvo = produtoRepository.save(produtoMapper.produtoRequestParaProduto(produto));
         return ResponseEntity
@@ -66,7 +77,7 @@ public class ProdutoController {
                                     .imagem(produtoSalvo.getImagem())
                                     .marca(produtoSalvo.getMarca())
                                     .nome(produtoSalvo.getNome())
-                                    .preço(produtoSalvo.getPreço())
+                                    .preco(produtoSalvo.getPreco())
                                     .build());
     }
 

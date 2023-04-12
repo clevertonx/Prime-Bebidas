@@ -13,6 +13,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
 
 import org.assertj.core.api.Assertions;
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -21,24 +22,34 @@ import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMock
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
+import br.com.prime.prime.Builders.EstabelecimentoBuilder;
 import br.com.prime.prime.Builders.ProdutoBuilder;
+import br.com.prime.prime.dto.ProdutoResponseDTO;
 import br.com.prime.prime.models.Categoria;
+import br.com.prime.prime.models.Estabelecimento;
 import br.com.prime.prime.models.Produto;
+import br.com.prime.prime.repository.EstabelecimentoRepository;
 import br.com.prime.prime.repository.ProdutoRepository;
+import br.com.prime.prime.utils.JsonUtil;
+import org.springframework.http.HttpStatus;
 
 @SpringBootTest
 @AutoConfigureMockMvc
 public class ProdutoControllerTest {
     @Autowired
-    private MockMvc mockMvc;
+    private MockMvc mvc;
 
     @Autowired
     private ProdutoRepository produtoRepository;
+
+    @Autowired
+    private EstabelecimentoRepository estabelecimentoRepository;
 
     @BeforeEach
     @AfterEach
@@ -47,18 +58,23 @@ public class ProdutoControllerTest {
     }
 
     @Test
-    public void deve_buscar_os_produtos_cadastrados_pelo_nome() throws Exception {
-        String nome = "Cerveja";
-        ArrayList<Produto> produtos = new ArrayList<Produto>();
-        produtos.add(new ProdutoBuilder().construir());
-        produtos.add(new ProdutoBuilder().comNome(nome).construir());
+    public void deve_buscar_produtos_por_nome() throws Exception {
+        Estabelecimento estabelecimento = new EstabelecimentoBuilder().construir();
+        estabelecimentoRepository.save(estabelecimento);
 
-        produtoRepository.saveAll(produtos);
+        String nomeProduto = "Pinga";
+        Produto produto = new ProdutoBuilder().comNome(nomeProduto).comEstabelecimento(estabelecimento).construir();
+        produtoRepository.save(produto);
 
-        this.mockMvc
-                .perform(get("/produto"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString(nome)));
+        MvcResult resultado = mvc.perform(get("/produto/buscarPorNome?nome=" + nomeProduto)).andReturn();
+
+        ProdutoResponseDTO[] produtosRetornadosDTO = JsonUtil.mapFromJson(
+                resultado.getResponse().getContentAsString(),
+                ProdutoResponseDTO[].class);
+
+        assertThat(HttpStatus.OK.value()).isEqualTo(resultado.getResponse().getStatus());
+        assertThat(produtosRetornadosDTO).extracting("nome").contains(nomeProduto);
+        assertThat(produtosRetornadosDTO).hasSize(1);
     }
 
     @Test

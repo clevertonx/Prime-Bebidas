@@ -8,12 +8,12 @@ import br.com.prime.prime.Builders.ProdutoBuilder;
 public class ProdutoTest {
     @Test
     public void deve_criar_um_produto()
-            throws PreçoInvalidoException {
+            throws PrecoInvalidoException {
 
         String nome = "Vodka";
         String descricao = "Nossa premiada vodka tem um sabor robusto com acabamento seco para uma maior suavidade";
         String marca = "Absolut";
-        Double preço = 89.90;
+        Double preco = 89.90;
         Categoria categoria = Categoria.Destilada;
 
         Produto produto = new ProdutoBuilder().construir();
@@ -21,7 +21,7 @@ public class ProdutoTest {
         Assertions.assertEquals(nome, produto.getNome());
         Assertions.assertEquals(descricao, produto.getDescricao());
         Assertions.assertEquals(marca, produto.getMarca());
-        Assertions.assertEquals(preço, produto.getPreço());
+        Assertions.assertEquals(preco, produto.getPreco());
         Assertions.assertEquals(categoria, produto.getCategoria());
     }
 }

@@ -2,7 +2,7 @@ package br.com.prime.prime.Builders;
 
 import br.com.prime.prime.models.Categoria;
 import br.com.prime.prime.models.Estabelecimento;
-import br.com.prime.prime.models.PreçoInvalidoException;
+import br.com.prime.prime.models.PrecoInvalidoException;
 import br.com.prime.prime.models.Produto;
 
 public class ProdutoBuilder {
@@ -17,12 +17,12 @@ public class ProdutoBuilder {
 
 
     public ProdutoBuilder()
-            throws PreçoInvalidoException {
+            throws PrecoInvalidoException {
 
     }
 
     public Produto construir()
-            throws PreçoInvalidoException {
+            throws PrecoInvalidoException {
         return new Produto(nome, descricao, marca, preço, categoria, imagem, estabelecimento);
     }
 

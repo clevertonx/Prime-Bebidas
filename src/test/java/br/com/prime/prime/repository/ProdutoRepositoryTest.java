@@ -10,7 +10,8 @@ import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import br.com.prime.prime.Builders.ProdutoBuilder;
 import br.com.prime.prime.models.Categoria;
-import br.com.prime.prime.models.PreçoInvalidoException;
+import br.com.prime.prime.models.Estabelecimento;
+import br.com.prime.prime.models.PrecoInvalidoException;
 import br.com.prime.prime.models.Produto;
 
 @DataJpaTest
@@ -19,8 +20,11 @@ public class ProdutoRepositoryTest {
     @Autowired
     private ProdutoRepository produtoRepository;
 
+    @Autowired
+    private EstabelecimentoRepository estabelecimentoRepository;
+
     @Test
-    public void deve_salvar_um_produto() throws PreçoInvalidoException {
+    public void deve_salvar_um_produto() throws PrecoInvalidoException {
 
         Produto produto = new ProdutoBuilder().construir();
 
@@ -30,7 +34,7 @@ public class ProdutoRepositoryTest {
     }
 
     @Test
-    void deve_remover_produto() throws PreçoInvalidoException {
+    void deve_remover_produto() throws PrecoInvalidoException {
         Produto produto = new ProdutoBuilder().construir();
         produtoRepository.save(produto);
 
@@ -42,7 +46,21 @@ public class ProdutoRepositoryTest {
     }
 
     @Test
-    public void deve_buscar_produto_pelo_nome() throws PreçoInvalidoException {
+    public void deve_buscar_produto_pelo_nome() throws PrecoInvalidoException {
+        String nome = "Vodka";
+        Produto produto = new ProdutoBuilder().comNome(nome).construir();
+        Estabelecimento estabelecimento = new Estabelecimento();
+        produto.setEstabelecimento(estabelecimento);
+        produtoRepository.save(produto);
+        estabelecimentoRepository.save(estabelecimento);
+
+        List<Produto> produtoRetornado = produtoRepository.findByNomeContainingIgnoreCase(nome);
+
+        Assertions.assertTrue(produtoRetornado.contains(produto));
+    }
+
+    @Test
+    public void deve_buscar_produto_pela_marca() throws PrecoInvalidoException {
         String nome = "Vodka";
         Produto produto = new ProdutoBuilder().comNome(nome).construir();
         produtoRepository.save(produto);
@@ -53,18 +71,7 @@ public class ProdutoRepositoryTest {
     }
 
     @Test
-    public void deve_buscar_produto_pela_marca() throws PreçoInvalidoException {
-        String nome = "Vodka";
-        Produto produto = new ProdutoBuilder().comNome(nome).construir();
-        produtoRepository.save(produto);
-
-        List<Produto> produtoRetornado = produtoRepository.findByNomeContainingIgnoreCase(nome);
-
-        Assertions.assertTrue(produtoRetornado.contains(produto));
-    }
-
-    @Test
-    public void deve_buscar_produto_pela_categoria() throws PreçoInvalidoException {
+    public void deve_buscar_produto_pela_categoria() throws PrecoInvalidoException {
         Categoria categoria = Categoria.Destilada;
         Produto produto = new ProdutoBuilder().comCategoria(categoria).construir();
         produtoRepository.save(produto);

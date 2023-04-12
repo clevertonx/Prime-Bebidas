@@ -19,7 +19,7 @@ public class ProdutoRequestDTO {
     @NotBlank(message = "Uma marca é obrigatória")
     private String marca;
     @NotNull(message = "Um valor é obrigatório")
-    private Double preço;
+    private Double preco;
     @NotNull(message = "Uma categoria é obrigatória")
     private Categoria categoria;
     private String imagem;
@@ -29,7 +29,7 @@ public class ProdutoRequestDTO {
         this.nome = produto.getNome();
         this.descricao = produto.getDescricao();
         this.marca = produto.getMarca();
-        this.preço = produto.getPreço();
+        this.preco = produto.getPreco();
         this.categoria = produto.getCategoria();
         this.imagem = produto.getImagem();
         this.idEstabelecimento = produto.getEstabelecimento().getId();
