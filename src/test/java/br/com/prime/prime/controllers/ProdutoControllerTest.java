@@ -1,25 +1,26 @@
 package br.com.prime.prime.controllers;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
+
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.hamcrest.Matchers.containsString;
-import static org.junit.jupiter.api.Assertions.assertEquals;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-
 import org.assertj.core.api.Assertions;
-import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
@@ -30,6 +31,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 
 import br.com.prime.prime.Builders.EstabelecimentoBuilder;
 import br.com.prime.prime.Builders.ProdutoBuilder;
+import br.com.prime.prime.dto.ProdutoRequestDTO;
 import br.com.prime.prime.dto.ProdutoResponseDTO;
 import br.com.prime.prime.models.Categoria;
 import br.com.prime.prime.models.Estabelecimento;
@@ -37,10 +39,10 @@ import br.com.prime.prime.models.Produto;
 import br.com.prime.prime.repository.EstabelecimentoRepository;
 import br.com.prime.prime.repository.ProdutoRepository;
 import br.com.prime.prime.utils.JsonUtil;
-import org.springframework.http.HttpStatus;
 
-@SpringBootTest
+@SpringBootTest(webEnvironment = WebEnvironment.RANDOM_PORT)
 @AutoConfigureMockMvc
+@AutoConfigureTestDatabase
 public class ProdutoControllerTest {
     @Autowired
     private MockMvc mvc;
@@ -86,39 +88,65 @@ public class ProdutoControllerTest {
 
         produtoRepository.saveAll(produtos);
 
-        this.mockMvc
+        this.mvc
                 .perform(get("/produto"))
                 .andExpect(status().isOk());
         assertEquals(Categoria.Fortificada, categoria);
     }
 
     @Test
-    public void deve_remover_um_produto_pelo_id() throws Exception {
-        String nome = "Antarctica";
-        ArrayList<Produto> produtos = new ArrayList<Produto>();
-        produtos.add(new ProdutoBuilder().construir());
-        produtos.add(new ProdutoBuilder().comNome(nome).construir());
+    void deve_excluir_um_produto_pelo_id() throws Exception {
 
-        produtoRepository.saveAll(produtos);
+        Estabelecimento estabelecimento = new EstabelecimentoBuilder().construir();
+        estabelecimentoRepository.save(estabelecimento);
 
-        Produto produto1 = produtos.get(1);
+        int quantidadeEsperada = 0;
 
-        this.mockMvc
-                .perform(delete("/produto/" + produto1.getId()))
-                .andExpect(status().isOk());
+        Produto produto = new ProdutoBuilder().comEstabelecimento(estabelecimento).construir();
+        produtoRepository.save(produto);
 
-        List<Produto> produtosRetornados = produtoRepository
-                .findByNomeContainingIgnoreCase(produto1.getNome());
+        String url = "/produto/" + produto.getId();
+        mvc.perform(delete(url)).andReturn();
 
-        Assertions.assertThat(produtosRetornados).isEmpty();
+        Iterable<Produto> produtosEncontrados = produtoRepository.findAll();
+        long quantidadeEncontrada = produtosEncontrados.spliterator().getExactSizeIfKnown();
+
+        assertEquals(quantidadeEsperada, quantidadeEncontrada);
+    }
+
+    @Test
+    void deve_cadastrar_um_novo_produto() throws Exception {
+
+        Estabelecimento estabelecimento = new EstabelecimentoBuilder().construir();
+        estabelecimentoRepository.save(estabelecimento);
+
+        int quantidadeEsperada = 1;
+
+        Produto produto = new ProdutoBuilder().comEstabelecimento(estabelecimento).construir();
+        produtoRepository.save(produto);
+
+        mvc.perform(post("/produto/")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.toJson(produto)))
+                .andExpect(status().isCreated());
+
+        Iterable<Produto> buscaProduto = produtoRepository.findAll();
+        long quantidadeEncontrada = buscaProduto.spliterator().getExactSizeIfKnown();
+
+        assertThat(quantidadeEncontrada).isEqualTo(quantidadeEsperada);
+
     }
 
     @Test
     public void deve_incluir_um_produto() throws Exception {
-        Produto produto = new ProdutoBuilder().construir();
+
+        Estabelecimento estabelecimento = new EstabelecimentoBuilder().construir();
+        estabelecimentoRepository.save(estabelecimento);
+        String nomeProduto = "Pinga";
+        Produto produto = new ProdutoBuilder().comNome(nomeProduto).comEstabelecimento(estabelecimento).construir();
+        produtoRepository.save(produto);
         String json = toJSON(produto);
-        this.mockMvc
-                .perform(post("/produto").content(json).contentType(MediaType.APPLICATION_JSON_VALUE))
+        mvc.perform(post("/produto/").content(json).contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isCreated());
 
         List<Produto> produtosRetornados = produtoRepository
@@ -137,6 +165,49 @@ public class ProdutoControllerTest {
     }
 
     @Test
+    void deve_criar_um_produto() throws Exception {
+
+        Estabelecimento estabelecimento = new EstabelecimentoBuilder().construir();
+        estabelecimentoRepository.save(estabelecimento);
+
+        Produto produto = new ProdutoBuilder().comEstabelecimento(estabelecimento).construir();
+        produtoRepository.save(produto);
+
+        ProdutoRequestDTO produtoRequestDTO = new ProdutoRequestDTO();
+
+        mvc
+                .perform(
+                        post("/produto/")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(JsonUtil.toJson(produtoRequestDTO)))
+                .andExpect(status().isCreated());
+
+        Iterable<Produto> produtosEncontrados = produtoRepository.findAll();
+
+        assertThat(produtosEncontrados)
+                .extracting("nome")
+                .containsOnly(produto.getNome());
+        assertThat(produtosEncontrados)
+                .extracting("descricao")
+                .containsOnly(produto.getDescricao());
+        assertThat(produtosEncontrados)
+                .extracting("marca")
+                .containsOnly(produto.getMarca());
+        assertThat(produtosEncontrados)
+                .extracting("preco")
+                .containsOnly(produto.getPreco());
+        assertThat(produtosEncontrados)
+                .extracting("categoria")
+                .containsOnly(produto.getCategoria());
+        assertThat(produtosEncontrados)
+                .extracting("imagem")
+                .containsOnly(produto.getImagem());
+        assertThat(produtosEncontrados)
+                .extracting("estabelecimento")
+                .containsOnly(produto.getEstabelecimento());
+    }
+
+    @Test
     public void deve_alterar_dados_do_produto() throws Exception {
         Produto nomeAlterado = new ProdutoBuilder().construir();
         produtoRepository.save(nomeAlterado);
@@ -145,7 +216,7 @@ public class ProdutoControllerTest {
 
         String json = toJSON(nomeAlterado);
 
-        this.mockMvc.perform(put("/produto").content(json).contentType(MediaType.APPLICATION_JSON_VALUE))
+        this.mvc.perform(put("/produto").content(json).contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isCreated());
 
         Produto produtoRetornado = produtoRepository.findById(nomeAlterado.getId()).get();
