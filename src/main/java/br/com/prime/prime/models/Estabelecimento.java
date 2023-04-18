@@ -33,11 +33,11 @@ public class Estabelecimento {
     private String cnpj;
 
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "estabelecimento")
+    @OneToMany(mappedBy = "estabelecimento", cascade = CascadeType.ALL)
     private List<Produto> produtos;
 
     public Estabelecimento(String nome, String telefone, String horarioAtendimento, int numero, String cidade,

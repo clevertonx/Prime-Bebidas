@@ -14,6 +14,7 @@ import br.com.prime.prime.repository.UsuarioRepository;
 
 @Component
 public class UsuarioMapperImpl implements UsuarioMapper {
+    
     @Autowired
     private UsuarioRepository usuarioRepository;
 

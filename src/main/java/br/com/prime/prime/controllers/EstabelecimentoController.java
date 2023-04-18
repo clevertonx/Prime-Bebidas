@@ -1,13 +1,11 @@
 package br.com.prime.prime.controllers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
@@ -23,10 +21,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.prime.prime.Mappers.EstabelecimentoMapper;
+import br.com.prime.prime.Services.EstabelecimentoService;
+import br.com.prime.prime.dto.EstabelecimentoPutDTO;
 import br.com.prime.prime.dto.EstabelecimentoRequestDTO;
-import br.com.prime.prime.models.Estabelecimento;
+import br.com.prime.prime.dto.EstabelecimentoResponseDTO;
 import br.com.prime.prime.repository.EstabelecimentoRepository;
-import jakarta.validation.Valid;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 
 @RestController
 @RequestMapping(path = "/estabelecimento")
@@ -36,14 +37,13 @@ public class EstabelecimentoController {
     private EstabelecimentoRepository estabelecimentoRepository;
 
     @Autowired
-    private EstabelecimentoMapper estabelecimentoMapper;
+    private EstabelecimentoService estabelecimentoService;
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Estabelecimento>> buscarTodos() {
-        Iterable<Estabelecimento> iterable = estabelecimentoRepository.findAll();
-        List<Estabelecimento> estabelecimentos = new ArrayList<>();
-        iterable.forEach(estabelecimentos::add);
-        return ResponseEntity.ok().body(estabelecimentos);
+    @Operation(summary = "Lista todos os estabelecimentos")
+    @ApiResponse(responseCode = "200")
+    @GetMapping
+    public ResponseEntity<List<EstabelecimentoResponseDTO>> buscarTodos() {
+        return ResponseEntity.ok(estabelecimentoService.buscarTodos());
     }
 
     @DeleteMapping(path = "/{id}")
@@ -51,16 +51,22 @@ public class EstabelecimentoController {
         estabelecimentoRepository.deleteById(id);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EstabelecimentoRequestDTO> cadastrar(@RequestBody @Valid EstabelecimentoRequestDTO estabelecimentoDto) {
-        estabelecimentoRepository.save(estabelecimentoMapper.estabelecimentoRequestParaEstabelecimento(estabelecimentoDto));
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    @Operation(summary = "Cadastrar um novo estabelecimento")
+    @ApiResponse(responseCode = "201")
+    @PostMapping(consumes = { "application/json" })
+    public ResponseEntity<EstabelecimentoResponseDTO> cadastrarEstabelecimento(
+            @RequestBody EstabelecimentoRequestDTO novoEstabelecimento) throws Exception {
+        return ResponseEntity.status(HttpStatus.CREATED).body(estabelecimentoService.criar(novoEstabelecimento));
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Estabelecimento> alterar(@RequestBody Estabelecimento estabelecimento) {
-        Estabelecimento estabelecimentoAlterado = estabelecimentoRepository.save(estabelecimento);
-        return ResponseEntity.status(HttpStatus.CREATED).body(estabelecimentoAlterado);
+    @Operation(summary = "Editar o estabelecimento")
+    @ApiResponse(responseCode = "200")
+    @PutMapping(path = "/{id}", consumes = "application/json")
+    public ResponseEntity<EstabelecimentoResponseDTO> atualizarEstabelecimento(
+            @RequestBody EstabelecimentoPutDTO estabelecimentoPutDTO,
+            @PathVariable Long id) {
+
+        return ResponseEntity.ok(estabelecimentoService.alterar(estabelecimentoPutDTO, id));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
