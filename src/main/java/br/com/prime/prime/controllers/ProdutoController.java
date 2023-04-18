@@ -1,6 +1,5 @@
 package br.com.prime.prime.controllers;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,13 +23,13 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.prime.prime.Services.ProdutoService;
+import br.com.prime.prime.dto.ProdutoPutDTO;
 import br.com.prime.prime.dto.ProdutoRequestDTO;
 import br.com.prime.prime.dto.ProdutoResponseDTO;
 import br.com.prime.prime.models.PrecoInvalidoException;
-import br.com.prime.prime.models.Produto;
-import br.com.prime.prime.repository.ProdutoRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(path = { "/produto" }, produces = { "application/json" })
@@ -38,17 +37,13 @@ import io.swagger.v3.oas.annotations.responses.ApiResponse;
 public class ProdutoController {
 
     @Autowired
-    private ProdutoRepository produtoRepository;
-
-    @Autowired
     private ProdutoService produtoService;
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Produto>> buscarTodos() {
-        Iterable<Produto> iterable = produtoRepository.findAll();
-        List<Produto> produtos = new ArrayList<>();
-        iterable.forEach(produtos::add);
-        return ResponseEntity.ok().body(produtos);
+    @Operation(summary = "Lista todos os produtos")
+    @ApiResponse(responseCode = "200")
+    @GetMapping
+    public ResponseEntity<List<ProdutoResponseDTO>> buscarTodos() {
+        return ResponseEntity.ok(produtoService.buscarTodos());
     }
 
     @GetMapping(path = "/buscarPorNome", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -69,14 +64,18 @@ public class ProdutoController {
     @ApiResponse(responseCode = "201")
     @PostMapping(consumes = { "application/json" })
     public ResponseEntity<ProdutoResponseDTO> cadastrarProduto(
-            @RequestBody ProdutoRequestDTO novoProduto) throws PrecoInvalidoException {
+            @RequestBody @Valid ProdutoRequestDTO novoProduto) throws PrecoInvalidoException {
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.criar(novoProduto));
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Produto> alterar(@RequestBody Produto produto) {
-        Produto produtoAlterado = produtoRepository.save(produto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(produtoAlterado);
+    @Operation(summary = "Editar o produto")
+    @ApiResponse(responseCode = "200")
+    @PutMapping(path = "/{id}", consumes = "application/json")
+    public ResponseEntity<ProdutoResponseDTO> atualizarProduto(
+            @RequestBody @Valid ProdutoPutDTO produtoPutDTO,
+            @PathVariable Long id) {
+
+        return ResponseEntity.ok(produtoService.alterar(produtoPutDTO, id));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

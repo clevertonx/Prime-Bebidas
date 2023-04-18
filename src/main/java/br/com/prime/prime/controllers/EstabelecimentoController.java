@@ -20,7 +20,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
-import br.com.prime.prime.Mappers.EstabelecimentoMapper;
 import br.com.prime.prime.Services.EstabelecimentoService;
 import br.com.prime.prime.dto.EstabelecimentoPutDTO;
 import br.com.prime.prime.dto.EstabelecimentoRequestDTO;
@@ -28,6 +27,7 @@ import br.com.prime.prime.dto.EstabelecimentoResponseDTO;
 import br.com.prime.prime.repository.EstabelecimentoRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/estabelecimento")
@@ -55,7 +55,7 @@ public class EstabelecimentoController {
     @ApiResponse(responseCode = "201")
     @PostMapping(consumes = { "application/json" })
     public ResponseEntity<EstabelecimentoResponseDTO> cadastrarEstabelecimento(
-            @RequestBody EstabelecimentoRequestDTO novoEstabelecimento) throws Exception {
+            @RequestBody @Valid EstabelecimentoRequestDTO novoEstabelecimento) throws Exception {
         return ResponseEntity.status(HttpStatus.CREATED).body(estabelecimentoService.criar(novoEstabelecimento));
     }
 
@@ -63,7 +63,7 @@ public class EstabelecimentoController {
     @ApiResponse(responseCode = "200")
     @PutMapping(path = "/{id}", consumes = "application/json")
     public ResponseEntity<EstabelecimentoResponseDTO> atualizarEstabelecimento(
-            @RequestBody EstabelecimentoPutDTO estabelecimentoPutDTO,
+            @RequestBody @Valid EstabelecimentoPutDTO estabelecimentoPutDTO,
             @PathVariable Long id) {
 
         return ResponseEntity.ok(estabelecimentoService.alterar(estabelecimentoPutDTO, id));

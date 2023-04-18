@@ -1,4 +1,5 @@
 package br.com.prime.prime.Mappers;
+
 import java.util.List;
 
 import org.mapstruct.Mapper;
@@ -10,11 +11,13 @@ import br.com.prime.prime.models.Estabelecimento;
 
 @Mapper(componentModel = "spring")
 public interface EstabelecimentoMapper {
-    public Estabelecimento estabelecimentoRequestParaEstabelecimento(EstabelecimentoRequestDTO estabelecimentoRequestDTO);
+    public Estabelecimento estabelecimentoRequestParaEstabelecimento(
+            EstabelecimentoRequestDTO estabelecimentoRequestDTO);
 
-    public Estabelecimento estabeleicmentoPutParaEstabelecimento(EstabelecimentoPutDTO estabelecimentoPutDTO);
+    public Estabelecimento estabelecimentoPutParaEstabelecimento(EstabelecimentoPutDTO estabelecimentoPutDTO);
 
     public EstabelecimentoResponseDTO estabelecimentoParaEstabelecimentoResponse(Estabelecimento estabelecimento);
 
-    public List<EstabelecimentoResponseDTO> estabelecimentosParaEstabelecimentoResponseDTOs(List<Estabelecimento> estabelecimentos);
+    public List<EstabelecimentoResponseDTO> estabelecimentosParaEstabelecimentoResponseDTOs(
+            List<Estabelecimento> estabelecimentos);
 }

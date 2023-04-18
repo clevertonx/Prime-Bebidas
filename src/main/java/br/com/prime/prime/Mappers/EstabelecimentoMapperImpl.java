@@ -38,7 +38,7 @@ public class EstabelecimentoMapperImpl implements EstabelecimentoMapper {
         }
 
         @Override
-        public Estabelecimento estabeleicmentoPutParaEstabelecimento(EstabelecimentoPutDTO estabelecimentoPutDTO) {
+        public Estabelecimento estabelecimentoPutParaEstabelecimento(EstabelecimentoPutDTO estabelecimentoPutDTO) {
                 Estabelecimento estabelecimento = estabelecimentoRepository.findById(estabelecimentoPutDTO.getId())
                                 .get();
                 estabelecimento.setNome(estabelecimentoPutDTO.getNome());

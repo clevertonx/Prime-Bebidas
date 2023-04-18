@@ -27,6 +27,7 @@ import br.com.prime.prime.dto.UsuarioResponseDTO;
 import br.com.prime.prime.repository.UsuarioRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 
 @RestController
 @RequestMapping(path = "/usuario")
@@ -39,11 +40,11 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @Operation(summary = "Lista todos os usuarios")
-	@ApiResponse(responseCode = "200")
-	@GetMapping
-	public ResponseEntity<List<UsuarioResponseDTO>> buscarTodos() {
-		return ResponseEntity.ok(usuarioService.buscarTodos());
-	}
+    @ApiResponse(responseCode = "200")
+    @GetMapping
+    public ResponseEntity<List<UsuarioResponseDTO>> buscarTodos() {
+        return ResponseEntity.ok(usuarioService.buscarTodos());
+    }
 
     @DeleteMapping(path = "/{id}")
     public void remover(@PathVariable Long id) {
@@ -54,14 +55,14 @@ public class UsuarioController {
     @ApiResponse(responseCode = "201")
     @PostMapping(consumes = { "application/json" })
     public ResponseEntity<UsuarioResponseDTO> cadastrarUsuario(
-            @RequestBody UsuarioRequestDTO novoUsuario) throws Exception {
+            @RequestBody @Valid UsuarioRequestDTO novoUsuario) throws Exception {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.criar(novoUsuario));
     }
 
     @Operation(summary = "Editar o usuario")
     @ApiResponse(responseCode = "200")
     @PutMapping(path = "/{id}", consumes = "application/json")
-    public ResponseEntity<UsuarioResponseDTO> atualizarUsuario(@RequestBody UsuarioPutDTO usuarioPutDTO,
+    public ResponseEntity<UsuarioResponseDTO> atualizarUsuario(@RequestBody @Valid UsuarioPutDTO usuarioPutDTO,
             @PathVariable Long id) {
 
         return ResponseEntity.ok(usuarioService.alterar(usuarioPutDTO, id));
