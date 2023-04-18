@@ -1,9 +1,5 @@
 package br.com.prime.prime.Builders;
 
-import java.util.ArrayList;
-import java.util.List;
-
-import br.com.prime.prime.models.Estabelecimento;
 import br.com.prime.prime.models.Usuario;
 
 public class UsuarioBuilder {
