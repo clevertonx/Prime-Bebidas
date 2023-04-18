@@ -9,16 +9,13 @@ import br.com.prime.prime.models.Usuario;
 public class UsuarioBuilder {
     String email = "clevertonx@gmail.com";
     String senha = "senha123";
-    private List<Estabelecimento> estabelecimentos = new ArrayList<>();
-
 
     public UsuarioBuilder() {
 
     }
 
     public Usuario construir() {
-        Usuario usuario = new Usuario(email, senha, estabelecimentos);
-        usuario.setEstabelecimentos(estabelecimentos);
+        Usuario usuario = new Usuario(email, senha);
         return usuario;
     }
 
@@ -32,8 +29,4 @@ public class UsuarioBuilder {
         return this;
     }
 
-    public UsuarioBuilder comEstabelecimento(Estabelecimento estabelecimento) {
-        this.estabelecimentos.add(estabelecimento);
-        return this;
-    }
 }

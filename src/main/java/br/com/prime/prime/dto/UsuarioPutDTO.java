@@ -10,8 +10,9 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UsuarioRequestDTO {
-
+public class UsuarioPutDTO {
+    
+    private Long id;
 
     @Email(message = "Campo inválido")
     @NotBlank(message = "Email não informado")
@@ -20,7 +21,8 @@ public class UsuarioRequestDTO {
     @NotBlank(message = "Senha não informada")
     private String senha;
 
-    public UsuarioRequestDTO(Usuario usuario) {
+    public UsuarioPutDTO(Usuario usuario) {
+        this.id = usuario.getId();
         this.email = usuario.getEmail();
         this.senha = usuario.getSenha();
     }

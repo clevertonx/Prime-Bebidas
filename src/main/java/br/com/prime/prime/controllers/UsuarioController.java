@@ -22,9 +22,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.prime.prime.Services.UsuarioService;
+import br.com.prime.prime.dto.UsuarioPutDTO;
 import br.com.prime.prime.dto.UsuarioRequestDTO;
+import br.com.prime.prime.dto.UsuarioResponseDTO;
 import br.com.prime.prime.models.Usuario;
 import br.com.prime.prime.repository.UsuarioRepository;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.responses.ApiResponse;
 import jakarta.validation.Valid;
 
 @RestController
@@ -34,29 +39,36 @@ public class UsuarioController {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
-    @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Usuario>> buscarTodos() {
-        Iterable<Usuario> iterable = usuarioRepository.findAll();
-        List<Usuario> usuarios = new ArrayList<>();
-        iterable.forEach(usuarios::add);
-        return ResponseEntity.ok().body(usuarios);
-    }
+    @Autowired
+    private UsuarioService usuarioService;
+
+    @Operation(summary = "Lista todos os usuarios")
+	@ApiResponse(responseCode = "200")
+	@GetMapping
+	public ResponseEntity<List<UsuarioResponseDTO>> buscarTodos() {
+		return ResponseEntity.ok(usuarioService.buscarTodos());
+	}
 
     @DeleteMapping(path = "/{id}")
     public void remover(@PathVariable Long id) {
         usuarioRepository.deleteById(id);
     }
 
-    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Void> cadastrar(@RequestBody @Valid UsuarioRequestDTO usuarioDto) {
-        usuarioRepository.save(usuarioDto.toUsuario());
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    @Operation(summary = "Cadastrar um novo usuario")
+    @ApiResponse(responseCode = "201")
+    @PostMapping(consumes = { "application/json" })
+    public ResponseEntity<UsuarioResponseDTO> cadastrarUsuario(
+            @RequestBody UsuarioRequestDTO novoUsuario) throws Exception {
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.criar(novoUsuario));
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Usuario> alterar(@RequestBody Usuario usuario) {
-        Usuario usuarioAlterado = usuarioRepository.save(usuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioAlterado);
+    @Operation(summary = "Editar o usuario")
+    @ApiResponse(responseCode = "200")
+    @PutMapping(path = "/{id}", consumes = "application/json")
+    public ResponseEntity<UsuarioResponseDTO> atualizarUsuario(@RequestBody UsuarioPutDTO usuarioPutDTO,
+            @PathVariable Long id) {
+
+        return ResponseEntity.ok(usuarioService.alterar(usuarioPutDTO, id));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
