@@ -22,6 +22,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.prime.prime.Services.UsuarioService;
+import br.com.prime.prime.dto.LoginDTO;
+import br.com.prime.prime.dto.LoginRequestDTO;
 import br.com.prime.prime.dto.UsuarioPutDTO;
 import br.com.prime.prime.dto.UsuarioRequestDTO;
 import br.com.prime.prime.dto.UsuarioResponseDTO;
@@ -82,6 +84,19 @@ public class UsuarioController {
         });
 
         return errors;
+    }
+
+    @Operation(summary = "Login")
+    @ApiResponse(responseCode = "200")
+    @PostMapping(consumes = { "application/json" }, path ="/login")
+    public ResponseEntity<LoginDTO> login(
+            @RequestBody @Valid LoginRequestDTO loginRequestDTO) throws Exception {
+        LoginDTO loginDTO = usuarioService.login(loginRequestDTO);
+        HttpStatus status = HttpStatus.OK;
+        if (loginDTO.getId() == -1) {          
+            status = HttpStatus.FORBIDDEN;
+        }
+        return ResponseEntity.status(status).body(loginDTO);
     }
 
 }

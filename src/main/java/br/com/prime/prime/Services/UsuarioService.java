@@ -8,6 +8,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.prime.prime.Mappers.UsuarioMapper;
+import br.com.prime.prime.dto.LoginDTO;
+import br.com.prime.prime.dto.LoginRequestDTO;
 import br.com.prime.prime.dto.UsuarioPutDTO;
 import br.com.prime.prime.dto.UsuarioRequestDTO;
 import br.com.prime.prime.dto.UsuarioResponseDTO;
@@ -16,7 +18,7 @@ import br.com.prime.prime.repository.UsuarioRepository;
 
 @Service
 public class UsuarioService {
-    
+
     @Autowired
     UsuarioRepository usuarioRepository;
 
@@ -49,5 +51,14 @@ public class UsuarioService {
         usuarioRepository.save(usuario);
 
         return usuarioMapper.usuarioParaUsuarioResponse(usuario);
+    }
+
+    public LoginDTO login(LoginRequestDTO loginRequestDTO){
+        Usuario usuario = usuarioRepository.findByEmailIgnoreCase(loginRequestDTO.getEmail());
+        Long id = -1L;
+        if (usuario.getSenha().equals(loginRequestDTO.getSenha()))  {
+            id = usuario.getId();
+        }
+        return new LoginDTO(id);    
     }
 }
