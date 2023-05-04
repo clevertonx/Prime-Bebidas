@@ -85,18 +85,4 @@ public class UsuarioController {
 
         return errors;
     }
-
-    @Operation(summary = "Login")
-    @ApiResponse(responseCode = "200")
-    @PostMapping(consumes = { "application/json" }, path ="/login")
-    public ResponseEntity<LoginDTO> login(
-            @RequestBody @Valid LoginRequestDTO loginRequestDTO) throws Exception {
-        LoginDTO loginDTO = usuarioService.login(loginRequestDTO);
-        HttpStatus status = HttpStatus.OK;
-        if (loginDTO.getId() == -1) {          
-            status = HttpStatus.FORBIDDEN;
-        }
-        return ResponseEntity.status(status).body(loginDTO);
-    }
-
 }
