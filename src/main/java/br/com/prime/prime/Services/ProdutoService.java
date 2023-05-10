@@ -52,5 +52,4 @@ public class ProdutoService {
     public List<ProdutoResponseDTO> buscarTodos() {
         return produtoMapper.produtosParaProdutoResponseDTOs((List<Produto>) produtoRepository.findAll());
     }
-
 }

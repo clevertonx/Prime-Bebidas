@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,11 +25,14 @@ import br.com.prime.prime.Services.UsuarioService;
 import br.com.prime.prime.dto.UsuarioPutDTO;
 import br.com.prime.prime.dto.UsuarioRequestDTO;
 import br.com.prime.prime.dto.UsuarioResponseDTO;
+import br.com.prime.prime.models.Usuario;
 import br.com.prime.prime.repository.UsuarioRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 
 @RestController
+@CrossOrigin("*")
 @RequestMapping(path = "/usuario")
 public class UsuarioController {
 
@@ -39,11 +43,11 @@ public class UsuarioController {
     private UsuarioService usuarioService;
 
     @Operation(summary = "Lista todos os usuarios")
-	@ApiResponse(responseCode = "200")
-	@GetMapping
-	public ResponseEntity<List<UsuarioResponseDTO>> buscarTodos() {
-		return ResponseEntity.ok(usuarioService.buscarTodos());
-	}
+    @ApiResponse(responseCode = "200")
+    @GetMapping
+    public ResponseEntity<List<UsuarioResponseDTO>> buscarTodos() {
+        return ResponseEntity.ok(usuarioService.buscarTodos());
+    }
 
     @DeleteMapping(path = "/{id}")
     public void remover(@PathVariable Long id) {
@@ -65,6 +69,17 @@ public class UsuarioController {
             @PathVariable Long id) {
 
         return ResponseEntity.ok(usuarioService.alterar(usuarioPutDTO, id));
+    }
+
+    @PostMapping(path = "/login", consumes = "application/json")
+public ResponseEntity<String> login(@RequestBody @Valid UsuarioRequestDTO usuarioRequest) {
+    Usuario usuario = usuarioService.loginUsuario(usuarioRequest.getEmail(), usuarioRequest.getSenha());
+
+    if (usuario == null) {
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
+    } else {
+        return ResponseEntity.ok("Login realizado com sucesso");
+    }
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

@@ -50,4 +50,9 @@ public class UsuarioService {
 
         return usuarioMapper.usuarioParaUsuarioResponse(usuario);
     }
+
+    public Usuario loginUsuario(String email, String senha) {
+        Usuario usuariologin = usuarioRepository.login(email, senha);
+        return usuariologin;
+    }
 }
