@@ -24,7 +24,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.prime.prime.Mappers.EstabelecimentoMapper;
+import br.com.prime.prime.Services.EstabelecimentoService;
 import br.com.prime.prime.dto.EstabelecimentoRequestDTO;
+import br.com.prime.prime.dto.EstabelecimentoResponseDTO;
 import br.com.prime.prime.models.Estabelecimento;
 import br.com.prime.prime.repository.EstabelecimentoRepository;
 import jakarta.validation.Valid;
@@ -40,6 +42,9 @@ public class EstabelecimentoController {
     @Autowired
     private EstabelecimentoMapper estabelecimentoMapper;
 
+    @Autowired
+    private EstabelecimentoService estabelecimentoService;
+
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<Estabelecimento>> buscarTodos() {
         Iterable<Estabelecimento> iterable = estabelecimentoRepository.findAll();
@@ -54,9 +59,9 @@ public class EstabelecimentoController {
     }
 
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EstabelecimentoRequestDTO> cadastrar(@RequestBody @Valid EstabelecimentoRequestDTO estabelecimentoDto) {
-        estabelecimentoRepository.save(estabelecimentoMapper.estabelecimentoRequestParaEstabelecimento(estabelecimentoDto));
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<EstabelecimentoResponseDTO> cadastrar(
+            @RequestBody @Valid EstabelecimentoRequestDTO estabelecimentoDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(estabelecimentoService.criar(estabelecimentoDto));
     }
 
     @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
