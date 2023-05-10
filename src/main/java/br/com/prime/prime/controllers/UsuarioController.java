@@ -72,14 +72,14 @@ public class UsuarioController {
     }
 
     @PostMapping(path = "/login", consumes = "application/json")
-public ResponseEntity<String> login(@RequestBody @Valid UsuarioRequestDTO usuarioRequest) {
-    Usuario usuario = usuarioService.loginUsuario(usuarioRequest.getEmail(), usuarioRequest.getSenha());
+    public ResponseEntity<String> login(@RequestBody @Valid UsuarioRequestDTO usuarioRequest) {
+        Usuario usuario = usuarioService.loginUsuario(usuarioRequest.getEmail(), usuarioRequest.getSenha());
 
-    if (usuario == null) {
-        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
-    } else {
-        return ResponseEntity.ok("Login realizado com sucesso");
-    }
+        if (usuario == null) {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
+        } else {
+            return ResponseEntity.ok("Login realizado com sucesso");
+        }
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
