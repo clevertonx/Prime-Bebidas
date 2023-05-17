@@ -11,6 +11,7 @@ import br.com.prime.prime.Mappers.UsuarioMapper;
 import br.com.prime.prime.dto.UsuarioPutDTO;
 import br.com.prime.prime.dto.UsuarioRequestDTO;
 import br.com.prime.prime.dto.UsuarioResponseDTO;
+import br.com.prime.prime.models.Estabelecimento;
 import br.com.prime.prime.models.Usuario;
 import br.com.prime.prime.repository.UsuarioRepository;
 
@@ -55,4 +56,11 @@ public class UsuarioService {
         Usuario usuariologin = usuarioRepository.login(email, senha);
         return usuariologin;
     }
+
+    public List<Estabelecimento> estabelecimentoPorUsuario (Long idUsuario) {
+        Usuario usuario = usuarioRepository.findById(idUsuario).get();
+       return usuario.getEstabelecimentos();
+    }
 }
+
+

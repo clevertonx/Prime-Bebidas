@@ -25,6 +25,7 @@ import br.com.prime.prime.Services.UsuarioService;
 import br.com.prime.prime.dto.UsuarioPutDTO;
 import br.com.prime.prime.dto.UsuarioRequestDTO;
 import br.com.prime.prime.dto.UsuarioResponseDTO;
+import br.com.prime.prime.models.Estabelecimento;
 import br.com.prime.prime.models.Usuario;
 import br.com.prime.prime.repository.UsuarioRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -82,6 +83,7 @@ public class UsuarioController {
         }
     }
 
+
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationException(MethodArgumentNotValidException ex) {
@@ -94,6 +96,12 @@ public class UsuarioController {
         });
 
         return errors;
+    }
+
+    @Operation(summary = "Busca estabelecimentos do Usuário")
+    @GetMapping(path = "/{idUsuario}/estabelecimento")
+    public ResponseEntity<List<Estabelecimento>> buscarEstabelecimento(@PathVariable Long idUsuario) {
+        return ResponseEntity.ok(usuarioService.estabelecimentoPorUsuario(idUsuario));
     }
 
 }
