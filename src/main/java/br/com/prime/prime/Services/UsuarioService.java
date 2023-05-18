@@ -1,5 +1,6 @@
 package br.com.prime.prime.Services;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -7,7 +8,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import br.com.prime.prime.Mappers.EstabelecimentoMapper;
 import br.com.prime.prime.Mappers.UsuarioMapper;
+import br.com.prime.prime.dto.EstabelecimentoUsuarioResponseDTO;
 import br.com.prime.prime.dto.UsuarioPutDTO;
 import br.com.prime.prime.dto.UsuarioRequestDTO;
 import br.com.prime.prime.dto.UsuarioResponseDTO;
@@ -23,6 +26,9 @@ public class UsuarioService {
 
     @Autowired
     UsuarioMapper usuarioMapper;
+
+    @Autowired
+    EstabelecimentoMapper estabelecimentoMapper;
 
     public void removerPorId(Long id) {
         usuarioRepository.deleteById(id);
@@ -57,9 +63,13 @@ public class UsuarioService {
         return usuariologin;
     }
 
-    public List<Estabelecimento> estabelecimentoPorUsuario (Long idUsuario) {
-        Usuario usuario = usuarioRepository.findById(idUsuario).get();
-       return usuario.getEstabelecimentos();
+    public Collection<EstabelecimentoUsuarioResponseDTO> estabelecimentoPorUsuario (Long idUsuario) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
+        if (usuarioOptional.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        Usuario usuario = usuarioOptional.get();
+       return estabelecimentoMapper.estabelecimentosParaEstabelecimentosUsuariosResponse(usuario.getEstabelecimentos());
     }
 }
 

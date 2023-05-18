@@ -1,5 +1,6 @@
 package br.com.prime.prime.controllers;
 
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -22,10 +23,10 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.prime.prime.Services.UsuarioService;
+import br.com.prime.prime.dto.EstabelecimentoUsuarioResponseDTO;
 import br.com.prime.prime.dto.UsuarioPutDTO;
 import br.com.prime.prime.dto.UsuarioRequestDTO;
 import br.com.prime.prime.dto.UsuarioResponseDTO;
-import br.com.prime.prime.models.Estabelecimento;
 import br.com.prime.prime.models.Usuario;
 import br.com.prime.prime.repository.UsuarioRepository;
 import io.swagger.v3.oas.annotations.Operation;
@@ -79,7 +80,7 @@ public class UsuarioController {
         if (usuario == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
         } else {
-            return ResponseEntity.ok("Login realizado com sucesso");
+            return ResponseEntity.ok(Long.toString(usuario.getId()));
         }
     }
 
@@ -100,7 +101,7 @@ public class UsuarioController {
 
     @Operation(summary = "Busca estabelecimentos do Usuário")
     @GetMapping(path = "/{idUsuario}/estabelecimento")
-    public ResponseEntity<List<Estabelecimento>> buscarEstabelecimento(@PathVariable Long idUsuario) {
+    public ResponseEntity<Collection<EstabelecimentoUsuarioResponseDTO>> buscarEstabelecimento(@PathVariable Long idUsuario) {
         return ResponseEntity.ok(usuarioService.estabelecimentoPorUsuario(idUsuario));
     }
 

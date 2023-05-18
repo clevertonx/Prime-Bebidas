@@ -1,5 +1,6 @@
 package br.com.prime.prime.Mappers;
 
+import java.util.ArrayList;
 import java.util.Collection;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -39,7 +40,12 @@ public class EstabelecimentoMapperImpl implements EstabelecimentoMapper {
         @Override
         public Collection<EstabelecimentoUsuarioResponseDTO> estabelecimentosParaEstabelecimentosUsuariosResponse(
                         Collection<Estabelecimento> estabelecimentos) {
-                // TODO Auto-generated method stub
-                throw new UnsupportedOperationException("Unimplemented method 'estabelecimentosParaEstabelecimentosUsuariosResponse'");
+                Collection<EstabelecimentoUsuarioResponseDTO> estabelecimentosMapeados = new ArrayList<>();
+                for (Estabelecimento estabelecimento : estabelecimentos) {
+                        estabelecimentosMapeados.add(new EstabelecimentoUsuarioResponseDTO(estabelecimento.getId(),
+                                        estabelecimento.getNome(), estabelecimento.getLogradouro(),
+                                        estabelecimento.getTelefone(), estabelecimento.getCnpj()));
+                }
+                return estabelecimentosMapeados;
         }
 }
