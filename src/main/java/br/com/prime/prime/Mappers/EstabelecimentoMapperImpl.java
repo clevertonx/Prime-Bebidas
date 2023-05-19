@@ -48,4 +48,14 @@ public class EstabelecimentoMapperImpl implements EstabelecimentoMapper {
                 }
                 return estabelecimentosMapeados;
         }
+
+        @Override
+        public Collection<EstabelecimentoResponseDTO> estabelecimentosParaEstabelecimentoResponses(
+                        Collection<Estabelecimento> estabelecimentos) {
+                Collection<EstabelecimentoResponseDTO> estabelecimentosMapeados = new ArrayList<>();   
+                for (Estabelecimento estabelecimento : estabelecimentos) {
+                        estabelecimentosMapeados.add(new EstabelecimentoResponseDTO(estabelecimento));
+                }
+                return estabelecimentosMapeados;                
+        }
 }

@@ -1,6 +1,7 @@
 package br.com.prime.prime.controllers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -46,11 +47,11 @@ public class EstabelecimentoController {
     private EstabelecimentoService estabelecimentoService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Estabelecimento>> buscarTodos() {
+    public ResponseEntity<Collection<EstabelecimentoResponseDTO>> buscarTodos() {
         Iterable<Estabelecimento> iterable = estabelecimentoRepository.findAll();
         List<Estabelecimento> estabelecimentos = new ArrayList<>();
         iterable.forEach(estabelecimentos::add);
-        return ResponseEntity.ok().body(estabelecimentos);
+        return ResponseEntity.ok().body(estabelecimentoMapper.estabelecimentosParaEstabelecimentoResponses(estabelecimentos));
     }
 
     @DeleteMapping(path = "/{id}")
