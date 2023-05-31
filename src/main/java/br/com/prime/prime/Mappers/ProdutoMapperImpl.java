@@ -28,16 +28,16 @@ private EstabelecimentoRepository estabelecimentoRepository;
     public ProdutoResponseDTO produtoParaProdutoResponse(Produto produto) {
 
         return new ProdutoResponseDTO(produto.getId(), produto.getNome(), produto.getDescricao(), produto.getMarca(),
-                produto.getPreco(), produto.getImagem());
+                produto.getPreco(), produto.getImagem(), produto.getEstabelecimento().getId());
     }
 
     @Override
     public List<ProdutoResponseDTO> produtosParaProdutoResponseDTOs(List<Produto> produtos) {
-        List<ProdutoResponseDTO> produtoResponseDTOs = new ArrayList<>();
+        List<ProdutoResponseDTO> produtosMapeados = new ArrayList<>();
         for (Produto produto : produtos) {
-            produtoResponseDTOs.add(produtoParaProdutoResponse(produto));
+            produtosMapeados.add(new ProdutoResponseDTO(produto));
         }
-        return produtoResponseDTOs;
+        return produtosMapeados;
     }
 
 }

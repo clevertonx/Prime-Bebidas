@@ -5,7 +5,6 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -79,34 +78,8 @@ public class EstabelecimentoController {
 
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EstabelecimentoResponseDTO> alterar(@PathVariable Long id,
-            @RequestBody EstabelecimentoRequestDTO request) {
-        Optional<Estabelecimento> optionalEstabelecimento = estabelecimentoRepository.findById(id);
-
-        Estabelecimento estabelecimentoExistente = optionalEstabelecimento.get();
-
-        estabelecimentoExistente.setNome(request.getNome());
-        estabelecimentoExistente.setTelefone(request.getTelefone());
-        estabelecimentoExistente.setHorarioAtendimento(request.getHorarioAtendimento());
-        estabelecimentoExistente.setNumero(request.getNumero());
-        estabelecimentoExistente.setCidade(request.getCidade());
-        estabelecimentoExistente.setLogradouro(request.getLogradouro());
-        estabelecimentoExistente.setEstado(request.getEstado());
-        estabelecimentoExistente.setCnpj(request.getCnpj());
-
-        Estabelecimento estabelecimentoAlterado = estabelecimentoRepository.save(estabelecimentoExistente);
-
-        EstabelecimentoResponseDTO response = new EstabelecimentoResponseDTO();
-        response.setId(estabelecimentoAlterado.getId());
-        response.setNome(estabelecimentoAlterado.getNome());
-        response.setTelefone(estabelecimentoAlterado.getTelefone());
-        response.setHorarioAtendimento(estabelecimentoAlterado.getHorarioAtendimento());
-        response.setNumero(estabelecimentoAlterado.getNumero());
-        response.setCidade(estabelecimentoAlterado.getCidade());
-        response.setLogradouro(estabelecimentoAlterado.getLogradouro());
-        response.setEstado(estabelecimentoAlterado.getEstado());
-        response.setCnpj(estabelecimentoAlterado.getCnpj());
-
-        return ResponseEntity.ok(response);
+            @RequestBody EstabelecimentoRequestDTO estabelecimentoRequestDTO) {
+        return ResponseEntity.ok(estabelecimentoService.editar(estabelecimentoRequestDTO, id));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

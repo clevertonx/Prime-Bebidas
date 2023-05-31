@@ -84,7 +84,6 @@ public class UsuarioController {
         }
     }
 
-
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public Map<String, String> handleValidationException(MethodArgumentNotValidException ex) {
@@ -101,7 +100,8 @@ public class UsuarioController {
 
     @Operation(summary = "Busca estabelecimentos do Usuário")
     @GetMapping(path = "/{idUsuario}/estabelecimento")
-    public ResponseEntity<Collection<EstabelecimentoUsuarioResponseDTO>> buscarEstabelecimento(@PathVariable Long idUsuario) {
+    public ResponseEntity<Collection<EstabelecimentoUsuarioResponseDTO>> buscarEstabelecimento(
+            @PathVariable Long idUsuario) {
         return ResponseEntity.ok(usuarioService.estabelecimentoPorUsuario(idUsuario));
     }
 

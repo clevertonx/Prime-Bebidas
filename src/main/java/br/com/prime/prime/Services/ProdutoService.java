@@ -44,7 +44,8 @@ public class ProdutoService {
         for (Produto produto : produtos) {
             produtosRetornados
                     .add(new ProdutoResponseDTO(produto.getId(), produto.getNome(),
-                            produto.getDescricao(), produto.getMarca(), produto.getPreco(), produto.getImagem()));
+                            produto.getDescricao(), produto.getMarca(), produto.getPreco(), produto.getImagem(),
+                            produto.getEstabelecimento().getId()));
         }
         return produtoMapper.produtosParaProdutoResponseDTOs(produtos);
     }

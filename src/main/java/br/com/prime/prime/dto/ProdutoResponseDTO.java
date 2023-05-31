@@ -1,5 +1,6 @@
 package br.com.prime.prime.dto;
 
+import br.com.prime.prime.models.Produto;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -16,5 +17,16 @@ public class ProdutoResponseDTO {
     private String marca;
     private Double preco;
     private String imagem;
+    private Long idEstabelecimento;
+
+    public ProdutoResponseDTO(Produto produto) {
+        this.id = produto.getId();
+        this.nome = produto.getNome();
+        this.descricao = produto.getDescricao();
+        this.marca = produto.getMarca();
+        this.preco = produto.getPreco();
+        this.imagem = produto.getImagem();
+        this.idEstabelecimento = produto.getEstabelecimento().getId();
+    }
 
 }
