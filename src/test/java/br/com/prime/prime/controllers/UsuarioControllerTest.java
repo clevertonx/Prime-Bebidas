@@ -7,11 +7,13 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 
 import java.util.ArrayList;
 import java.util.List;
 
 import org.assertj.core.api.Assertions;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.AfterEach;
 
@@ -27,12 +29,18 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.ObjectWriter;
 
 import br.com.prime.prime.Builders.UsuarioBuilder;
+import br.com.prime.prime.dto.UsuarioRequestDTO;
+import br.com.prime.prime.dto.UsuarioResponseDTO;
 import br.com.prime.prime.models.Usuario;
 import br.com.prime.prime.repository.UsuarioRepository;
+
 
 @SpringBootTest
 @AutoConfigureMockMvc
 public class UsuarioControllerTest {
+
+    private ObjectMapper objectMapper = new ObjectMapper();
+
     @Autowired
     private MockMvc mockMvc;
 
@@ -61,8 +69,6 @@ public class UsuarioControllerTest {
                 .andExpect(content().string(containsString(email1)))
                 .andExpect(content().string(containsString(email2)));
     }
-
-    
 
     @Test
     public void deve_remover_um_usuario_pelo_id() throws Exception {
@@ -106,37 +112,33 @@ public class UsuarioControllerTest {
     }
 
     @Test
-    public void deve_alterar_email_do_usuario() throws Exception {
-        Usuario emailAlterado = new UsuarioBuilder().construir();
-        usuarioRepository.save(emailAlterado);
+    public void deve_alterar_dados_do_usuario() throws Exception {
 
-        emailAlterado.setEmail("Gustavodurn@gmail.com");
+        Usuario usuario = new Usuario("teste@gmail.com", "senha123");
+        usuarioRepository.save(usuario);
 
-        String json = toJSON(emailAlterado);
+        long usuarioId = usuario.getId();
+        UsuarioRequestDTO usuarioDTO = new UsuarioRequestDTO("tom@gmail.com", "senha321");
 
-        this.mockMvc.perform(put("/usuario").content(json).contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isCreated());
-
-        Usuario usuarioRetornado = usuarioRepository.findById(emailAlterado.getId()).get();
-        Assertions.assertThat(usuarioRetornado.getId()).isEqualTo(emailAlterado.getId());
-        Assertions.assertThat(usuarioRetornado.getEmail()).isEqualTo(emailAlterado.getEmail());
+        mockMvc.perform(put("/usuario/{id}", usuarioId)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(asJsonString(usuarioDTO)))
+                .andExpect(status().isOk())
+                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                .andExpect(jsonPath("$.email").value("tom@gmail.com"))
+                .andExpect(jsonPath("$.senha").value("senha321"))
+                .andDo(result -> {
+                    String responseBody = result.getResponse().getContentAsString();
+                    UsuarioResponseDTO usuarioResponseDTO = objectMapper.readValue(responseBody,
+                            UsuarioResponseDTO.class);
+                    assertThat(usuarioResponseDTO.getEmail()).isEqualTo("tom@gmail.com");
+                    assertThat(usuarioResponseDTO.getSenha()).isEqualTo("senha321");
+                });
     }
 
-    @Test
-    public void deve_alterar_senha_do_usuario() throws Exception {
-        Usuario senhaAlterada = new UsuarioBuilder().construir();
-        usuarioRepository.save(senhaAlterada);
-
-        senhaAlterada.setSenha("tururu");
-
-        String json = toJSON(senhaAlterada);
-
-        this.mockMvc.perform(put("/usuario").content(json).contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isCreated());
-
-        Usuario usuarioRetornado = usuarioRepository.findById(senhaAlterada.getId()).get();
-        Assertions.assertThat(usuarioRetornado.getId()).isEqualTo(senhaAlterada.getId());
-        Assertions.assertThat(usuarioRetornado.getSenha()).isEqualTo(senhaAlterada.getSenha());
+    private String asJsonString(Object object) throws JsonProcessingException {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper.writeValueAsString(object);
     }
 
 }

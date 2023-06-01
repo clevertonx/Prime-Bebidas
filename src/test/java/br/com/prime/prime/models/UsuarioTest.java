@@ -1,21 +1,24 @@
 package br.com.prime.prime.models;
 
-import org.junit.jupiter.api.Assertions;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.Test;
 
 import br.com.prime.prime.Builders.UsuarioBuilder;
+
+
 
 public class UsuarioTest {
     @Test
     public void deve_criar_um_usuario()
             {
 
-        String email = "clevertonx@gmail.com";
+        String email = "teste@gmail.com";
         String senha = "senha123";
 
         Usuario usuario = new UsuarioBuilder().construir();
 
-        Assertions.assertEquals(email, usuario.getEmail());
-        Assertions.assertEquals(senha, usuario.getSenha());
+       assertThat(usuario.getEmail()).isEqualTo(email);
+       assertThat(usuario.getSenha()).isEqualTo(senha);
     }
 }

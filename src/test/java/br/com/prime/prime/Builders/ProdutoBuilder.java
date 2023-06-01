@@ -10,7 +10,7 @@ public class ProdutoBuilder {
     private String nome = "Vodka";
     private String descricao = "Nossa premiada vodka tem um sabor robusto com acabamento seco para uma maior suavidade";
     private String marca = "Absolut";
-    private Double preço = 89.90;
+    private Double preco = 89.90;
     private Categoria categoria = Categoria.Destilada;
     private String imagem = Imagem.getBytes();
     private Estabelecimento estabelecimento = new EstabelecimentoBuilder().construir();
@@ -23,7 +23,7 @@ public class ProdutoBuilder {
 
     public Produto construir()
             throws PrecoInvalidoException {
-        return new Produto(nome, descricao, marca, preço, categoria, imagem, estabelecimento);
+        return new Produto(nome, descricao, marca, preco, categoria, imagem, estabelecimento);
     }
 
     public ProdutoBuilder comNome(String nome) {
@@ -36,8 +36,8 @@ public class ProdutoBuilder {
         return this;
     }
 
-    public ProdutoBuilder comPreço(double preço) {
-        this.preço = preço;
+    public ProdutoBuilder comPreço(double preco) {
+        this.preco = preco;
         return this;
     }
 
