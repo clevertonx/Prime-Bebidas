@@ -13,7 +13,7 @@ public class UsuarioTest {
     public void deve_criar_um_usuario()
             {
 
-        String email = "teste@gmail.com";
+        String email = "test@gmail.com";
         String senha = "senha123";
 
         Usuario usuario = new UsuarioBuilder().construir();

@@ -2,6 +2,9 @@ package br.com.prime.prime.models;
 
 import java.util.List;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 
@@ -23,13 +26,13 @@ public class Usuario {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    @JsonInclude(Include.NON_NULL)
     private Long id;
     @Column(unique = true)
-    private String email = "clevertonx@gmail.com";
-    private String senha = "senha123";
+    private String email;
+    private String senha;
     
-    @OneToMany(mappedBy = "usuario")
+    @OneToMany(mappedBy = "usuario", orphanRemoval = true)
+    @Cascade(CascadeType.PERSIST)
     private List<Estabelecimento> estabelecimentos;
 
     public Usuario(String email, String senha) {

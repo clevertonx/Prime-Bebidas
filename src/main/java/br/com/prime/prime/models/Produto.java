@@ -1,5 +1,8 @@
 package br.com.prime.prime.models;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -38,6 +41,7 @@ public class Produto {
 
     @ManyToOne
     @JoinColumn(name = "estabelecimento_id")
+    @Cascade(CascadeType.PERSIST)
     private Estabelecimento estabelecimento;
 
     public Produto(String nome, String descricao, String marca, double preco, Categoria categoria, String imagem, Estabelecimento estabelecimento)
