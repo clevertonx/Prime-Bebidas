@@ -10,14 +10,19 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
+import br.com.prime.prime.Builders.EstabelecimentoBuilder;
 import br.com.prime.prime.Builders.Imagem;
 import br.com.prime.prime.Builders.ProdutoBuilder;
+import br.com.prime.prime.Builders.UsuarioBuilder;
 import br.com.prime.prime.models.Categoria;
 import br.com.prime.prime.models.Estabelecimento;
 import br.com.prime.prime.models.PrecoInvalidoException;
 import br.com.prime.prime.models.Produto;
+import br.com.prime.prime.models.Usuario;
+import jakarta.transaction.Transactional;
 
 @DataJpaTest
+@Transactional
 public class ProdutoRepositoryTest {
 
     @Autowired
@@ -78,10 +83,8 @@ public class ProdutoRepositoryTest {
     public void deve_buscar_produto_pelo_nome() throws PrecoInvalidoException {
         String nome = "Vodka";
         Produto produto = new ProdutoBuilder().comNome(nome).construir();
-        Estabelecimento estabelecimento = new Estabelecimento();
-        produto.setEstabelecimento(estabelecimento);
+
         produtoRepository.save(produto);
-        estabelecimentoRepository.save(estabelecimento);
 
         List<Produto> produtoRetornado = produtoRepository.findByNomeContainingIgnoreCase(nome);
 
@@ -90,7 +93,10 @@ public class ProdutoRepositoryTest {
 
     @Test
     public void deve_buscar_produto_pela_categoria() throws PrecoInvalidoException {
-        Estabelecimento estabelecimento = new Estabelecimento();
+
+        Usuario usuario = new UsuarioBuilder().construir();
+
+        Estabelecimento estabelecimento = new EstabelecimentoBuilder().comUsuario(usuario).construir();
         estabelecimentoRepository.save(estabelecimento);
 
         Categoria categoria = Categoria.Destilada;
