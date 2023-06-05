@@ -60,6 +60,16 @@ public class ProdutoController {
                 .body(produtoMapper.produtosParaProdutoResponses(produtos));
     }
 
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ProdutoResponseDTO> buscarPorId(@PathVariable Long id) {
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado"));
+
+        ProdutoResponseDTO produtoResponseDTO = produtoMapper
+                .produtoParaProdutoResponse(produto);
+        return ResponseEntity.ok().body(produtoResponseDTO);
+    }
+
     @GetMapping(path = "/buscarPorNome", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ProdutoResponseDTO>> buscarPorNome(
             @RequestParam(required = false, name = "nome") String nome) {

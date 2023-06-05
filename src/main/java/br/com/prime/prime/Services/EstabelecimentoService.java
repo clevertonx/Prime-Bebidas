@@ -11,6 +11,7 @@ import br.com.prime.prime.Mappers.EstabelecimentoMapper;
 import br.com.prime.prime.Mappers.ProdutoMapper;
 import br.com.prime.prime.dto.EstabelecimentoRequestDTO;
 import br.com.prime.prime.dto.EstabelecimentoResponseDTO;
+import br.com.prime.prime.dto.ProdutoEstabelecimentoResponseDTO;
 import br.com.prime.prime.dto.ProdutoResponseDTO;
 import br.com.prime.prime.models.Estabelecimento;
 import br.com.prime.prime.repository.EstabelecimentoRepository;
@@ -53,12 +54,12 @@ public class EstabelecimentoService {
         return estabelecimentoMapper.estabelecimentoParaEstabelecimentoResponse(estabelecimento);
     }
 
-    public Collection<ProdutoResponseDTO> produtoPorEstabelecimento(Long idEstabelecimento) {
+    public Collection<ProdutoEstabelecimentoResponseDTO> produtoPorEstabelecimento(Long idEstabelecimento) {
         Optional<Estabelecimento> estabelecimentoOptional = estabelecimentoRepository.findById(idEstabelecimento);
         if (estabelecimentoOptional.isEmpty()) {
             throw new NoSuchElementException();
         }
         Estabelecimento estabelecimento = estabelecimentoOptional.get();
-        return produtoMapper.produtosParaProdutoResponses(estabelecimento.getProdutos());
+        return produtoMapper.produtosParaProdutosEstabelecimentosResponse(estabelecimento.getProdutos());
     }
 }
