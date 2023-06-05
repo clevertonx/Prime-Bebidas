@@ -51,7 +51,7 @@ public class ProdutoMapperImpl implements ProdutoMapper {
                 for (Produto produto : produtos) {
                     produtosMapeados.add(new ProdutoEstabelecimentoUsuarioResponseDTO(produto.getId(),
                             produto.getNome(), produto.getDescricao(),
-                            produto.getMarca(), produto.getPreco(), produto.getCategoria()));
+                            produto.getMarca(), produto.getPreco(), produto.getCategoria(), produto.getEstabelecimento().getId()));
                 }
                 return produtosMapeados;
     }
@@ -63,7 +63,7 @@ public class ProdutoMapperImpl implements ProdutoMapper {
             for (Produto produto : produtos) {
                     produtosMapeados.add(new ProdutoEstabelecimentoUsuarioResponseDTO(produto.getId(),
                                     produto.getNome(), produto.getDescricao(),
-                                    produto.getMarca(), produto.getPreco(), produto.getCategoria()));
+                                    produto.getMarca(), produto.getPreco(), produto.getCategoria(), produto.getEstabelecimento().getId()));
             }
             return produtosMapeados;
     }

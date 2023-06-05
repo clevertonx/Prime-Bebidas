@@ -16,6 +16,7 @@ public class ProdutoEstabelecimentoUsuarioResponseDTO {
     private String marca;
     private Double preco;
     private Categoria categoria;
+    private long idEstabelecimento;
 
     public ProdutoEstabelecimentoUsuarioResponseDTO(Produto produto) {
         this.id = produto.getId();
@@ -24,5 +25,6 @@ public class ProdutoEstabelecimentoUsuarioResponseDTO {
         this.marca = produto.getMarca();
         this.preco = produto.getPreco();
         this.categoria = produto.getCategoria();
+        this.idEstabelecimento = produto.getEstabelecimento().getId(); 
     }
 }
