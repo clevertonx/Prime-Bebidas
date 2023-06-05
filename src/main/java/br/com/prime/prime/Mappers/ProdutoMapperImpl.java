@@ -55,4 +55,16 @@ public class ProdutoMapperImpl implements ProdutoMapper {
                 }
                 return produtosMapeados;
     }
+
+    @Override
+    public Collection<ProdutoEstabelecimentoUsuarioResponseDTO> produtosParaUsuariosResponse(
+                    Collection<Produto> produtos) {
+            Collection<ProdutoEstabelecimentoUsuarioResponseDTO> produtosMapeados = new ArrayList<>();
+            for (Produto produto : produtos) {
+                    produtosMapeados.add(new ProdutoEstabelecimentoUsuarioResponseDTO(produto.getId(),
+                                    produto.getNome(), produto.getDescricao(),
+                                    produto.getMarca(), produto.getPreco(), produto.getCategoria()));
+            }
+            return produtosMapeados;
+    }
 }

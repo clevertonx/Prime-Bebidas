@@ -22,4 +22,6 @@ public interface ProdutoMapper {
     public Collection<ProdutoEstabelecimentoUsuarioResponseDTO>
     produtosParaProdutosEstabelecimentosUsuarioResponse(Collection<Produto> produtos);
 
+    public Collection<ProdutoEstabelecimentoUsuarioResponseDTO> produtosParaUsuariosResponse(Collection<Produto> produtos);
+
 }

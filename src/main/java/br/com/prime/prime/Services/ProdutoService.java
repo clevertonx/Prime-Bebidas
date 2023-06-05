@@ -101,4 +101,18 @@ public class ProdutoService {
         return produtoMapper.produtosParaProdutosEstabelecimentosUsuarioResponse(produtos);
     }
 
+    public Collection<ProdutoEstabelecimentoUsuarioResponseDTO> produtoPorUsuario(Long idUsuario) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
+        if (usuarioOptional.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        Usuario usuario = usuarioOptional.get();
+
+        List<Produto> produtos = new ArrayList<>();
+        for (Estabelecimento estabelecimento : usuario.getEstabelecimentos()) {
+            produtos.addAll(estabelecimento.getProdutos());
+        }
+
+        return produtoMapper.produtosParaUsuariosResponse(produtos);
+    }
 }

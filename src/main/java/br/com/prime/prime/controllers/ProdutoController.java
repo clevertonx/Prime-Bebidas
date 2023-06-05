@@ -125,4 +125,11 @@ public class ProdutoController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @Operation(summary = "Busca produtos do Usuário")
+    @GetMapping(path = "/usuario/{idUsuario}")
+    public ResponseEntity<Collection<ProdutoEstabelecimentoUsuarioResponseDTO>> buscarProduto(
+            @PathVariable Long idUsuario) {
+        return ResponseEntity.ok(produtoService.produtoPorUsuario(idUsuario));
+    }
 }
