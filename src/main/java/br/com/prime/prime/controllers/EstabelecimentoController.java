@@ -28,10 +28,8 @@ import br.com.prime.prime.Mappers.EstabelecimentoMapper;
 import br.com.prime.prime.Services.EstabelecimentoService;
 import br.com.prime.prime.dto.EstabelecimentoRequestDTO;
 import br.com.prime.prime.dto.EstabelecimentoResponseDTO;
-import br.com.prime.prime.dto.ProdutoEstabelecimentoResponseDTO;
 import br.com.prime.prime.models.Estabelecimento;
 import br.com.prime.prime.repository.EstabelecimentoRepository;
-import io.swagger.v3.oas.annotations.Operation;
 import jakarta.validation.Valid;
 
 @RestController
@@ -96,13 +94,6 @@ public class EstabelecimentoController {
         });
 
         return errors;
-    }
-
-    @Operation(summary = "Busca produtos do Estabelecimento")
-    @GetMapping(path = "/{idEstabelecimento}/produto")
-    public ResponseEntity<Collection<ProdutoEstabelecimentoResponseDTO>> buscarProduto(
-            @PathVariable Long idEstabelecimento) {
-        return ResponseEntity.ok(estabelecimentoService.produtoPorEstabelecimento(idEstabelecimento));
     }
 
 }

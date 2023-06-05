@@ -5,6 +5,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -27,6 +28,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import br.com.prime.prime.Mappers.ProdutoMapper;
 import br.com.prime.prime.Services.ProdutoService;
+import br.com.prime.prime.dto.ProdutoEstabelecimentoUsuarioResponseDTO;
 import br.com.prime.prime.dto.ProdutoRequestDTO;
 import br.com.prime.prime.dto.ProdutoResponseDTO;
 import br.com.prime.prime.models.PrecoInvalidoException;
@@ -111,4 +113,16 @@ public class ProdutoController {
         return errors;
     }
 
+    @Operation(summary = "Busca produtos do Estabelecimento")
+    @GetMapping(path = "/usuario/{idUsuario}/estabelecimento/{idEstabelecimento}/produto")
+    public ResponseEntity<Collection<ProdutoEstabelecimentoUsuarioResponseDTO>> getProdutosPorEstabelecimentoUsuario(
+            @PathVariable Long idUsuario, @PathVariable Long idEstabelecimento) {
+        try {
+            Collection<ProdutoEstabelecimentoUsuarioResponseDTO> produtos = produtoService
+                    .produtoPorEstabelecimentoUsuario(idUsuario, idEstabelecimento);
+            return ResponseEntity.ok(produtos);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
 }

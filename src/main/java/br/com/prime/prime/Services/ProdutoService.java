@@ -1,6 +1,7 @@
 package br.com.prime.prime.Services;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.NoSuchElementException;
 import java.util.Optional;
@@ -9,11 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import br.com.prime.prime.Mappers.ProdutoMapper;
+import br.com.prime.prime.dto.ProdutoEstabelecimentoUsuarioResponseDTO;
 import br.com.prime.prime.dto.ProdutoRequestDTO;
 import br.com.prime.prime.dto.ProdutoResponseDTO;
+import br.com.prime.prime.models.Estabelecimento;
 import br.com.prime.prime.models.PrecoInvalidoException;
 import br.com.prime.prime.models.Produto;
+import br.com.prime.prime.models.Usuario;
 import br.com.prime.prime.repository.ProdutoRepository;
+import br.com.prime.prime.repository.UsuarioRepository;
 
 @Service
 public class ProdutoService {
@@ -22,6 +27,9 @@ public class ProdutoService {
 
     @Autowired
     private ProdutoMapper produtoMapper;
+
+    @Autowired
+    private UsuarioRepository usuarioRepository;
 
     public void removerPorId(Long id) {
         produtoRepository.deleteById(id);
@@ -52,7 +60,6 @@ public class ProdutoService {
         return produtoMapper.produtoParaProdutoResponse(produto);
     }
 
-
     public List<ProdutoResponseDTO> buscarPorNome(String nome) {
         List<Produto> produtos;
         if (nome == null || nome.isEmpty()) {
@@ -75,4 +82,23 @@ public class ProdutoService {
     public List<ProdutoResponseDTO> buscarTodos() {
         return produtoMapper.produtosParaProdutoResponses((List<Produto>) produtoRepository.findAll());
     }
+
+    public Collection<ProdutoEstabelecimentoUsuarioResponseDTO> produtoPorEstabelecimentoUsuario(Long idUsuario,
+            Long idEstabelecimento) {
+        Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
+        if (usuarioOptional.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        Usuario usuario = usuarioOptional.get();
+
+        Estabelecimento estabelecimento = usuario.getEstabelecimentos().stream()
+                .filter(e -> e.getId().equals(idEstabelecimento))
+                .findFirst()
+                .orElseThrow(NoSuchElementException::new);
+
+        Collection<Produto> produtos = estabelecimento.getProdutos();
+
+        return produtoMapper.produtosParaProdutosEstabelecimentosUsuarioResponse(produtos);
+    }
+
 }

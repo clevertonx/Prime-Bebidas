@@ -28,7 +28,7 @@ public class Usuario {
     private String email;
     private String senha;
     
-    @OneToMany(mappedBy = "usuario", orphanRemoval = true)
+    @OneToMany(mappedBy = "usuario")
     @Cascade(CascadeType.PERSIST)
     private List<Estabelecimento> estabelecimentos;
 

@@ -7,7 +7,7 @@ import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import br.com.prime.prime.dto.ProdutoEstabelecimentoResponseDTO;
+import br.com.prime.prime.dto.ProdutoEstabelecimentoUsuarioResponseDTO;
 import br.com.prime.prime.dto.ProdutoRequestDTO;
 import br.com.prime.prime.dto.ProdutoResponseDTO;
 import br.com.prime.prime.models.Estabelecimento;
@@ -37,18 +37,6 @@ public class ProdutoMapperImpl implements ProdutoMapper {
     }
 
     @Override
-    public Collection<ProdutoEstabelecimentoResponseDTO> produtosParaProdutosEstabelecimentosResponse(
-            Collection<Produto> produtos) {
-        Collection<ProdutoEstabelecimentoResponseDTO> produtosMapeados = new ArrayList<>();
-        for (Produto produto : produtos) {
-            produtosMapeados.add(new ProdutoEstabelecimentoResponseDTO(produto.getId(),
-                    produto.getNome(), produto.getDescricao(),
-                    produto.getMarca(), produto.getPreco(), produto.getCategoria()));
-        }
-        return produtosMapeados;
-    }
-
-    @Override
     public List<ProdutoResponseDTO> produtosParaProdutoResponses(List<Produto> produtos) {
         List<ProdutoResponseDTO> produtosMapeados = new ArrayList<>();
         for (Produto produto : produtos) {
@@ -57,4 +45,14 @@ public class ProdutoMapperImpl implements ProdutoMapper {
         return produtosMapeados;
     }
 
+    @Override
+    public Collection<ProdutoEstabelecimentoUsuarioResponseDTO> produtosParaProdutosEstabelecimentosUsuarioResponse(
+            Collection<Produto> produtos) {  Collection<ProdutoEstabelecimentoUsuarioResponseDTO> produtosMapeados = new ArrayList<>();
+                for (Produto produto : produtos) {
+                    produtosMapeados.add(new ProdutoEstabelecimentoUsuarioResponseDTO(produto.getId(),
+                            produto.getNome(), produto.getDescricao(),
+                            produto.getMarca(), produto.getPreco(), produto.getCategoria()));
+                }
+                return produtosMapeados;
+    }
 }
