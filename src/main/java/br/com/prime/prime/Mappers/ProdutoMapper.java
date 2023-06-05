@@ -1,8 +1,10 @@
 package br.com.prime.prime.Mappers;
+import java.util.Collection;
 import java.util.List;
 
 import org.mapstruct.Mapper;
 
+import br.com.prime.prime.dto.ProdutoEstabelecimentoResponseDTO;
 import br.com.prime.prime.dto.ProdutoRequestDTO;
 import br.com.prime.prime.dto.ProdutoResponseDTO;
 import br.com.prime.prime.models.PrecoInvalidoException;
@@ -14,7 +16,8 @@ public interface ProdutoMapper {
 
     public ProdutoResponseDTO produtoParaProdutoResponse(Produto produto);
 
-    public List<ProdutoResponseDTO> produtosParaProdutoResponseDTOs(List<Produto> produtos);
+    public List<ProdutoResponseDTO> produtosParaProdutoResponses(List<Produto> produtos);
 
+    public Collection<ProdutoEstabelecimentoResponseDTO> produtosParaProdutosEstabelecimentosResponse(Collection<Produto> produtos);
 
 }

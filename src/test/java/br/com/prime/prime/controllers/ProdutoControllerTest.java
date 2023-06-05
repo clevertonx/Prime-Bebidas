@@ -1,21 +1,18 @@
 package br.com.prime.prime.controllers;
 
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
-import java.util.List;
 
-import org.assertj.core.api.Assertions;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -31,13 +28,11 @@ import org.springframework.test.web.servlet.MvcResult;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 
 import br.com.prime.prime.Builders.EstabelecimentoBuilder;
 import br.com.prime.prime.Builders.Imagem;
 import br.com.prime.prime.Builders.ProdutoBuilder;
 import br.com.prime.prime.Builders.UsuarioBuilder;
-import br.com.prime.prime.dto.EstabelecimentoRequestDTO;
 import br.com.prime.prime.dto.ProdutoRequestDTO;
 import br.com.prime.prime.dto.ProdutoResponseDTO;
 import br.com.prime.prime.models.Categoria;
@@ -204,9 +199,9 @@ public class ProdutoControllerTest {
                 assertEquals("descAlterada", produtoAlterado.getDescricao());
                 assertEquals("marcaAlterada", produtoAlterado.getMarca());
                 assertEquals(25.0, produtoAlterado.getPreco());
-                assertEquals(Categoria.Destilada, produtoAlterado.getCategoria());
+                assertEquals(Categoria.Bitter, produtoAlterado.getCategoria());
                 assertEquals(Imagem.getBytes(), produtoAlterado.getImagem());
-                assertEquals(produto.getId(), produtoAlterado.getEstabelecimento().getId());
+                assertEquals(estabelecimento.getId(), produtoAlterado.getEstabelecimento().getId());
         }
 
         private String asJsonString(Object object) throws JsonProcessingException {

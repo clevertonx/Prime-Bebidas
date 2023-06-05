@@ -1,6 +1,7 @@
 package br.com.prime.prime.controllers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -24,6 +25,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.prime.prime.Mappers.ProdutoMapper;
 import br.com.prime.prime.Services.ProdutoService;
 import br.com.prime.prime.dto.ProdutoRequestDTO;
 import br.com.prime.prime.dto.ProdutoResponseDTO;
@@ -32,6 +34,7 @@ import br.com.prime.prime.models.Produto;
 import br.com.prime.prime.repository.ProdutoRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 
 @RestController
 @CrossOrigin("*")
@@ -43,14 +46,18 @@ public class ProdutoController {
     private ProdutoRepository produtoRepository;
 
     @Autowired
+    private ProdutoMapper produtoMapper;
+
+    @Autowired
     private ProdutoService produtoService;
 
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Produto>> buscarTodos() {
+    public ResponseEntity<Collection<ProdutoResponseDTO>> buscarTodos() {
         Iterable<Produto> iterable = produtoRepository.findAll();
         List<Produto> produtos = new ArrayList<>();
         iterable.forEach(produtos::add);
-        return ResponseEntity.ok().body(produtos);
+        return ResponseEntity.ok()
+                .body(produtoMapper.produtosParaProdutoResponses(produtos));
     }
 
     @GetMapping(path = "/buscarPorNome", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -62,23 +69,22 @@ public class ProdutoController {
     @Operation(summary = "Deletar um Produto pelo seu id")
     @ApiResponse(responseCode = "204")
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> removerProdutoId(@PathVariable Long id) {
-        produtoService.removerPorId(id);
-        return ResponseEntity.noContent().build();
+    public void remover(@PathVariable Long id) {
+        produtoRepository.deleteById(id);
     }
 
     @Operation(summary = "Cadastrar um novo produto")
     @ApiResponse(responseCode = "201")
     @PostMapping(consumes = { "application/json" })
-    public ResponseEntity<ProdutoResponseDTO> cadastrarProduto(
-            @RequestBody ProdutoRequestDTO novoProduto) throws PrecoInvalidoException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.criar(novoProduto));
+    public ResponseEntity<ProdutoResponseDTO> cadastrar(
+            @RequestBody @Valid ProdutoRequestDTO produtoDto) throws PrecoInvalidoException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.criar(produtoDto));
     }
 
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Produto> alterar(@RequestBody Produto produto) {
-        Produto produtoAlterado = produtoRepository.save(produto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(produtoAlterado);
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ProdutoResponseDTO> alterar(@PathVariable Long id,
+            @RequestBody ProdutoRequestDTO produtoRequestDTO) {
+        return ResponseEntity.ok(produtoService.editar(produtoRequestDTO, id));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

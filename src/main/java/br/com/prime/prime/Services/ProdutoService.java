@@ -2,6 +2,8 @@ package br.com.prime.prime.Services;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,11 +27,31 @@ public class ProdutoService {
         produtoRepository.deleteById(id);
     }
 
-    public ProdutoResponseDTO criar(ProdutoRequestDTO ProdutoRequestDTO) throws PrecoInvalidoException {
-        Produto produto = produtoMapper.produtoRequestParaProduto(ProdutoRequestDTO);
+    public ProdutoResponseDTO criar(ProdutoRequestDTO produtoRequestDTO) throws PrecoInvalidoException {
+        Produto produto = produtoMapper
+                .produtoRequestParaProduto(produtoRequestDTO);
         produtoRepository.save(produto);
         return produtoMapper.produtoParaProdutoResponse(produto);
     }
+
+    public ProdutoResponseDTO editar(ProdutoRequestDTO produtoRequestDTO, Long id) {
+
+        Optional<Produto> produtoOptional = produtoRepository.findById(id);
+        if (produtoOptional.isEmpty()) {
+            throw new NoSuchElementException();
+        }
+        Produto produto = produtoOptional.get();
+        produto.setNome(produtoRequestDTO.getNome());
+        produto.setDescricao(produtoRequestDTO.getDescricao());
+        produto.setMarca(produtoRequestDTO.getMarca());
+        produto.setPreco(produtoRequestDTO.getPreco());
+        produto.setCategoria(produtoRequestDTO.getCategoria());
+        produto.setImagem(produtoRequestDTO.getImagem());
+        produtoRepository.save(produto);
+
+        return produtoMapper.produtoParaProdutoResponse(produto);
+    }
+
 
     public List<ProdutoResponseDTO> buscarPorNome(String nome) {
         List<Produto> produtos;
@@ -47,10 +69,10 @@ public class ProdutoService {
                             produto.getDescricao(), produto.getMarca(), produto.getPreco(), produto.getImagem(),
                             produto.getEstabelecimento().getId()));
         }
-        return produtoMapper.produtosParaProdutoResponseDTOs(produtos);
+        return produtoMapper.produtosParaProdutoResponses(produtos);
     }
 
     public List<ProdutoResponseDTO> buscarTodos() {
-        return produtoMapper.produtosParaProdutoResponseDTOs((List<Produto>) produtoRepository.findAll());
+        return produtoMapper.produtosParaProdutoResponses((List<Produto>) produtoRepository.findAll());
     }
 }

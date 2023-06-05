@@ -59,6 +59,6 @@ public class EstabelecimentoService {
             throw new NoSuchElementException();
         }
         Estabelecimento estabelecimento = estabelecimentoOptional.get();
-        return produtoMapper.produtosParaProdutoResponseDTOs(estabelecimento.getProdutos());
+        return produtoMapper.produtosParaProdutoResponses(estabelecimento.getProdutos());
     }
 }

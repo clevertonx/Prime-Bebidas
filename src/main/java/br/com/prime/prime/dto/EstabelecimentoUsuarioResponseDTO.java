@@ -13,7 +13,7 @@ public class EstabelecimentoUsuarioResponseDTO {
     private String logradouro;
     private String telefone;
     private String cnpj;
-   
+    
 
     public EstabelecimentoUsuarioResponseDTO(Estabelecimento estabelecimento) {
         this.id = estabelecimento.getId();
@@ -22,5 +22,4 @@ public class EstabelecimentoUsuarioResponseDTO {
         this.telefone = estabelecimento.getTelefone();
         this.cnpj = estabelecimento.getCnpj();
     }
-
 }
