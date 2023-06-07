@@ -18,6 +18,7 @@ public class ProdutoResponseDTO {
     private Double preco;
     private String imagem;
     private Long idEstabelecimento;
+    private String nomeEstabelecimento;
 
     public ProdutoResponseDTO(Produto produto) {
         this.id = produto.getId();
@@ -27,6 +28,7 @@ public class ProdutoResponseDTO {
         this.preco = produto.getPreco();
         this.imagem = produto.getImagem();
         this.idEstabelecimento = produto.getEstabelecimento().getId();
+        this.nomeEstabelecimento = produto.getEstabelecimento().getNome();
     }
 
 }

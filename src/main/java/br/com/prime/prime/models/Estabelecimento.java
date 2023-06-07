@@ -36,11 +36,11 @@ public class Estabelecimento {
 
 
     @ManyToOne
-    @JoinColumn(name = "usuario", nullable = false)
+    @JoinColumn(name = "usuario")
     @Cascade(CascadeType.PERSIST)
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "estabelecimento", orphanRemoval = true)
+    @OneToMany(mappedBy = "estabelecimento")
     @Cascade(CascadeType.PERSIST)
     private List<Produto> produtos;
 

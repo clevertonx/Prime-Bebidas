@@ -33,7 +33,7 @@ public class ProdutoMapperImpl implements ProdutoMapper {
     public ProdutoResponseDTO produtoParaProdutoResponse(Produto produto) {
 
         return new ProdutoResponseDTO(produto.getId(), produto.getNome(), produto.getDescricao(), produto.getMarca(),
-                produto.getPreco(), produto.getImagem(), produto.getEstabelecimento().getId());
+                produto.getPreco(), produto.getImagem(), produto.getEstabelecimento().getId(), produto.getEstabelecimento().getNome());
     }
 
     @Override
