@@ -18,7 +18,6 @@ public interface ProdutoMapper {
 
     public List<ProdutoResponseDTO> produtosParaProdutoResponses(List<Produto> produtos);
 
-
     public Collection<ProdutoEstabelecimentoUsuarioResponseDTO>
     produtosParaProdutosEstabelecimentosUsuarioResponse(Collection<Produto> produtos);
 

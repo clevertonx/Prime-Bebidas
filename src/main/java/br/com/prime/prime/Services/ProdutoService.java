@@ -13,6 +13,7 @@ import br.com.prime.prime.Mappers.ProdutoMapper;
 import br.com.prime.prime.dto.ProdutoEstabelecimentoUsuarioResponseDTO;
 import br.com.prime.prime.dto.ProdutoRequestDTO;
 import br.com.prime.prime.dto.ProdutoResponseDTO;
+import br.com.prime.prime.models.Categoria;
 import br.com.prime.prime.models.Estabelecimento;
 import br.com.prime.prime.models.PrecoInvalidoException;
 import br.com.prime.prime.models.Produto;
@@ -81,6 +82,11 @@ public class ProdutoService {
 
     public List<ProdutoResponseDTO> buscarTodos() {
         return produtoMapper.produtosParaProdutoResponses((List<Produto>) produtoRepository.findAll());
+    }
+
+    public List<ProdutoResponseDTO> buscarPorCategoria(Categoria categoria) {
+        List<Produto> produtos = produtoRepository.findByCategoria(categoria);
+        return produtoMapper.produtosParaProdutoResponses(produtos);
     }
 
     public Collection<ProdutoEstabelecimentoUsuarioResponseDTO> produtoPorEstabelecimentoUsuario(Long idUsuario,

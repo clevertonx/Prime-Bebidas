@@ -31,6 +31,7 @@ import br.com.prime.prime.Services.ProdutoService;
 import br.com.prime.prime.dto.ProdutoEstabelecimentoUsuarioResponseDTO;
 import br.com.prime.prime.dto.ProdutoRequestDTO;
 import br.com.prime.prime.dto.ProdutoResponseDTO;
+import br.com.prime.prime.models.Categoria;
 import br.com.prime.prime.models.PrecoInvalidoException;
 import br.com.prime.prime.models.Produto;
 import br.com.prime.prime.repository.ProdutoRepository;
@@ -70,6 +71,12 @@ public class ProdutoController {
         ProdutoResponseDTO produtoResponseDTO = produtoMapper
                 .produtoParaProdutoResponse(produto);
         return ResponseEntity.ok().body(produtoResponseDTO);
+    }
+
+    @GetMapping("/categoria")
+    public ResponseEntity<List<ProdutoResponseDTO>> buscarPorCategoria(@RequestParam Categoria categoria) {
+        List<ProdutoResponseDTO> produtos = produtoService.buscarPorCategoria(categoria);
+        return ResponseEntity.ok(produtos);
     }
 
     @GetMapping(path = "/buscarPorNome", produces = MediaType.APPLICATION_JSON_VALUE)
