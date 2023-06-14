@@ -40,7 +40,7 @@ public class Estabelecimento {
     @Cascade(CascadeType.PERSIST)
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "estabelecimento")
+    @OneToMany(mappedBy = "estabelecimento", orphanRemoval = true)
     @Cascade(CascadeType.PERSIST)
     private List<Produto> produtos;
 
