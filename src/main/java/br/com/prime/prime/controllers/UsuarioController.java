@@ -72,7 +72,7 @@ public class UsuarioController {
 
         return ResponseEntity.ok(usuarioService.alterar(usuarioPutDTO, id));
     }
-
+    @Operation(summary = "Autenticar usuario")
     @PostMapping(path = "/login", consumes = "application/json")
     public ResponseEntity<String> login(@RequestBody @Valid UsuarioRequestDTO usuarioRequest) {
         Usuario usuario = usuarioService.loginUsuario(usuarioRequest.getEmail(), usuarioRequest.getSenha());

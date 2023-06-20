@@ -53,7 +53,7 @@ public class ProdutoController {
 
     @Autowired
     private ProdutoService produtoService;
-
+    @Operation(summary = "Busca todos os produtos cadastrados")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<ProdutoResponseDTO>> buscarTodos() {
         Iterable<Produto> iterable = produtoRepository.findAll();
@@ -62,7 +62,7 @@ public class ProdutoController {
         return ResponseEntity.ok()
                 .body(produtoMapper.produtosParaProdutoResponses(produtos));
     }
-
+    @Operation(summary = "Busca produto por Id")
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProdutoResponseDTO> buscarPorId(@PathVariable Long id) {
         Produto produto = produtoRepository.findById(id)
@@ -72,13 +72,13 @@ public class ProdutoController {
                 .produtoParaProdutoResponse(produto);
         return ResponseEntity.ok().body(produtoResponseDTO);
     }
-
+    @Operation(summary = "Busca produtos por categoria")
     @GetMapping("/categoria")
     public ResponseEntity<List<ProdutoResponseDTO>> buscarPorCategoria(@RequestParam Categoria categoria) {
         List<ProdutoResponseDTO> produtos = produtoService.buscarPorCategoria(categoria);
         return ResponseEntity.ok(produtos);
     }
-
+    @Operation(summary = "Busca produtos por nome")
     @GetMapping(path = "/buscarPorNome", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ProdutoResponseDTO>> buscarPorNome(
             @RequestParam(required = false, name = "nome") String nome) {
@@ -99,7 +99,7 @@ public class ProdutoController {
             @RequestBody @Valid ProdutoRequestDTO produtoDto) throws PrecoInvalidoException {
         return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.criar(produtoDto));
     }
-
+    @Operation(summary = "Altera dados do produto")
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<ProdutoResponseDTO> alterar(@PathVariable Long id,
             @RequestBody ProdutoRequestDTO produtoRequestDTO) {

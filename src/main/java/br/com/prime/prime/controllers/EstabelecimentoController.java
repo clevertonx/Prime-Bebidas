@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -45,7 +46,7 @@ public class EstabelecimentoController {
 
     @Autowired
     private EstabelecimentoService estabelecimentoService;
-
+    @Operation(summary = "Busca todos estabelecimentos cadastrados")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<EstabelecimentoResponseDTO>> buscarTodos() {
         Iterable<Estabelecimento> iterable = estabelecimentoRepository.findAll();
@@ -54,7 +55,7 @@ public class EstabelecimentoController {
         return ResponseEntity.ok()
                 .body(estabelecimentoMapper.estabelecimentosParaEstabelecimentoResponses(estabelecimentos));
     }
-
+    @Operation(summary = "Busca estabelecimento por Id")
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EstabelecimentoResponseDTO> buscarPorId(@PathVariable Long id) {
         Estabelecimento estabelecimento = estabelecimentoRepository.findById(id)
@@ -69,13 +70,13 @@ public class EstabelecimentoController {
     public void remover(@PathVariable Long id) {
         estabelecimentoRepository.deleteById(id);
     }
-
+    @Operation(summary = "Cadastrar um novo estabelecimento")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EstabelecimentoResponseDTO> cadastrar(
             @RequestBody @Valid EstabelecimentoRequestDTO estabelecimentoDto) {
         return ResponseEntity.status(HttpStatus.CREATED).body(estabelecimentoService.criar(estabelecimentoDto));
     }
-
+    @Operation(summary = "Altera dados do estabelecimento")
     @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<EstabelecimentoResponseDTO> alterar(@PathVariable Long id,
             @RequestBody EstabelecimentoRequestDTO estabelecimentoRequestDTO) {
