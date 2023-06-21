@@ -14,7 +14,7 @@ public interface EstabelecimentoMapper {
 
     public EstabelecimentoResponseDTO estabelecimentoParaEstabelecimentoResponse(Estabelecimento estabelecimento);
 
-    public Collection<EstabelecimentoResponseDTO> estabelecimentosParaEstabelecimentoResponses(Collection<Estabelecimento> estabelecimentos);
+    public Collection<EstabelecimentoResponseDTO> estabelecimentosParaEstabelecimentosResponses(Collection<Estabelecimento> estabelecimentos);
 
     public Collection<EstabelecimentoUsuarioResponseDTO> estabelecimentosParaEstabelecimentosUsuariosResponse(Collection<Estabelecimento> estabelecimentos);
 

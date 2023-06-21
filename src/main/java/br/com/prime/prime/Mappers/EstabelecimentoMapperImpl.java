@@ -50,7 +50,7 @@ public class EstabelecimentoMapperImpl implements EstabelecimentoMapper {
         }
 
         @Override
-        public Collection<EstabelecimentoResponseDTO> estabelecimentosParaEstabelecimentoResponses(
+        public Collection<EstabelecimentoResponseDTO> estabelecimentosParaEstabelecimentosResponses(
                         Collection<Estabelecimento> estabelecimentos) {
                 Collection<EstabelecimentoResponseDTO> estabelecimentosMapeados = new ArrayList<>();   
                 for (Estabelecimento estabelecimento : estabelecimentos) {

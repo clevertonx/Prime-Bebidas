@@ -53,7 +53,7 @@ public class EstabelecimentoController {
         List<Estabelecimento> estabelecimentos = new ArrayList<>();
         iterable.forEach(estabelecimentos::add);
         return ResponseEntity.ok()
-                .body(estabelecimentoMapper.estabelecimentosParaEstabelecimentoResponses(estabelecimentos));
+                .body(estabelecimentoMapper.estabelecimentosParaEstabelecimentosResponses(estabelecimentos));
     }
     @Operation(summary = "Busca estabelecimento por Id")
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

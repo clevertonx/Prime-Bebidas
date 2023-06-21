@@ -11,8 +11,7 @@ public class UsuarioBuilder {
     }
 
     public Usuario construir() {
-        Usuario usuario = new Usuario(email, senha);
-        return usuario;
+        return new Usuario(email, senha);
     }
 
     public UsuarioBuilder comEmail(String email) {
