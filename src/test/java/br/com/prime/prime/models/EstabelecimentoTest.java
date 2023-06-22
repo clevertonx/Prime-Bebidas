@@ -1,6 +1,7 @@
 package br.com.prime.prime.models;
 
-import org.junit.jupiter.api.Assertions;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.Test;
 
 import br.com.prime.prime.Builders.EstabelecimentoBuilder;
@@ -20,13 +21,13 @@ public class EstabelecimentoTest {
 
         Estabelecimento estabelecimento = new EstabelecimentoBuilder().construir();
 
-        Assertions.assertEquals(nome, estabelecimento.getNome());
-        Assertions.assertEquals(telefone, estabelecimento.getTelefone());
-        Assertions.assertEquals(horarioAtendimento, estabelecimento.getHorarioAtendimento());
-        Assertions.assertEquals(numero, estabelecimento.getNumero());
-        Assertions.assertEquals(cidade, estabelecimento.getCidade());
-        Assertions.assertEquals(logradouro, estabelecimento.getLogradouro());
-        Assertions.assertEquals(estado, estabelecimento.getEstado());
-        Assertions.assertEquals(cnpj, estabelecimento.getCnpj());
+        assertThat(estabelecimento.getNome()).isEqualTo(nome);
+        assertThat(estabelecimento.getTelefone()).isEqualTo(telefone);
+        assertThat(estabelecimento.getHorarioAtendimento()).isEqualTo(horarioAtendimento);
+        assertThat(estabelecimento.getNumero()).isEqualTo(numero);
+        assertThat(estabelecimento.getCidade()).isEqualTo(cidade);
+        assertThat(estabelecimento.getLogradouro()).isEqualTo(logradouro);
+        assertThat(estabelecimento.getEstado()).isEqualTo(estado);
+        assertThat(estabelecimento.getCnpj()).isEqualTo(cnpj);
     }
 }

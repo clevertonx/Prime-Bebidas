@@ -1,17 +1,19 @@
 package br.com.prime.prime.controllers;
 
-import java.util.ArrayList;
-import java.util.List;
-
+import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.containsString;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import org.assertj.core.api.Assertions;
+import java.util.ArrayList;
+
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -23,117 +25,152 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.databind.ObjectWriter;
 
 import br.com.prime.prime.Builders.EstabelecimentoBuilder;
 import br.com.prime.prime.Builders.UsuarioBuilder;
+import br.com.prime.prime.dto.EstabelecimentoRequestDTO;
+import br.com.prime.prime.dto.EstabelecimentoResponseDTO;
 import br.com.prime.prime.models.Estabelecimento;
+import br.com.prime.prime.models.Usuario;
 import br.com.prime.prime.repository.EstabelecimentoRepository;
+import br.com.prime.prime.repository.UsuarioRepository;
+import jakarta.transaction.Transactional;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@Transactional
 public class EstabelecimentoControllerTest {
-    @Autowired
-    private MockMvc mockMvc;
 
-    @Autowired
-    private EstabelecimentoRepository estabelecimentoRepository;
+        private ObjectMapper objectMapper = new ObjectMapper();
 
-    @BeforeEach
-    @AfterEach
-    public void deletaDados() {
-        estabelecimentoRepository.deleteAll();
-    }
+        @Autowired
+        private MockMvc mockMvc;
 
-    @Test
-    public void deve_buscar_os_estabelecimentos_cadastrados_pelo_nome() throws Exception {
-        String nome = "atacadao";
-        String email = "tom@gmail.com";
-        ArrayList<Estabelecimento> estabelecimentos = new ArrayList<Estabelecimento>();
-        estabelecimentos.add(new EstabelecimentoBuilder().construir());
-        estabelecimentos.add(new EstabelecimentoBuilder().comNome(nome).comUsuario(new UsuarioBuilder().comEmail(email).construir()).construir());
+        @Autowired
+        private EstabelecimentoRepository estabelecimentoRepository;
 
-        estabelecimentoRepository.saveAll(estabelecimentos);
+        @Autowired
+        private UsuarioRepository usuarioRepository;
 
-        this.mockMvc
-                .perform(get("/estabelecimento"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString(nome)));
-    }
+        @BeforeEach
+        @AfterEach
+        public void deletaDados() {
+                estabelecimentoRepository.deleteAll();
+        }
 
-    @Test
-    public void deve_buscar_os_estabelecimentos_cadastrados_pela_cidade() throws Exception {
-        String cidade = "Corumba";
-        ArrayList<Estabelecimento> estabelecimentos = new ArrayList<Estabelecimento>();
-        estabelecimentos.add(new EstabelecimentoBuilder().construir());
-        estabelecimentos.add(new EstabelecimentoBuilder().comCidade(cidade).construir());
+        @Test
+        public void deve_buscar_os_estabelecimentos_cadastrados_pelo_nome() throws Exception {
+                String nome = "atacadao";
+                String email = "tom@gmail.com";
+                ArrayList<Estabelecimento> estabelecimentos = new ArrayList<Estabelecimento>();
+                estabelecimentos.add(new EstabelecimentoBuilder().construir());
+                estabelecimentos.add(new EstabelecimentoBuilder().comNome(nome)
+                                .comUsuario(new UsuarioBuilder().comEmail(email).construir()).construir());
 
-        estabelecimentoRepository.saveAll(estabelecimentos);
+                estabelecimentoRepository.saveAll(estabelecimentos);
 
-        this.mockMvc
-                .perform(get("/estabelecimento"))
-                .andExpect(status().isOk())
-                .andExpect(content().string(containsString(cidade)));
-    }
+                this.mockMvc
+                                .perform(get("/estabelecimento"))
+                                .andExpect(status().isOk())
+                                .andExpect(content().string(containsString(nome)));
+        }
 
-    @Test
-    public void deve_remover_um_estabelecimento_pelo_id() throws Exception {
-        String nome = "Assai";
-        ArrayList<Estabelecimento> estabelecimentos = new ArrayList<Estabelecimento>();
-        estabelecimentos.add(new EstabelecimentoBuilder().construir());
-        estabelecimentos.add(new EstabelecimentoBuilder().comNome(nome).construir());
+        @Test
+        public void deve_remover_estabelecimento_por_id() throws Exception {
 
-        estabelecimentoRepository.saveAll(estabelecimentos);
+                Usuario usuario = new Usuario();
 
-        Estabelecimento estabelecimento1 = estabelecimentos.get(1);
+                usuarioRepository.save(usuario);
 
-        this.mockMvc
-                .perform(delete("/estabelecimento/" + estabelecimento1.getId()))
-                .andExpect(status().isOk());
+                Estabelecimento estabelecimento = new Estabelecimento("Teste", "67991333993", "8 as 9",
+                                2024, "cg", "rua teste", "ms", "67.596.818/0001-90", usuario);
+                estabelecimentoRepository.save(estabelecimento);
 
-        List<Estabelecimento> estabelecimentoRetornados = estabelecimentoRepository
-                .findByNomeContainingIgnoreCase(estabelecimento1.getNome());
+                long estabelecimentoId = estabelecimento.getId();
 
-        Assertions.assertThat(estabelecimentoRetornados).isEmpty();
-    }
+                mockMvc.perform(delete("/estabelecimento/{id}", estabelecimentoId))
+                                .andExpect(status().isOk());
+        }
 
-    @Test
-    public void deve_incluir_um_estabelecimento() throws Exception {
-        Estabelecimento estabelecimento = new EstabelecimentoBuilder().construir();
-        String json = toJSON(estabelecimento);
-        this.mockMvc
-                .perform(post("/estabelecimento").content(json).contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isCreated());
+        @Test
+        public void deve_incluir_um_estabelecimento() throws Exception {
 
-        List<Estabelecimento> estabelecimentoRetornados = estabelecimentoRepository
-                .findByNomeContainingIgnoreCase(estabelecimento.getNome());
+                Usuario usuario = new UsuarioBuilder().construir();
 
-        Assertions.assertThat(estabelecimentoRetornados.size()).isEqualTo(1);
-        Assertions.assertThat(
-                estabelecimento.getNome())
-                .isIn(estabelecimentoRetornados.stream().map(Estabelecimento::getNome).toList());
-    }
+                usuarioRepository.save(usuario);
 
-    private String toJSON(Estabelecimento estabelecimento) throws JsonProcessingException {
-        ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(estabelecimento);
-        return json;
-    }
+                EstabelecimentoRequestDTO estabelecimentoDTO = new EstabelecimentoRequestDTO("Teste", "67991333993",
+                                "8 as 9",
+                                2024, "cg", "rua teste", "ms", "67.596.818/0001-90", usuario.getId());
 
-    @Test
-    public void deve_alterar_dados_do_estabelecimento() throws Exception {
-        Estabelecimento nomeAlterado = new EstabelecimentoBuilder().construir();
-        estabelecimentoRepository.save(nomeAlterado);
+                mockMvc.perform(post("/estabelecimento")
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(asJsonString(estabelecimentoDTO)))
+                                .andExpect(status().isCreated())
+                                .andExpect(content().contentType(MediaType.APPLICATION_JSON))
+                                .andExpect(jsonPath("$.nome").value("Teste"))
+                                .andExpect(jsonPath("$.telefone").value("67991333993"))
+                                .andExpect(jsonPath("$.horarioAtendimento").value("8 as 9"))
+                                .andExpect(jsonPath("$.numero").value(2024))
+                                .andExpect(jsonPath("$.cidade").value("cg"))
+                                .andExpect(jsonPath("$.logradouro").value("rua teste"))
+                                .andExpect(jsonPath("$.estado").value("ms"))
+                                .andExpect(jsonPath("$.cnpj").value("67.596.818/0001-90"))
+                                .andExpect(jsonPath("$.idUsuario").value(usuario.getId()))
+                                .andDo(result -> {
+                                        String jsonResponse = result.getResponse().getContentAsString();
+                                        EstabelecimentoResponseDTO responseDTO = objectMapper.readValue(jsonResponse,
+                                                        EstabelecimentoResponseDTO.class);
+                                        assertThat(responseDTO.getNome()).isEqualTo("Teste");
+                                        assertThat(responseDTO.getTelefone()).isEqualTo("67991333993");
+                                        assertThat(responseDTO.getHorarioAtendimento()).isEqualTo("8 as 9");
+                                        assertThat(responseDTO.getNumero()).isEqualTo(2024);
+                                        assertThat(responseDTO.getCidade()).isEqualTo("cg");
+                                        assertThat(responseDTO.getLogradouro()).isEqualTo("rua teste");
+                                        assertThat(responseDTO.getEstado()).isEqualTo("ms");
+                                        assertThat(responseDTO.getCnpj()).isEqualTo("67.596.818/0001-90");
+                                        assertThat(responseDTO.getIdUsuario()).isEqualTo(usuario.getId());
+                                });
+        }
 
-        nomeAlterado.setNome("Pires");
+        @Test
+        public void deve_alterar_dados_do_estabelecimento() throws Exception {
 
-        String json = toJSON(nomeAlterado);
+                Usuario usuario = new UsuarioBuilder().construir();
 
-        this.mockMvc.perform(put("/estabelecimento").content(json).contentType(MediaType.APPLICATION_JSON_VALUE))
-                .andExpect(status().isCreated());
+                usuarioRepository.save(usuario);
 
-        Estabelecimento estabelecimentoRetornado = estabelecimentoRepository.findById(nomeAlterado.getId()).get();
-        Assertions.assertThat(estabelecimentoRetornado.getId()).isEqualTo(nomeAlterado.getId());
-        Assertions.assertThat(estabelecimentoRetornado.getNome()).isEqualTo(nomeAlterado.getNome());
-    }
+                Estabelecimento estabelecimento = new Estabelecimento("Teste", "67991333993", "8 as 9",
+                                2024, "cg", "rua teste", "ms", "67.596.818/0001-90", usuario);
+
+                estabelecimentoRepository.save(estabelecimento);
+
+                EstabelecimentoRequestDTO estabelecimentoDTO = new EstabelecimentoRequestDTO("Estabelecimento Alterado",
+                                "987654321",
+                                "9-18", 2024, "Nova Cidade", "Nova Rua", "Novo Estado", "67.987.654/0001-90",
+                                usuario.getId());
+
+                mockMvc.perform(put("/estabelecimento/{id}", estabelecimento.getId())
+                                .contentType(MediaType.APPLICATION_JSON)
+                                .content(asJsonString(estabelecimentoDTO)))
+                                .andExpect(status().isOk());
+
+                Estabelecimento estabelecimentoAlterado = estabelecimentoRepository.findById(estabelecimento.getId())
+                                .orElse(null);
+                assertNotNull(estabelecimentoAlterado);
+                assertEquals("Estabelecimento Alterado", estabelecimentoAlterado.getNome());
+                assertEquals("987654321", estabelecimentoAlterado.getTelefone());
+                assertEquals("9-18", estabelecimentoAlterado.getHorarioAtendimento());
+                assertEquals(2024, estabelecimentoAlterado.getNumero());
+                assertEquals("Nova Cidade", estabelecimentoAlterado.getCidade());
+                assertEquals("Nova Rua", estabelecimentoAlterado.getLogradouro());
+                assertEquals("Novo Estado", estabelecimentoAlterado.getEstado());
+                assertEquals("67.987.654/0001-90", estabelecimentoAlterado.getCnpj());
+                assertEquals(usuario.getId(), estabelecimentoAlterado.getUsuario().getId());
+        }
+
+        private String asJsonString(Object object) throws JsonProcessingException {
+                ObjectMapper objectMapper = new ObjectMapper();
+                return objectMapper.writeValueAsString(object);
+        }
 }

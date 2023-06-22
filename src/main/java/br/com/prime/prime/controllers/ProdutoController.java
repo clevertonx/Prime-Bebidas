@@ -1,9 +1,11 @@
 package br.com.prime.prime.controllers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.NoSuchElementException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -24,14 +26,18 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import br.com.prime.prime.Mappers.ProdutoMapper;
 import br.com.prime.prime.Services.ProdutoService;
+import br.com.prime.prime.dto.ProdutoEstabelecimentoUsuarioResponseDTO;
 import br.com.prime.prime.dto.ProdutoRequestDTO;
 import br.com.prime.prime.dto.ProdutoResponseDTO;
+import br.com.prime.prime.models.Categoria;
 import br.com.prime.prime.models.PrecoInvalidoException;
 import br.com.prime.prime.models.Produto;
 import br.com.prime.prime.repository.ProdutoRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.validation.Valid;
 
 @RestController
 @CrossOrigin("*")
@@ -43,16 +49,36 @@ public class ProdutoController {
     private ProdutoRepository produtoRepository;
 
     @Autowired
-    private ProdutoService produtoService;
+    private ProdutoMapper produtoMapper;
 
+    @Autowired
+    private ProdutoService produtoService;
+    @Operation(summary = "Busca todos os produtos cadastrados")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Produto>> buscarTodos() {
+    public ResponseEntity<Collection<ProdutoResponseDTO>> buscarTodos() {
         Iterable<Produto> iterable = produtoRepository.findAll();
         List<Produto> produtos = new ArrayList<>();
         iterable.forEach(produtos::add);
-        return ResponseEntity.ok().body(produtos);
+        return ResponseEntity.ok()
+                .body(produtoMapper.produtosParaProdutoResponses(produtos));
     }
+    @Operation(summary = "Busca produto por Id")
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ProdutoResponseDTO> buscarPorId(@PathVariable Long id) {
+        Produto produto = produtoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Produto não encontrado"));
 
+        ProdutoResponseDTO produtoResponseDTO = produtoMapper
+                .produtoParaProdutoResponse(produto);
+        return ResponseEntity.ok().body(produtoResponseDTO);
+    }
+    @Operation(summary = "Busca produtos por categoria")
+    @GetMapping("/categoria")
+    public ResponseEntity<List<ProdutoResponseDTO>> buscarPorCategoria(@RequestParam Categoria categoria) {
+        List<ProdutoResponseDTO> produtos = produtoService.buscarPorCategoria(categoria);
+        return ResponseEntity.ok(produtos);
+    }
+    @Operation(summary = "Busca produtos por nome")
     @GetMapping(path = "/buscarPorNome", produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<List<ProdutoResponseDTO>> buscarPorNome(
             @RequestParam(required = false, name = "nome") String nome) {
@@ -62,23 +88,22 @@ public class ProdutoController {
     @Operation(summary = "Deletar um Produto pelo seu id")
     @ApiResponse(responseCode = "204")
     @DeleteMapping(path = "/{id}")
-    public ResponseEntity<Void> removerProdutoId(@PathVariable Long id) {
-        produtoService.removerPorId(id);
-        return ResponseEntity.noContent().build();
+    public void remover(@PathVariable Long id) {
+        produtoRepository.deleteById(id);
     }
 
     @Operation(summary = "Cadastrar um novo produto")
     @ApiResponse(responseCode = "201")
     @PostMapping(consumes = { "application/json" })
-    public ResponseEntity<ProdutoResponseDTO> cadastrarProduto(
-            @RequestBody ProdutoRequestDTO novoProduto) throws PrecoInvalidoException {
-        return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.criar(novoProduto));
+    public ResponseEntity<ProdutoResponseDTO> cadastrar(
+            @RequestBody @Valid ProdutoRequestDTO produtoDto) throws PrecoInvalidoException {
+        return ResponseEntity.status(HttpStatus.CREATED).body(produtoService.criar(produtoDto));
     }
-
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Produto> alterar(@RequestBody Produto produto) {
-        Produto produtoAlterado = produtoRepository.save(produto);
-        return ResponseEntity.status(HttpStatus.CREATED).body(produtoAlterado);
+    @Operation(summary = "Altera dados do produto")
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<ProdutoResponseDTO> alterar(@PathVariable Long id,
+            @RequestBody ProdutoRequestDTO produtoRequestDTO) {
+        return ResponseEntity.ok(produtoService.editar(produtoRequestDTO, id));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
@@ -95,4 +120,23 @@ public class ProdutoController {
         return errors;
     }
 
+    @Operation(summary = "Busca produtos do Estabelecimento")
+    @GetMapping(path = "/usuario/{idUsuario}/estabelecimento/{idEstabelecimento}/produto")
+    public ResponseEntity<Collection<ProdutoEstabelecimentoUsuarioResponseDTO>> getProdutosPorEstabelecimentoUsuario(
+            @PathVariable Long idUsuario, @PathVariable Long idEstabelecimento) {
+        try {
+            Collection<ProdutoEstabelecimentoUsuarioResponseDTO> produtos = produtoService
+                    .produtoPorEstabelecimentoUsuario(idUsuario, idEstabelecimento);
+            return ResponseEntity.ok(produtos);
+        } catch (NoSuchElementException e) {
+            return ResponseEntity.notFound().build();
+        }
+    }
+
+    @Operation(summary = "Busca produtos do Usuário")
+    @GetMapping(path = "/usuario/{idUsuario}")
+    public ResponseEntity<Collection<ProdutoEstabelecimentoUsuarioResponseDTO>> buscarProduto(
+            @PathVariable Long idUsuario) {
+        return ResponseEntity.ok(produtoService.produtoPorUsuario(idUsuario));
+    }
 }

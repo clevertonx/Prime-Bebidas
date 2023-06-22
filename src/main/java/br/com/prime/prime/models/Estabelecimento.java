@@ -2,7 +2,9 @@ package br.com.prime.prime.models;
 
 import java.util.List;
 
-import jakarta.persistence.CascadeType;
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
@@ -21,7 +23,7 @@ import lombok.experimental.Accessors;
 public class Estabelecimento {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
     private String telefone;
@@ -33,11 +35,13 @@ public class Estabelecimento {
     private String cnpj;
 
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
-    @JoinColumn(name = "usuario_id")
+    @ManyToOne
+    @JoinColumn(name = "usuario")
+    @Cascade(CascadeType.PERSIST)
     private Usuario usuario;
 
-    @OneToMany(mappedBy = "estabelecimento")
+    @OneToMany(mappedBy = "estabelecimento", orphanRemoval = true)
+    @Cascade(CascadeType.PERSIST)
     private List<Produto> produtos;
 
     public Estabelecimento(String nome, String telefone, String horarioAtendimento, int numero, String cidade,

@@ -19,4 +19,6 @@ public interface UsuarioMapper {
     public UsuarioResponseDTO usuarioParaUsuarioResponse(Usuario usuario);
 
     public List<UsuarioResponseDTO> usuariosParaUsuarioResponseDTOs(List<Usuario> usuarios);
+
+    
 }

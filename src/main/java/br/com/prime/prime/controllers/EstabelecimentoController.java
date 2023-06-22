@@ -1,10 +1,12 @@
 package br.com.prime.prime.controllers;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -24,7 +26,9 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
 import br.com.prime.prime.Mappers.EstabelecimentoMapper;
+import br.com.prime.prime.Services.EstabelecimentoService;
 import br.com.prime.prime.dto.EstabelecimentoRequestDTO;
+import br.com.prime.prime.dto.EstabelecimentoResponseDTO;
 import br.com.prime.prime.models.Estabelecimento;
 import br.com.prime.prime.repository.EstabelecimentoRepository;
 import jakarta.validation.Valid;
@@ -40,29 +44,43 @@ public class EstabelecimentoController {
     @Autowired
     private EstabelecimentoMapper estabelecimentoMapper;
 
+    @Autowired
+    private EstabelecimentoService estabelecimentoService;
+    @Operation(summary = "Busca todos estabelecimentos cadastrados")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<Estabelecimento>> buscarTodos() {
+    public ResponseEntity<Collection<EstabelecimentoResponseDTO>> buscarTodos() {
         Iterable<Estabelecimento> iterable = estabelecimentoRepository.findAll();
         List<Estabelecimento> estabelecimentos = new ArrayList<>();
         iterable.forEach(estabelecimentos::add);
-        return ResponseEntity.ok().body(estabelecimentos);
+        return ResponseEntity.ok()
+                .body(estabelecimentoMapper.estabelecimentosParaEstabelecimentosResponses(estabelecimentos));
+    }
+    @Operation(summary = "Busca estabelecimento por Id")
+    @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<EstabelecimentoResponseDTO> buscarPorId(@PathVariable Long id) {
+        Estabelecimento estabelecimento = estabelecimentoRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("Estabelecimento não encontrado"));
+
+        EstabelecimentoResponseDTO estabelecimentoResponseDTO = estabelecimentoMapper
+                .estabelecimentoParaEstabelecimentoResponse(estabelecimento);
+        return ResponseEntity.ok().body(estabelecimentoResponseDTO);
     }
 
     @DeleteMapping(path = "/{id}")
     public void remover(@PathVariable Long id) {
         estabelecimentoRepository.deleteById(id);
     }
-
+    @Operation(summary = "Cadastrar um novo estabelecimento")
     @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<EstabelecimentoRequestDTO> cadastrar(@RequestBody @Valid EstabelecimentoRequestDTO estabelecimentoDto) {
-        estabelecimentoRepository.save(estabelecimentoMapper.estabelecimentoRequestParaEstabelecimento(estabelecimentoDto));
-        return ResponseEntity.status(HttpStatus.CREATED).build();
+    public ResponseEntity<EstabelecimentoResponseDTO> cadastrar(
+            @RequestBody @Valid EstabelecimentoRequestDTO estabelecimentoDto) {
+        return ResponseEntity.status(HttpStatus.CREATED).body(estabelecimentoService.criar(estabelecimentoDto));
     }
-
-    @PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<Estabelecimento> alterar(@RequestBody Estabelecimento estabelecimento) {
-        Estabelecimento estabelecimentoAlterado = estabelecimentoRepository.save(estabelecimento);
-        return ResponseEntity.status(HttpStatus.CREATED).body(estabelecimentoAlterado);
+    @Operation(summary = "Altera dados do estabelecimento")
+    @PutMapping(path = "/{id}", consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<EstabelecimentoResponseDTO> alterar(@PathVariable Long id,
+            @RequestBody EstabelecimentoRequestDTO estabelecimentoRequestDTO) {
+        return ResponseEntity.ok(estabelecimentoService.editar(estabelecimentoRequestDTO, id));
     }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)

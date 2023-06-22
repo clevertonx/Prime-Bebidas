@@ -13,8 +13,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 @AllArgsConstructor
 public class EstabelecimentoRequestDTO {
-    
-    
+     
     @NotBlank(message = "Nome não informado")
     private String nome;
     @NotBlank(message = "Telefone não informado")

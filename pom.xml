@@ -5,14 +5,14 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.4</version>
+		<version>3.1.0</version>
 		<relativePath/>
 	</parent>
 	<groupId>br.com.prime</groupId>
 	<artifactId>prime</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>Prime Bebidas</name>
-	<description>Projeto da desgraça</description>
+	<description>Projeto Brasil</description>
 	<properties>
 		<java.version>19</java.version>
 	</properties>
@@ -29,7 +29,11 @@
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-web</artifactId>
 		</dependency>
-
+		<dependency>
+			<groupId>org.springframework</groupId>
+			<artifactId>spring-aop</artifactId>
+			<version>6.0.9</version>
+		</dependency>
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>

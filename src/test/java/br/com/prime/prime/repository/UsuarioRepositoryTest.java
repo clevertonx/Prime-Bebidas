@@ -3,6 +3,7 @@ package br.com.prime.prime.repository;
 import java.util.List;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.assertThat;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +17,22 @@ public class UsuarioRepositoryTest {
 
     @Autowired
     private UsuarioRepository usuarioRepository;
+
+    @Test
+    public void deve_buscar_usuario_pelo_id() throws Exception {
+
+        String email = "teste@gmail.com";
+        String senha = "senha123";
+        Usuario usuario = new Usuario(email, senha);
+        usuarioRepository.save(usuario);
+
+        Usuario usuarioRetornado = usuarioRepository.findById(usuario.getId()).orElse(null);
+
+        assertThat(usuarioRetornado).isNotNull();
+        assertThat(usuarioRetornado.getId()).isEqualTo(usuario.getId());
+        assertThat(usuarioRetornado.getEmail()).isEqualTo(email);
+        assertThat(usuarioRetornado.getSenha()).isEqualTo(senha);
+    }
 
     @Test
     public void deve_salvar_um_usuario() {
@@ -41,7 +58,7 @@ public class UsuarioRepositoryTest {
 
     @Test
     public void deve_buscar_usuario_pelo_email() {
-        String email = "clevertonx@gmail.com";
+        String email = "teste@gmail.com";
         Usuario usuario = new UsuarioBuilder().comEmail(email).construir();
         usuarioRepository.save(usuario);
 

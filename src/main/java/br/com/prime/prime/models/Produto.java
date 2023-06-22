@@ -1,5 +1,8 @@
 package br.com.prime.prime.models;
 
+import org.hibernate.annotations.Cascade;
+import org.hibernate.annotations.CascadeType;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
@@ -22,7 +25,7 @@ import lombok.experimental.Accessors;
 public class Produto {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     private String nome;
     private String descricao;
@@ -38,6 +41,7 @@ public class Produto {
 
     @ManyToOne
     @JoinColumn(name = "estabelecimento_id")
+    @Cascade(CascadeType.PERSIST)
     private Estabelecimento estabelecimento;
 
     public Produto(String nome, String descricao, String marca, double preco, Categoria categoria, String imagem, Estabelecimento estabelecimento)

@@ -1,6 +1,7 @@
 package br.com.prime.prime.models;
 
-import org.junit.jupiter.api.Assertions;
+import static org.assertj.core.api.Assertions.assertThat;
+
 import org.junit.jupiter.api.Test;
 
 import br.com.prime.prime.Builders.ProdutoBuilder;
@@ -18,10 +19,10 @@ public class ProdutoTest {
 
         Produto produto = new ProdutoBuilder().construir();
 
-        Assertions.assertEquals(nome, produto.getNome());
-        Assertions.assertEquals(descricao, produto.getDescricao());
-        Assertions.assertEquals(marca, produto.getMarca());
-        Assertions.assertEquals(preco, produto.getPreco());
-        Assertions.assertEquals(categoria, produto.getCategoria());
+        assertThat(produto.getNome()).isEqualTo(nome);
+        assertThat(produto.getDescricao()).isEqualTo(descricao);
+        assertThat(produto.getMarca()).isEqualTo(marca);
+        assertThat(produto.getPreco()).isEqualTo(preco);
+        assertThat(produto.getCategoria()).isEqualTo(categoria);
     }
 }
