@@ -72,17 +72,6 @@ public class UsuarioController {
 
         return ResponseEntity.ok(usuarioService.alterar(usuarioPutDTO, id));
     }
-    @Operation(summary = "Autenticar usuario")
-    @PostMapping(path = "/login", consumes = "application/json")
-    public ResponseEntity<String> login(@RequestBody @Valid UsuarioRequestDTO usuarioRequest) {
-        Usuario usuario = usuarioService.loginUsuario(usuarioRequest.getEmail(), usuarioRequest.getSenha());
-
-        if (usuario == null) {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Credenciais inválidas");
-        } else {
-            return ResponseEntity.ok(Long.toString(usuario.getId()));
-        }
-    }
 
     @ResponseStatus(HttpStatus.BAD_REQUEST)
     @ExceptionHandler(MethodArgumentNotValidException.class)
