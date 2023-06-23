@@ -23,12 +23,19 @@ public class TokenService {
                     .withSubject(usuario.getEmail())
                     .withClaim("id", usuario.getId())
                     .withExpiresAt(LocalDateTime.now()
-                            .plusMinutes(10)
+                            .plusMinutes(1)
                             .toInstant(ZoneOffset.of("-03:00"))
-                    ).sign(Algorithm.HMAC256("secreta"));
+                    ).sign(Algorithm.HMAC256(String.valueOf(secreta)));
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Erro ao gerar Token JWT: ", exception);
         }
 
+    }
+
+    public String getSubject(String tokenJWT) {
+
+        return JWT.require(Algorithm.HMAC256(secreta))
+                .withIssuer("estabelecimentos")
+                .build().verify(tokenJWT).getSubject();
     }
 }

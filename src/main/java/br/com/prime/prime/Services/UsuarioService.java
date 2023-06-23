@@ -11,6 +11,7 @@ import br.com.prime.prime.models.Usuario;
 import br.com.prime.prime.repository.EstabelecimentoRepository;
 import br.com.prime.prime.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.util.Collection;
@@ -36,6 +37,9 @@ public class UsuarioService {
     @Autowired
     ProdutoMapper produtoMapper;
 
+    @Autowired
+    PasswordEncoder passwordEncoder;
+
     public void removerPorId(Long id) {
         usuarioRepository.deleteById(id);
     }
@@ -46,6 +50,8 @@ public class UsuarioService {
 
     public UsuarioResponseDTO criar(UsuarioRequestDTO usuarioRequestDTO) throws Exception {
         Usuario usuario = usuarioMapper.usuarioRequestParaUsuario(usuarioRequestDTO);
+        String senhaEncriptada = passwordEncoder.encode(usuario.getSenha());
+        usuario.setSenha(senhaEncriptada);
         usuarioRepository.save(usuario);
         return usuarioMapper.usuarioParaUsuarioResponse(usuario);
     }
