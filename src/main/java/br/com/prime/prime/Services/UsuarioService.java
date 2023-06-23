@@ -1,13 +1,5 @@
 package br.com.prime.prime.Services;
 
-import java.util.Collection;
-import java.util.List;
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Service;
-
 import br.com.prime.prime.Mappers.EstabelecimentoMapper;
 import br.com.prime.prime.Mappers.ProdutoMapper;
 import br.com.prime.prime.Mappers.UsuarioMapper;
@@ -18,6 +10,13 @@ import br.com.prime.prime.dto.UsuarioResponseDTO;
 import br.com.prime.prime.models.Usuario;
 import br.com.prime.prime.repository.EstabelecimentoRepository;
 import br.com.prime.prime.repository.UsuarioRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.util.Collection;
+import java.util.List;
+import java.util.NoSuchElementException;
+import java.util.Optional;
 
 @Service
 public class UsuarioService {
@@ -65,10 +64,10 @@ public class UsuarioService {
         return usuarioMapper.usuarioParaUsuarioResponse(usuario);
     }
 
-    public Usuario loginUsuario(String email, String senha) {
-        Usuario usuariologin = usuarioRepository.login(email, senha);
-        return usuariologin;
-    }
+//    public Usuario loginUsuario(String email, String senha) {
+//        Usuario usuariologin = usuarioRepository.login(email, senha);
+//        return usuariologin;
+//    }
 
     public Collection<EstabelecimentoUsuarioResponseDTO> estabelecimentoPorUsuario(Long idUsuario) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);

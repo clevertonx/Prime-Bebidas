@@ -10,6 +10,8 @@ import br.com.prime.prime.models.Usuario;
 public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
     public List<Usuario> findByEmailContainingIgnoreCase(String email);
 
+    Usuario findByEmail(String email);
+
     @Query(value = "select * from usuario where email = :email and senha = :senha", nativeQuery =  true)
     public Usuario login(String email, String senha);
 
