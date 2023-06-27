@@ -19,22 +19,22 @@ public class Produto {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private String nome;
-    private String descricao;
-    private String marca;
-    private Double preco;
-    
-    @Enumerated(EnumType.STRING)
-    private Categoria categoria;
+        private String nome;
+        private String descricao;
+        private String marca;
+        private Double preco;
 
-    @Lob
-    @Column(columnDefinition = "MEDIUMBLOB")
-    private String imagem;
+        @Enumerated(EnumType.STRING)
+        private Categoria categoria;
 
-    @ManyToOne
-    @JoinColumn(name = "estabelecimento_id")
-    @Cascade(CascadeType.PERSIST)
-    private Estabelecimento estabelecimento;
+        @Lob
+        @Column(columnDefinition = "MEDIUMBLOB")
+        private String imagem;
+
+        @ManyToOne
+        @JoinColumn(name = "estabelecimento_id")
+        @Cascade(CascadeType.PERSIST)
+        private Estabelecimento estabelecimento;
 
     public Produto(String nome, String descricao, String marca, double preco, Categoria categoria, String imagem, Estabelecimento estabelecimento)
             throws PrecoInvalidoException {

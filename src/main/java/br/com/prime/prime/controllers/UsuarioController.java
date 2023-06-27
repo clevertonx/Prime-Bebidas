@@ -8,6 +8,7 @@ import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -44,6 +45,9 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
     @Operation(summary = "Lista todos os usuarios")
     @ApiResponse(responseCode = "200")
     @GetMapping
@@ -61,7 +65,17 @@ public class UsuarioController {
     @PostMapping(consumes = { "application/json" })
     public ResponseEntity<UsuarioResponseDTO> cadastrarUsuario(
             @RequestBody UsuarioRequestDTO novoUsuario) throws Exception {
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioService.criar(novoUsuario));
+
+        String senhaCriptografada = passwordEncoder.encode(novoUsuario.getSenha());
+
+        Usuario usuario = new Usuario();
+        usuario.setEmail(novoUsuario.getEmail());
+        usuario.setSenha(senhaCriptografada);
+
+        usuarioRepository.save(usuario);
+
+        UsuarioResponseDTO usuarioResponseDTO = new UsuarioResponseDTO(usuario.getId(), usuario.getEmail(), usuario.getSenha());
+        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioResponseDTO);
     }
 
     @Operation(summary = "Editar o usuario")

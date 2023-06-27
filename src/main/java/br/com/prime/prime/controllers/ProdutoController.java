@@ -53,6 +53,7 @@ public class ProdutoController {
 
     @Autowired
     private ProdutoService produtoService;
+
     @Operation(summary = "Busca todos os produtos cadastrados")
     @GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
     public ResponseEntity<Collection<ProdutoResponseDTO>> buscarTodos() {
