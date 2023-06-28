@@ -68,11 +68,6 @@ public class UsuarioService {
         return usuarioMapper.usuarioParaUsuarioResponse(usuario);
     }
 
-//    public Usuario loginUsuario(String email, String senha) {
-//        Usuario usuariologin = usuarioRepository.login(email, senha);
-//        return usuariologin;
-//    }
-
     public Collection<EstabelecimentoUsuarioResponseDTO> estabelecimentoPorUsuario(Long idUsuario) {
         Optional<Usuario> usuarioOptional = usuarioRepository.findById(idUsuario);
         if (usuarioOptional.isEmpty()) {
@@ -82,6 +77,5 @@ public class UsuarioService {
         return estabelecimentoMapper
                 .estabelecimentosParaEstabelecimentosUsuariosResponse(usuario.getEstabelecimentos());
     }
-
     
 }

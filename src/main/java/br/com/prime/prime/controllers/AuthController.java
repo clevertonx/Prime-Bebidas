@@ -14,7 +14,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -34,9 +33,8 @@ public class AuthController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
-
+    @Operation(summary = "Logar usuario")
+    @ApiResponse(responseCode = "201")
     @PostMapping("/usuario/login")
     public ResponseEntity login(@RequestBody @Valid UsuarioRequestDTO usuarioRequestDTO) {
 
@@ -49,7 +47,7 @@ public class AuthController {
 
     @Operation(summary = "Cadastrar um novo usuario")
     @ApiResponse(responseCode = "201")
-    @PostMapping(path = "/usuario/cadastro", consumes = { "application/json" })
+    @PostMapping(path = "/usuario/cadastro", consumes = {"application/json"})
     public ResponseEntity<UsuarioResponseDTO> cadastrarUsuario(@RequestBody @Valid UsuarioRequestDTO novoUsuario) throws Exception {
         UsuarioResponseDTO usuarioResponse = usuarioService.criar(novoUsuario);
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioResponse);
