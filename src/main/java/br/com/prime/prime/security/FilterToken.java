@@ -1,4 +1,4 @@
-package br.com.prime.prime.Services;
+package br.com.prime.prime.security;
 
 import br.com.prime.prime.repository.UsuarioRepository;
 import jakarta.servlet.FilterChain;
@@ -30,13 +30,12 @@ public class FilterToken extends OncePerRequestFilter {
         var authorizationHeader = request.getHeader("Authorization");
 
         if (authorizationHeader != null) {
-            tokenJWT = authorizationHeader.replace("Bearer ", "");
-            var subject = this.tokenService.getSubject(tokenJWT);
+            tokenJWT = authorizationHeader.replace("Bearer", "");
 
-            var usuario = this.usuarioRepository.findByEmail(subject);
+            var subject = tokenService.getSubject(tokenJWT);
+            var usuario = usuarioRepository.findByEmail(subject);
 
             var authentication = new UsernamePasswordAuthenticationToken(usuario, null, usuario.getAuthorities());
-
             SecurityContextHolder.getContext().setAuthentication(authentication);
         }
 

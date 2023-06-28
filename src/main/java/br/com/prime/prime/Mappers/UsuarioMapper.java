@@ -8,11 +8,12 @@ import br.com.prime.prime.dto.UsuarioPutDTO;
 import br.com.prime.prime.dto.UsuarioRequestDTO;
 import br.com.prime.prime.dto.UsuarioResponseDTO;
 import br.com.prime.prime.models.Usuario;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Mapper(componentModel = "spring")
 public interface UsuarioMapper {
 
-    public Usuario usuarioRequestParaUsuario(UsuarioRequestDTO usuarioRequestDTO);
+    public Usuario usuarioRequestParaUsuario(UsuarioRequestDTO usuarioRequestDTO, PasswordEncoder passwordEncoder);
 
     public Usuario usuarioPutParaUsuario(UsuarioPutDTO usuarioPutDTO);
 

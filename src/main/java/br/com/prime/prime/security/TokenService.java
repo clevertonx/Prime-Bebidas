@@ -1,9 +1,10 @@
-package br.com.prime.prime.Services;
+package br.com.prime.prime.security;
 
 import br.com.prime.prime.models.Usuario;
 import com.auth0.jwt.JWT;
 import com.auth0.jwt.algorithms.Algorithm;
 import com.auth0.jwt.exceptions.JWTCreationException;
+import com.auth0.jwt.exceptions.JWTVerificationException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
@@ -25,7 +26,7 @@ public class TokenService {
                     .withExpiresAt(LocalDateTime.now()
                             .plusMinutes(1)
                             .toInstant(ZoneOffset.of("-03:00"))
-                    ).sign(Algorithm.HMAC256(String.valueOf(secreta)));
+                    ).sign(algoritmo);
         } catch (JWTCreationException exception) {
             throw new RuntimeException("Erro ao gerar Token JWT: ", exception);
         }
@@ -34,8 +35,15 @@ public class TokenService {
 
     public String getSubject(String tokenJWT) {
 
-        return JWT.require(Algorithm.HMAC256(secreta))
-                .withIssuer("estabelecimentos")
-                .build().verify(tokenJWT).getSubject();
+        try {
+            var algoritmo = Algorithm.HMAC256(secreta);
+            return JWT.require(algoritmo)
+                    .withIssuer("Estabelecimentos")
+                    .build()
+                    .verify(tokenJWT)
+                    .getSubject();
+        } catch (JWTVerificationException exception) {
+            throw new RuntimeException("Token JWT inválido ou expirado!");
+        }
     }
 }

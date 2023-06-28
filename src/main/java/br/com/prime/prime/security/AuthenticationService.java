@@ -1,4 +1,4 @@
-package br.com.prime.prime.Services;
+package br.com.prime.prime.security;
 
 import br.com.prime.prime.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;

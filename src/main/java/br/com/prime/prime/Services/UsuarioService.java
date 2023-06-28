@@ -49,9 +49,7 @@ public class UsuarioService {
     }
 
     public UsuarioResponseDTO criar(UsuarioRequestDTO usuarioRequestDTO) throws Exception {
-        Usuario usuario = usuarioMapper.usuarioRequestParaUsuario(usuarioRequestDTO);
-        String senhaEncriptada = passwordEncoder.encode(usuario.getSenha());
-        usuario.setSenha(senhaEncriptada);
+        Usuario usuario = usuarioMapper.usuarioRequestParaUsuario(usuarioRequestDTO, passwordEncoder);
         usuarioRepository.save(usuario);
         return usuarioMapper.usuarioParaUsuarioResponse(usuario);
     }

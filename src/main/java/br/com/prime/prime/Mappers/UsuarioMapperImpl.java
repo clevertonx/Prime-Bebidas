@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import br.com.prime.prime.dto.UsuarioPutDTO;
@@ -14,12 +15,18 @@ import br.com.prime.prime.repository.UsuarioRepository;
 
 @Component
 public class UsuarioMapperImpl implements UsuarioMapper {
+
     @Autowired
     private UsuarioRepository usuarioRepository;
 
     @Override
-    public Usuario usuarioRequestParaUsuario(UsuarioRequestDTO usuarioRequestDTO) {
-        return new Usuario(usuarioRequestDTO.getEmail(), usuarioRequestDTO.getSenha());
+    public Usuario usuarioRequestParaUsuario(UsuarioRequestDTO usuarioRequestDTO, PasswordEncoder passwordEncoder) {
+        Usuario usuario = new Usuario();
+        usuario.setEmail(usuarioRequestDTO.getEmail());
+        String senhaEncriptada = passwordEncoder.encode(usuarioRequestDTO.getSenha());
+        usuario.setSenha(senhaEncriptada);
+
+        return usuario;
     }
 
     @Override
