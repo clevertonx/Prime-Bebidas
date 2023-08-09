@@ -36,7 +36,7 @@ public class AuthController {
     @Operation(summary = "Logar usuario")
     @ApiResponse(responseCode = "201")
     @PostMapping("/usuario/login")
-    public ResponseEntity login(@RequestBody @Valid UsuarioRequestDTO usuarioRequestDTO) {
+    public ResponseEntity<LoginTokenJWTDTO> login(@RequestBody @Valid UsuarioRequestDTO usuarioRequestDTO) {
 
         var authenticationToken = new UsernamePasswordAuthenticationToken(usuarioRequestDTO.getEmail(), usuarioRequestDTO.getSenha());
         var authentication = authenticationManager.authenticate(authenticationToken);

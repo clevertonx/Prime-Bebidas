@@ -2,7 +2,7 @@ package br.com.prime.prime.Builders;
 
 import br.com.prime.prime.models.Categoria;
 import br.com.prime.prime.models.Estabelecimento;
-import br.com.prime.prime.models.PrecoInvalidoException;
+import br.com.prime.prime.Exceptions.PrecoInvalidoException;
 import br.com.prime.prime.models.Produto;
 
 public class ProdutoBuilder {

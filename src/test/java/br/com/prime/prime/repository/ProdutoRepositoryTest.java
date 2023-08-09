@@ -16,7 +16,7 @@ import br.com.prime.prime.Builders.ProdutoBuilder;
 import br.com.prime.prime.Builders.UsuarioBuilder;
 import br.com.prime.prime.models.Categoria;
 import br.com.prime.prime.models.Estabelecimento;
-import br.com.prime.prime.models.PrecoInvalidoException;
+import br.com.prime.prime.Exceptions.PrecoInvalidoException;
 import br.com.prime.prime.models.Produto;
 import br.com.prime.prime.models.Usuario;
 import jakarta.transaction.Transactional;

@@ -8,7 +8,7 @@ import br.com.prime.prime.models.Categoria;
 import br.com.prime.prime.models.Produto;
 
 public interface ProdutoRepository extends CrudRepository<Produto, Long> {
-    public List<Produto> findByNomeContainingIgnoreCase(String nome);
+    List<Produto> findByNomeContainingIgnoreCase(String nome);
 
-    public List<Produto> findByCategoria(Categoria categoria);
+    List<Produto> findByCategoria(Categoria categoria);
 }

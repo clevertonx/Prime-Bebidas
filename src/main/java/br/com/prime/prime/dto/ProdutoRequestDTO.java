@@ -25,14 +25,6 @@ public class ProdutoRequestDTO {
     private String imagem;
     private Long idEstabelecimento;
 
-    public ProdutoRequestDTO(Produto produto) {
-        this.nome = produto.getNome();
-        this.descricao = produto.getDescricao();
-        this.marca = produto.getMarca();
-        this.preco = produto.getPreco();
-        this.categoria = produto.getCategoria();
-        this.imagem = produto.getImagem();
-        this.idEstabelecimento = produto.getEstabelecimento().getId();
-    }
+
 
 }

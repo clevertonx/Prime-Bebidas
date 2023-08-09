@@ -39,8 +39,6 @@ public class Usuario implements UserDetails {
     public Usuario(String email, String senha) {
         this.email = email;
         this.senha = senha;
-  
-
     }
 
     @Override

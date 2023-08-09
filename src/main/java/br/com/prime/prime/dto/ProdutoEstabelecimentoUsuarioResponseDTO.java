@@ -18,13 +18,5 @@ public class ProdutoEstabelecimentoUsuarioResponseDTO {
     private Categoria categoria;
     private long idEstabelecimento;
 
-    public ProdutoEstabelecimentoUsuarioResponseDTO(Produto produto) {
-        this.id = produto.getId();
-        this.nome = produto.getNome();
-        this.descricao = produto.getDescricao();
-        this.marca = produto.getMarca();
-        this.preco = produto.getPreco();
-        this.categoria = produto.getCategoria();
-        this.idEstabelecimento = produto.getEstabelecimento().getId(); 
-    }
+
 }

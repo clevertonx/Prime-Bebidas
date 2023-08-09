@@ -15,11 +15,5 @@ public class EstabelecimentoUsuarioResponseDTO {
     private String cnpj;
     
 
-    public EstabelecimentoUsuarioResponseDTO(Estabelecimento estabelecimento) {
-        this.id = estabelecimento.getId();
-        this.nome = estabelecimento.getNome();
-        this.logradouro = estabelecimento.getLogradouro();
-        this.telefone = estabelecimento.getTelefone();
-        this.cnpj = estabelecimento.getCnpj();
-    }
+
 }

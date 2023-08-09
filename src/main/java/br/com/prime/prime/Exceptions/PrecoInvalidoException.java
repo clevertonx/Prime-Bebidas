@@ -1,4 +1,4 @@
-package br.com.prime.prime.models;
+package br.com.prime.prime.Exceptions;
 
 public class PrecoInvalidoException extends Exception {
 

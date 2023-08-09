@@ -11,7 +11,7 @@ import br.com.prime.prime.dto.ProdutoEstabelecimentoUsuarioResponseDTO;
 import br.com.prime.prime.dto.ProdutoRequestDTO;
 import br.com.prime.prime.dto.ProdutoResponseDTO;
 import br.com.prime.prime.models.Estabelecimento;
-import br.com.prime.prime.models.PrecoInvalidoException;
+import br.com.prime.prime.Exceptions.PrecoInvalidoException;
 import br.com.prime.prime.models.Produto;
 import br.com.prime.prime.repository.EstabelecimentoRepository;
 

@@ -7,20 +7,20 @@ import org.mapstruct.Mapper;
 import br.com.prime.prime.dto.ProdutoEstabelecimentoUsuarioResponseDTO;
 import br.com.prime.prime.dto.ProdutoRequestDTO;
 import br.com.prime.prime.dto.ProdutoResponseDTO;
-import br.com.prime.prime.models.PrecoInvalidoException;
+import br.com.prime.prime.Exceptions.PrecoInvalidoException;
 import br.com.prime.prime.models.Produto;
 
 @Mapper(componentModel = "spring")
 public interface ProdutoMapper {
-    public Produto produtoRequestParaProduto(ProdutoRequestDTO ProdutoRequestDTO) throws PrecoInvalidoException;
+    Produto produtoRequestParaProduto(ProdutoRequestDTO ProdutoRequestDTO) throws PrecoInvalidoException;
 
-    public ProdutoResponseDTO produtoParaProdutoResponse(Produto produto);
+    ProdutoResponseDTO produtoParaProdutoResponse(Produto produto);
 
-    public List<ProdutoResponseDTO> produtosParaProdutoResponses(List<Produto> produtos);
+    List<ProdutoResponseDTO> produtosParaProdutoResponses(List<Produto> produtos);
 
-    public Collection<ProdutoEstabelecimentoUsuarioResponseDTO>
+    Collection<ProdutoEstabelecimentoUsuarioResponseDTO>
     produtosParaProdutosEstabelecimentosUsuarioResponse(Collection<Produto> produtos);
 
-    public Collection<ProdutoEstabelecimentoUsuarioResponseDTO> produtosParaUsuariosResponse(Collection<Produto> produtos);
+    Collection<ProdutoEstabelecimentoUsuarioResponseDTO> produtosParaUsuariosResponse(Collection<Produto> produtos);
 
 }

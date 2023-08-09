@@ -20,17 +20,7 @@ public class EstabelecimentoResponseDTO {
     private String cnpj;
     private Long idUsuario;
 
-    public EstabelecimentoResponseDTO(Estabelecimento estabelecimento) {
-        this.id = estabelecimento.getId();
-        this.nome = estabelecimento.getNome();
-        this.telefone = estabelecimento.getTelefone();
-        this.horarioAtendimento = estabelecimento.getHorarioAtendimento();
-        this.numero = estabelecimento.getNumero();
-        this.cidade = estabelecimento.getCidade();
-        this.logradouro = estabelecimento.getLogradouro();
-        this.estado = estabelecimento.getEstado();
-        this.cnpj = estabelecimento.getCnpj();
-        this.idUsuario = estabelecimento.getUsuario().getId();
-    }
 
+    public EstabelecimentoResponseDTO(Estabelecimento estabelecimento) {
+    }
 }

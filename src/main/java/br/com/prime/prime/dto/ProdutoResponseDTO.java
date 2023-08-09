@@ -20,15 +20,7 @@ public class ProdutoResponseDTO {
     private Long idEstabelecimento;
     private String nomeEstabelecimento;
 
-    public ProdutoResponseDTO(Produto produto) {
-        this.id = produto.getId();
-        this.nome = produto.getNome();
-        this.descricao = produto.getDescricao();
-        this.marca = produto.getMarca();
-        this.preco = produto.getPreco();
-        this.imagem = produto.getImagem();
-        this.idEstabelecimento = produto.getEstabelecimento().getId();
-        this.nomeEstabelecimento = produto.getEstabelecimento().getNome();
-    }
 
+    public ProdutoResponseDTO(Produto produto) {
+    }
 }

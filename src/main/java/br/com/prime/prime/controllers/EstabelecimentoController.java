@@ -6,6 +6,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import br.com.prime.prime.dto.ProdutoResponseDTO;
 import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -13,17 +14,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.PutMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import br.com.prime.prime.Mappers.EstabelecimentoMapper;
 import br.com.prime.prime.Services.EstabelecimentoService;
@@ -54,6 +45,13 @@ public class EstabelecimentoController {
         iterable.forEach(estabelecimentos::add);
         return ResponseEntity.ok()
                 .body(estabelecimentoMapper.estabelecimentosParaEstabelecimentosResponses(estabelecimentos));
+    }
+
+    @Operation(summary = "Busca estabelecimentos por nome")
+    @GetMapping(path = "/buscarEstabelecimentoPorNome", produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<Collection<EstabelecimentoResponseDTO>> buscarEstabelecimentoPorNome(
+            @RequestParam(required = false, name = "nome") String nome) {
+        return ResponseEntity.ok(estabelecimentoService.buscarEstabelecimentoPorNome(nome));
     }
     @Operation(summary = "Busca estabelecimento por Id")
     @GetMapping(path = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)

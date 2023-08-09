@@ -1,10 +1,9 @@
 package br.com.prime.prime.dto;
 
+import br.com.prime.prime.models.Usuario;
 import org.hibernate.validator.constraints.br.CNPJ;
 
-import br.com.prime.prime.models.Estabelecimento;
 import jakarta.validation.constraints.NotBlank;
-import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,7 +19,6 @@ public class EstabelecimentoRequestDTO {
     private String telefone;
     @NotBlank(message = "Horario de atendimento não informado")
     private String horarioAtendimento;
-    @NotNull
     private int numero;
     @NotBlank(message = "Cidade não informada")
     private String cidade;
@@ -33,16 +31,7 @@ public class EstabelecimentoRequestDTO {
     private String cnpj;
     private Long idUsuario;
 
-    public EstabelecimentoRequestDTO(Estabelecimento estabelecimento) {
-        this.nome = estabelecimento.getNome();
-        this.telefone = estabelecimento.getTelefone();
-        this.horarioAtendimento = estabelecimento.getHorarioAtendimento();
-        this.numero = estabelecimento.getNumero();
-        this.cidade = estabelecimento.getCidade();
-        this.logradouro = estabelecimento.getLogradouro();
-        this.estado = estabelecimento.getEstado();
-        this.cnpj = estabelecimento.getCnpj();
-        this.idUsuario = estabelecimento.getUsuario().getId();
-    }
 
+    public EstabelecimentoRequestDTO(String teste, String number, String s, String cg, String ruaTeste, String ms, String s1, Usuario usuario) {
+    }
 }

@@ -1,5 +1,6 @@
 package br.com.prime.prime.models;
 
+import br.com.prime.prime.Exceptions.PrecoInvalidoException;
 import org.hibernate.annotations.Cascade;
 import org.hibernate.annotations.CascadeType;
 
@@ -47,7 +48,7 @@ public class Produto {
     public Produto(String nome, String descricao, String marca, double preco, Categoria categoria, String imagem, Estabelecimento estabelecimento)
             throws PrecoInvalidoException {
 
-        verificarPreçoEntreZeroeDezMil(preco);
+        verificarPrecoEntreZeroeDezMil(preco);
         this.nome = nome;
         this.descricao = descricao;
         this.preco = preco;
@@ -57,7 +58,7 @@ public class Produto {
         this.estabelecimento = estabelecimento;
     }
 
-    private void verificarPreçoEntreZeroeDezMil(double preco) throws PrecoInvalidoException {
+    private void verificarPrecoEntreZeroeDezMil(double preco) throws PrecoInvalidoException {
         if (preco < 1 || preco > 10000) {
             throw new PrecoInvalidoException();
         }

@@ -2,6 +2,7 @@ package br.com.prime.prime.models;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+import br.com.prime.prime.Exceptions.PrecoInvalidoException;
 import org.junit.jupiter.api.Test;
 
 import br.com.prime.prime.Builders.ProdutoBuilder;

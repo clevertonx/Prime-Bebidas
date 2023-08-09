@@ -3,16 +3,13 @@ package br.com.prime.prime.controllers;
 import br.com.prime.prime.Services.UsuarioService;
 import br.com.prime.prime.dto.EstabelecimentoUsuarioResponseDTO;
 import br.com.prime.prime.dto.UsuarioPutDTO;
-import br.com.prime.prime.dto.UsuarioRequestDTO;
 import br.com.prime.prime.dto.UsuarioResponseDTO;
 import br.com.prime.prime.repository.UsuarioRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.*;
@@ -33,8 +30,6 @@ public class UsuarioController {
     @Autowired
     private UsuarioService usuarioService;
 
-    @Autowired
-    private PasswordEncoder passwordEncoder;
 
     @Operation(summary = "Lista todos os usuarios")
     @ApiResponse(responseCode = "200")

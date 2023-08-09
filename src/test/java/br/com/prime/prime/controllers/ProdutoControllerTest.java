@@ -23,6 +23,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.context.SpringBootTest.WebEnvironment;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
@@ -67,6 +68,7 @@ public class ProdutoControllerTest {
                 produtoRepository.deleteAll();
         }
 
+        @WithMockUser("spring")
         @Test
         public void deve_buscar_produtos_por_nome() throws Exception {
 
@@ -91,6 +93,7 @@ public class ProdutoControllerTest {
                 assertThat(produtosRetornadosDTO).hasSize(1);
         }
 
+        @WithMockUser("spring")
         @Test
         public void deve_buscar_os_produtos_cadastrados_pela_categoria() throws Exception {
 
@@ -113,6 +116,7 @@ public class ProdutoControllerTest {
                 assertEquals(Categoria.Fortificada, categoria);
         }
 
+        @WithMockUser("spring")
         @Test
         void deve_excluir_um_produto_pelo_id() throws Exception {
 
@@ -135,6 +139,7 @@ public class ProdutoControllerTest {
                 assertEquals(quantidadeEsperada, quantidadeEncontrada);
         }
 
+        @WithMockUser("spring")
         @Test
         void deve_cadastrar_um_novo_produto() throws Exception {
 
@@ -171,6 +176,7 @@ public class ProdutoControllerTest {
                                 });
         }
 
+        @WithMockUser("spring")
         @Test
         public void deve_alterar_dados_do_produto() throws Exception {
 

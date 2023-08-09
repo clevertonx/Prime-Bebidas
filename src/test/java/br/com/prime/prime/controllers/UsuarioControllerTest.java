@@ -12,7 +12,13 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import java.util.ArrayList;
 import java.util.List;
 
+import br.com.prime.prime.Services.UsuarioService;
+import br.com.prime.prime.security.AuthenticationService;
+import br.com.prime.prime.security.Configurations;
+import br.com.prime.prime.security.FilterToken;
+import br.com.prime.prime.security.TokenService;
 import org.assertj.core.api.Assertions;
+
 import static org.assertj.core.api.Assertions.assertThat;
 
 import org.junit.jupiter.api.AfterEach;
@@ -23,6 +29,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -47,6 +56,13 @@ public class UsuarioControllerTest {
     @Autowired
     private UsuarioRepository usuarioRepository;
 
+    @Autowired
+    private TokenService tokenService;
+
+    @Autowired
+    private AuthenticationManager authenticationManager;
+
+
     @BeforeEach
     @AfterEach
     public void deletaDados() {
@@ -63,9 +79,7 @@ public class UsuarioControllerTest {
 
         usuarioRepository.saveAll(usuarios);
 
-        this.mockMvc
-                .perform(get("/usuario"))
-                .andExpect(status().isOk())
+        this.mockMvc.perform(get("/usuario")).andExpect(status().isOk())
                 .andExpect(content().string(containsString(email1)))
                 .andExpect(content().string(containsString(email2)));
     }
@@ -81,9 +95,7 @@ public class UsuarioControllerTest {
 
         Usuario usuario1 = usuarios.get(1);
 
-        this.mockMvc
-                .perform(delete("/usuario/" + usuario1.getId()))
-                .andExpect(status().isOk());
+        this.mockMvc.perform(delete("/usuario/" + usuario1.getId())).andExpect(status().isOk());
 
         List<Usuario> usuarioRetornados = usuarioRepository.findByEmailContainingIgnoreCase(usuario1.getEmail());
 
@@ -94,23 +106,22 @@ public class UsuarioControllerTest {
     public void deve_incluir_um_usuario() throws Exception {
         Usuario usuario = new UsuarioBuilder().construir();
         String json = toJSON(usuario);
-        this.mockMvc
-                .perform(post("/usuario").content(json).contentType(MediaType.APPLICATION_JSON_VALUE))
+        this.mockMvc.perform(post("/usuario/cadastro")
+                .content(json).contentType(MediaType.APPLICATION_JSON_VALUE))
                 .andExpect(status().isCreated());
 
         List<Usuario> usuarioRetornados = usuarioRepository.findByEmailContainingIgnoreCase(usuario.getEmail());
 
         Assertions.assertThat(usuarioRetornados.size()).isEqualTo(1);
-        Assertions.assertThat(
-                usuario.getEmail()).isIn(usuarioRetornados.stream().map(Usuario::getEmail).toList());
+        Assertions.assertThat(usuario.getEmail()).isIn(usuarioRetornados.stream().map(Usuario::getEmail).toList());
     }
 
     private String toJSON(Usuario usuario) throws JsonProcessingException {
         ObjectWriter ow = new ObjectMapper().writer().withDefaultPrettyPrinter();
-        String json = ow.writeValueAsString(usuario);
-        return json;
+        return ow.writeValueAsString(usuario);
     }
 
+    @WithMockUser("spring")
     @Test
     public void deve_alterar_dados_do_usuario() throws Exception {
 
@@ -118,22 +129,22 @@ public class UsuarioControllerTest {
         usuarioRepository.save(usuario);
 
         long usuarioId = usuario.getId();
-        UsuarioRequestDTO usuarioDTO = new UsuarioRequestDTO("tom@gmail.com", "senha321");
+        UsuarioRequestDTO usuarioRequestDTO = new UsuarioRequestDTO("tom@gmail.com", "senha321");
 
         mockMvc.perform(put("/usuario/{id}", usuarioId)
                 .contentType(MediaType.APPLICATION_JSON)
-                .content(asJsonString(usuarioDTO)))
+                .content(asJsonString(usuarioRequestDTO)))
                 .andExpect(status().isOk())
                 .andExpect(content().contentType(MediaType.APPLICATION_JSON))
                 .andExpect(jsonPath("$.email").value("tom@gmail.com"))
                 .andExpect(jsonPath("$.senha").value("senha321"))
-                .andDo(result -> {
-                    String responseBody = result.getResponse().getContentAsString();
-                    UsuarioResponseDTO usuarioResponseDTO = objectMapper.readValue(responseBody,
-                            UsuarioResponseDTO.class);
-                    assertThat(usuarioResponseDTO.getEmail()).isEqualTo("tom@gmail.com");
-                    assertThat(usuarioResponseDTO.getSenha()).isEqualTo("senha321");
-                });
+                .andDo(result -> {String responseBody = result.getResponse().getContentAsString();
+
+            UsuarioResponseDTO usuarioResponseDTO = objectMapper.readValue(responseBody, UsuarioResponseDTO.class);
+
+            assertThat(usuarioResponseDTO.getEmail()).isEqualTo("tom@gmail.com");
+            assertThat(usuarioResponseDTO.getSenha()).isEqualTo("senha321");
+        });
     }
 
     private String asJsonString(Object object) throws JsonProcessingException {

@@ -8,15 +8,15 @@ import br.com.prime.prime.models.Estabelecimento;
 
 public interface EstabelecimentoRepository extends
         CrudRepository<Estabelecimento, Long> {
-    public List<Estabelecimento> findByNomeContainingIgnoreCase(String nome);
+    List<Estabelecimento> findByNomeContainingIgnoreCase(String nome);
 
-    public List<Estabelecimento> findByTelefoneContainingIgnoreCase(String telefone);
+    List<Estabelecimento> findByTelefoneContainingIgnoreCase(String telefone);
 
-    public List<Estabelecimento> findByLogradouroContainingIgnoreCase(String logradouro);
+    List<Estabelecimento> findByLogradouroContainingIgnoreCase(String logradouro);
 
-    public List<Estabelecimento> findByCidadeContainingIgnoreCase(String cidade);
+    List<Estabelecimento> findByCidadeContainingIgnoreCase(String cidade);
 
-    public List<Estabelecimento> findByEstadoContainingIgnoreCase(String estado);
+    List<Estabelecimento> findByEstadoContainingIgnoreCase(String estado);
 
-    public List<Estabelecimento> findByCnpjContaining(String cnpj);
+    List<Estabelecimento> findByCnpjContaining(String cnpj);
 }

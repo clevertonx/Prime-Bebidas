@@ -13,13 +13,13 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Mapper(componentModel = "spring")
 public interface UsuarioMapper {
 
-    public Usuario usuarioRequestParaUsuario(UsuarioRequestDTO usuarioRequestDTO, PasswordEncoder passwordEncoder);
+    Usuario usuarioRequestParaUsuario(UsuarioRequestDTO usuarioRequestDTO, PasswordEncoder passwordEncoder);
 
-    public Usuario usuarioPutParaUsuario(UsuarioPutDTO usuarioPutDTO);
+    Usuario usuarioPutParaUsuario(UsuarioPutDTO usuarioPutDTO);
 
-    public UsuarioResponseDTO usuarioParaUsuarioResponse(Usuario usuario);
+    UsuarioResponseDTO usuarioParaUsuarioResponse(Usuario usuario);
 
-    public List<UsuarioResponseDTO> usuariosParaUsuarioResponseDTOs(List<Usuario> usuarios);
+    List<UsuarioResponseDTO> usuariosParaUsuarioResponseDTOs(List<Usuario> usuarios);
 
     
 }

@@ -1,8 +1,9 @@
 package br.com.prime.prime.Services;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
+import java.util.*;
 
+import br.com.prime.prime.dto.ProdutoResponseDTO;
+import br.com.prime.prime.models.Produto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -55,6 +56,28 @@ public class EstabelecimentoService {
         return estabelecimentoMapper.estabelecimentoParaEstabelecimentoResponse(estabelecimento);
     }
 
-  
+    @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
+    public Collection<EstabelecimentoResponseDTO> buscarEstabelecimentoPorNome(String nome) {
+        Collection<Estabelecimento> estabelecimentos;
+        if (nome == null || nome.isEmpty()) {
+            estabelecimentos = (Collection<Estabelecimento>) estabelecimentoRepository.findAll();
+        } else {
+            estabelecimentos = estabelecimentoRepository.findByNomeContainingIgnoreCase(nome);
+        }
+
+        Collection<EstabelecimentoResponseDTO> estabelecimentosRetornados = new ArrayList<>();
+
+        for (Estabelecimento estabelecimento : estabelecimentos) {
+            estabelecimentosRetornados.add(new EstabelecimentoResponseDTO(
+                    estabelecimento.getId(), estabelecimento.getNome(),
+                    estabelecimento.getTelefone(), estabelecimento.getHorarioAtendimento(),
+                    estabelecimento.getNumero(), estabelecimento.getCidade(),
+                    estabelecimento.getLogradouro(), estabelecimento.getEstado(),
+                    estabelecimento.getCnpj(), estabelecimento.getUsuario().getId())
+            );
+        }
+        return estabelecimentoMapper.estabelecimentosParaEstabelecimentoResponseDTOs(estabelecimentos);
+    }
+
 
 }

@@ -16,8 +16,5 @@ public class UsuarioResponseDTO {
     private String email;
     private String senha;
 
-    public UsuarioResponseDTO(Usuario usuario) {
-        this.email = usuario.getEmail();
-        this.senha = usuario.getSenha();
-    }
+
 }

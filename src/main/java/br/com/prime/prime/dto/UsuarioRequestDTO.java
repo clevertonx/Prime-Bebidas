@@ -20,8 +20,5 @@ public class UsuarioRequestDTO {
     @NotBlank(message = "Senha não informada")
     private String senha;
 
-    public UsuarioRequestDTO(Usuario usuario) {
-        this.email = usuario.getEmail();
-        this.senha = usuario.getSenha();
-    }
+
 }
