@@ -1,19 +1,17 @@
 package br.com.prime.prime.Mappers;
 
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.List;
-
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Component;
-
+import br.com.prime.prime.Exceptions.PrecoInvalidoException;
 import br.com.prime.prime.dto.ProdutoEstabelecimentoUsuarioResponseDTO;
 import br.com.prime.prime.dto.ProdutoRequestDTO;
 import br.com.prime.prime.dto.ProdutoResponseDTO;
 import br.com.prime.prime.models.Estabelecimento;
-import br.com.prime.prime.Exceptions.PrecoInvalidoException;
 import br.com.prime.prime.models.Produto;
 import br.com.prime.prime.repository.EstabelecimentoRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
+import java.util.Collection;
 
 @Component
 public class ProdutoMapperImpl implements ProdutoMapper {
@@ -37,10 +35,10 @@ public class ProdutoMapperImpl implements ProdutoMapper {
     }
 
     @Override
-    public List<ProdutoResponseDTO> produtosParaProdutoResponses(List<Produto> produtos) {
-        List<ProdutoResponseDTO> produtosMapeados = new ArrayList<>();
+    public Collection<ProdutoResponseDTO> produtosParaProdutoResponses(Collection<Produto> produtos) {
+        Collection<ProdutoResponseDTO> produtosMapeados = new ArrayList<>();
         for (Produto produto : produtos) {
-            produtosMapeados.add(new ProdutoResponseDTO(produto));
+            produtosMapeados.add(produtoParaProdutoResponse(produto));
         }
         return produtosMapeados;
     }

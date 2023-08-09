@@ -74,13 +74,13 @@ public class ProdutoController {
     }
     @Operation(summary = "Busca produtos por categoria")
     @GetMapping("/categoria")
-    public ResponseEntity<List<ProdutoResponseDTO>> buscarPorCategoria(@RequestParam Categoria categoria) {
-        List<ProdutoResponseDTO> produtos = produtoService.buscarPorCategoria(categoria);
+    public ResponseEntity<Collection<ProdutoResponseDTO>> buscarPorCategoria(@RequestParam Categoria categoria) {
+        Collection<ProdutoResponseDTO> produtos = produtoService.buscarPorCategoria(categoria);
         return ResponseEntity.ok(produtos);
     }
     @Operation(summary = "Busca produtos por nome")
     @GetMapping(path = "/buscarPorNome", produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<List<ProdutoResponseDTO>> buscarPorNome(
+    public ResponseEntity<Collection<ProdutoResponseDTO>> buscarPorNome(
             @RequestParam(required = false, name = "nome") String nome) {
         return ResponseEntity.ok(produtoService.buscarPorNome(nome));
     }

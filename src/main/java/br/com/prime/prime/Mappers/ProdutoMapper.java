@@ -1,6 +1,5 @@
 package br.com.prime.prime.Mappers;
 import java.util.Collection;
-import java.util.List;
 
 import org.mapstruct.Mapper;
 
@@ -16,7 +15,7 @@ public interface ProdutoMapper {
 
     ProdutoResponseDTO produtoParaProdutoResponse(Produto produto);
 
-    List<ProdutoResponseDTO> produtosParaProdutoResponses(List<Produto> produtos);
+    Collection<ProdutoResponseDTO> produtosParaProdutoResponses(Collection<Produto> produtos);
 
     Collection<ProdutoEstabelecimentoUsuarioResponseDTO>
     produtosParaProdutosEstabelecimentosUsuarioResponse(Collection<Produto> produtos);

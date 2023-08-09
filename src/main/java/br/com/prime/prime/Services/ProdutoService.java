@@ -61,15 +61,15 @@ public class ProdutoService {
         return produtoMapper.produtoParaProdutoResponse(produto);
     }
 
-    public List<ProdutoResponseDTO> buscarPorNome(String nome) {
-        List<Produto> produtos;
+    public Collection<ProdutoResponseDTO> buscarPorNome(String nome) {
+        Collection<Produto> produtos;
         if (nome == null || nome.isEmpty()) {
-            produtos = (List<Produto>) produtoRepository.findAll();
+            produtos = (Collection<Produto>) produtoRepository.findAll();
         } else {
             produtos = produtoRepository.findByNomeContainingIgnoreCase(nome);
         }
 
-        List<ProdutoResponseDTO> produtosRetornados = new ArrayList<>();
+        Collection<ProdutoResponseDTO> produtosRetornados = new ArrayList<>();
 
         for (Produto produto : produtos) {
             produtosRetornados
@@ -80,12 +80,12 @@ public class ProdutoService {
         return produtoMapper.produtosParaProdutoResponses(produtos);
     }
 
-    public List<ProdutoResponseDTO> buscarTodos() {
-        return produtoMapper.produtosParaProdutoResponses((List<Produto>) produtoRepository.findAll());
+    public Collection<ProdutoResponseDTO> buscarTodos() {
+        return produtoMapper.produtosParaProdutoResponses((Collection<Produto>) produtoRepository.findAll());
     }
 
-    public List<ProdutoResponseDTO> buscarPorCategoria(Categoria categoria) {
-        List<Produto> produtos = produtoRepository.findByCategoria(categoria);
+    public Collection<ProdutoResponseDTO> buscarPorCategoria(Categoria categoria) {
+        Collection<Produto> produtos = produtoRepository.findByCategoria(categoria);
         return produtoMapper.produtosParaProdutoResponses(produtos);
     }
 

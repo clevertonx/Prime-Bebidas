@@ -51,7 +51,7 @@ import jakarta.transaction.Transactional;
 @Transactional
 public class ProdutoControllerTest {
 
-        private ObjectMapper objectMapper = new ObjectMapper();
+        private final ObjectMapper objectMapper = new ObjectMapper();
 
         @Autowired
         private MockMvc mockMvc;
@@ -72,25 +72,27 @@ public class ProdutoControllerTest {
         @Test
         public void deve_buscar_produtos_por_nome() throws Exception {
 
+                String email = "testezin@gmail.com";
+                String nomeEstabelecimento = "NomeTeste";
+                String nomeProduto = "nomeProduto";
+
                 Usuario usuario = new UsuarioBuilder().construir();
+                Usuario usuario2 = new UsuarioBuilder().comEmail(email).construir();
 
-                Estabelecimento estabelecimento = new EstabelecimentoBuilder().comUsuario(usuario).construir();
-                estabelecimentoRepository.save(estabelecimento);
+                Estabelecimento estabelecimento = new EstabelecimentoBuilder().comNome(nomeEstabelecimento).comUsuario(usuario).construir();
+                Estabelecimento estabelecimento2 = new EstabelecimentoBuilder().comUsuario(usuario2).construir();
 
-                String nomeProduto = "Pinga";
-                Produto produto = new ProdutoBuilder().comEstabelecimento(estabelecimento).comNome(nomeProduto)
-                                .construir();
+                Produto produto = new ProdutoBuilder().comNome(nomeProduto).comEstabelecimento(estabelecimento).construir();
+                Produto produto2 = new ProdutoBuilder().comEstabelecimento(estabelecimento2).construir();
+
                 produtoRepository.save(produto);
+                produtoRepository.save(produto2);
 
-                MvcResult resultado = mockMvc.perform(get("/produto/buscarPorNome?nome=" + nomeProduto)).andReturn();
 
-                ProdutoResponseDTO[] produtosRetornadosDTO = JsonUtil.mapFromJson(
-                                resultado.getResponse().getContentAsString(),
-                                ProdutoResponseDTO[].class);
-
-                assertThat(HttpStatus.OK.value()).isEqualTo(resultado.getResponse().getStatus());
-                assertThat(produtosRetornadosDTO).extracting("nome").contains(nomeProduto);
-                assertThat(produtosRetornadosDTO).hasSize(1);
+                mockMvc.perform(get("/produto/buscarPorNome?nome=" + nomeProduto))
+                        .andExpect(status().isOk())
+                        .andExpect(jsonPath("$.length()").value(1))
+                        .andExpect(jsonPath("$[0].nome").value(nomeProduto));
         }
 
         @WithMockUser("spring")
