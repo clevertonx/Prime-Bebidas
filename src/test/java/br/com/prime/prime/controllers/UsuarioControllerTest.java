@@ -68,7 +68,7 @@ public class UsuarioControllerTest {
     public void deletaDados() {
         usuarioRepository.deleteAll();
     }
-
+    @WithMockUser("spring")
     @Test
     public void deve_buscar_os_usuarios_cadastrados() throws Exception {
         String email1 = "cleverton@gmail.com";
@@ -83,7 +83,7 @@ public class UsuarioControllerTest {
                 .andExpect(content().string(containsString(email1)))
                 .andExpect(content().string(containsString(email2)));
     }
-
+    @WithMockUser("spring")
     @Test
     public void deve_remover_um_usuario_pelo_id() throws Exception {
         String email = "gustavopintomurcho@gmail.com";

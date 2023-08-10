@@ -28,13 +28,12 @@ public class Configurations {
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers(HttpMethod.POST, "/usuario/login").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/usuario/cadastro").permitAll();
-                    req.requestMatchers(HttpMethod.POST, "/estabelecimento").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/estabelecimento").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/estabelecimento/buscarEstabelecimentoPorNome").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/v3/api-docs/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/produto").permitAll();
-                    req.requestMatchers(HttpMethod.GET, "/usuario").permitAll();
-                    req.requestMatchers(HttpMethod.GET, "/estabelecimento/buscarEstabelecimentoPorNome").permitAll();
-                    req.requestMatchers(HttpMethod.POST, "/usuario/cadastro").permitAll();
-                    req.requestMatchers(HttpMethod.DELETE, "/usuario/{id}").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/produto/categoria").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/produto/buscarPorNome").permitAll();
                     req.anyRequest().authenticated();
                 })
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
