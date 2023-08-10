@@ -9,8 +9,8 @@ import org.springframework.stereotype.Component;
 import br.com.prime.prime.dto.EstabelecimentoRequestDTO;
 import br.com.prime.prime.dto.EstabelecimentoResponseDTO;
 import br.com.prime.prime.dto.EstabelecimentoUsuarioResponseDTO;
-import br.com.prime.prime.models.Estabelecimento;
-import br.com.prime.prime.models.Usuario;
+import br.com.prime.prime.dominio.estabelecimento.Estabelecimento;
+import br.com.prime.prime.dominio.Usuario;
 import br.com.prime.prime.repository.UsuarioRepository;
 
 @Component

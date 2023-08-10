@@ -28,11 +28,10 @@ import br.com.prime.prime.dto.EstabelecimentoUsuarioResponseDTO;
 import br.com.prime.prime.dto.UsuarioPutDTO;
 import br.com.prime.prime.dto.UsuarioRequestDTO;
 import br.com.prime.prime.dto.UsuarioResponseDTO;
-import br.com.prime.prime.models.Usuario;
+import br.com.prime.prime.dominio.Usuario;
 import br.com.prime.prime.repository.UsuarioRepository;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
-import jakarta.validation.Valid;
 
 @RestController
 @CrossOrigin("*")

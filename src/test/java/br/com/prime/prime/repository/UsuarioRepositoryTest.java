@@ -10,7 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import br.com.prime.prime.Builders.UsuarioBuilder;
-import br.com.prime.prime.models.Usuario;
+import br.com.prime.prime.dominio.Usuario;
 
 @DataJpaTest
 public class UsuarioRepositoryTest {

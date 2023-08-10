@@ -15,7 +15,7 @@ import br.com.prime.prime.dto.EstabelecimentoUsuarioResponseDTO;
 import br.com.prime.prime.dto.UsuarioPutDTO;
 import br.com.prime.prime.dto.UsuarioRequestDTO;
 import br.com.prime.prime.dto.UsuarioResponseDTO;
-import br.com.prime.prime.models.Usuario;
+import br.com.prime.prime.dominio.Usuario;
 import br.com.prime.prime.repository.EstabelecimentoRepository;
 import br.com.prime.prime.repository.UsuarioRepository;
 

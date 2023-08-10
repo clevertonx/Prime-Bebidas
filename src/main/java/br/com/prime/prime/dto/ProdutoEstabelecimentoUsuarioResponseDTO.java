@@ -1,7 +1,7 @@
 package br.com.prime.prime.dto;
 
-import br.com.prime.prime.models.Categoria;
-import br.com.prime.prime.models.Produto;
+import br.com.prime.prime.dominio.Categoria;
+import br.com.prime.prime.dominio.Produto;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

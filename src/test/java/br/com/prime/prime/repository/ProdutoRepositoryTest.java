@@ -14,11 +14,11 @@ import br.com.prime.prime.Builders.EstabelecimentoBuilder;
 import br.com.prime.prime.Builders.Imagem;
 import br.com.prime.prime.Builders.ProdutoBuilder;
 import br.com.prime.prime.Builders.UsuarioBuilder;
-import br.com.prime.prime.models.Categoria;
-import br.com.prime.prime.models.Estabelecimento;
-import br.com.prime.prime.models.PrecoInvalidoException;
-import br.com.prime.prime.models.Produto;
-import br.com.prime.prime.models.Usuario;
+import br.com.prime.prime.dominio.Categoria;
+import br.com.prime.prime.dominio.estabelecimento.Estabelecimento;
+import br.com.prime.prime.dominio.PrecoInvalidoException;
+import br.com.prime.prime.dominio.Produto;
+import br.com.prime.prime.dominio.Usuario;
 import jakarta.transaction.Transactional;
 
 @DataJpaTest

@@ -2,7 +2,7 @@ package br.com.prime.prime.dto;
 
 import org.hibernate.validator.constraints.br.CNPJ;
 
-import br.com.prime.prime.models.Estabelecimento;
+import br.com.prime.prime.dominio.estabelecimento.Estabelecimento;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.AllArgsConstructor;

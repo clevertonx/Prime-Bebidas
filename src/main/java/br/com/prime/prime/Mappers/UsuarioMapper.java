@@ -7,7 +7,7 @@ import org.mapstruct.Mapper;
 import br.com.prime.prime.dto.UsuarioPutDTO;
 import br.com.prime.prime.dto.UsuarioRequestDTO;
 import br.com.prime.prime.dto.UsuarioResponseDTO;
-import br.com.prime.prime.models.Usuario;
+import br.com.prime.prime.dominio.Usuario;
 
 @Mapper(componentModel = "spring")
 public interface UsuarioMapper {

@@ -1,5 +1,5 @@
 package br.com.prime.prime.dto;
-import br.com.prime.prime.models.Estabelecimento;
+import br.com.prime.prime.dominio.estabelecimento.Estabelecimento;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;

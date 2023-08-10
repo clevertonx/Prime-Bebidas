@@ -5,7 +5,7 @@ import java.util.List;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 
-import br.com.prime.prime.models.Usuario;
+import br.com.prime.prime.dominio.Usuario;
 import org.springframework.security.core.userdetails.UserDetails;
 
 public interface UsuarioRepository extends CrudRepository<Usuario, Long> {

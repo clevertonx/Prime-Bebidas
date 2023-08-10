@@ -9,7 +9,7 @@ import org.springframework.stereotype.Component;
 import br.com.prime.prime.dto.UsuarioPutDTO;
 import br.com.prime.prime.dto.UsuarioRequestDTO;
 import br.com.prime.prime.dto.UsuarioResponseDTO;
-import br.com.prime.prime.models.Usuario;
+import br.com.prime.prime.dominio.Usuario;
 import br.com.prime.prime.repository.UsuarioRepository;
 
 @Component
@@ -43,7 +43,5 @@ public class UsuarioMapperImpl implements UsuarioMapper {
         }
         return usuarioResponseDTOs;
     }
-
-    
 
 }

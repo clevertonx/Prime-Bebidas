@@ -10,9 +10,9 @@ import org.springframework.stereotype.Component;
 import br.com.prime.prime.dto.ProdutoEstabelecimentoUsuarioResponseDTO;
 import br.com.prime.prime.dto.ProdutoRequestDTO;
 import br.com.prime.prime.dto.ProdutoResponseDTO;
-import br.com.prime.prime.models.Estabelecimento;
-import br.com.prime.prime.models.PrecoInvalidoException;
-import br.com.prime.prime.models.Produto;
+import br.com.prime.prime.dominio.estabelecimento.Estabelecimento;
+import br.com.prime.prime.dominio.PrecoInvalidoException;
+import br.com.prime.prime.dominio.Produto;
 import br.com.prime.prime.repository.EstabelecimentoRepository;
 
 @Component

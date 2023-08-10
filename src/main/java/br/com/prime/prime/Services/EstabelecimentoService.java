@@ -1,23 +1,19 @@
 package br.com.prime.prime.Services;
 
-import java.util.NoSuchElementException;
-import java.util.Optional;
-
+import br.com.prime.prime.dominio.Usuario;
+import br.com.prime.prime.dominio.estabelecimento.Estabelecimento;
+import br.com.prime.prime.dominio.estabelecimento.EstabelecimentoAtualizacao;
+import br.com.prime.prime.dominio.estabelecimento.EstabelecimentoCriacao;
+import br.com.prime.prime.dominio.estabelecimento.EstabelecimentoDTO;
+import br.com.prime.prime.repository.EstabelecimentoRepository;
+import br.com.prime.prime.repository.UsuarioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import br.com.prime.prime.Mappers.EstabelecimentoMapper;
-import br.com.prime.prime.Mappers.ProdutoMapper;
-import br.com.prime.prime.dto.EstabelecimentoRequestDTO;
-import br.com.prime.prime.dto.EstabelecimentoResponseDTO;
-import br.com.prime.prime.models.Estabelecimento;
-import br.com.prime.prime.repository.EstabelecimentoRepository;
-import br.com.prime.prime.repository.UsuarioRepository;
+import java.util.NoSuchElementException;
 
 @Service
 public class EstabelecimentoService {
-    @Autowired
-    EstabelecimentoMapper estabelecimentoMapper;
 
     @Autowired
     EstabelecimentoRepository estabelecimentoRepository;
@@ -25,36 +21,69 @@ public class EstabelecimentoService {
     @Autowired
     UsuarioRepository usuarioRepository;
 
-    @Autowired
-    ProdutoMapper produtoMapper;
+    public EstabelecimentoDTO criar(EstabelecimentoCriacao estabelecimentoCriacao) {
+        Usuario usuario = usuarioRepository.findById(estabelecimentoCriacao.idUsuario())
+                .orElseThrow(() -> new NoSuchElementException());
 
-    public EstabelecimentoResponseDTO criar(EstabelecimentoRequestDTO estabelecimentoRequestDTO) {
-        Estabelecimento estabelecimento = estabelecimentoMapper
-                .estabelecimentoRequestParaEstabelecimento(estabelecimentoRequestDTO);
-        estabelecimentoRepository.save(estabelecimento);
-        return estabelecimentoMapper.estabelecimentoParaEstabelecimentoResponse(estabelecimento);
-    }
+        Estabelecimento estabelecimento = new Estabelecimento(
+                estabelecimentoCriacao.nome(),
+                estabelecimentoCriacao.telefone(),
+                estabelecimentoCriacao.horarioAtendimento(),
+                estabelecimentoCriacao.numero(),
+                estabelecimentoCriacao.cidade(),
+                estabelecimentoCriacao.logradouro(),
+                estabelecimentoCriacao.estado(),
+                estabelecimentoCriacao.cnpj(),
+                usuario
+        );
 
-    public EstabelecimentoResponseDTO editar(EstabelecimentoRequestDTO estabelecimentoRequestDTO, Long id) {
-
-        Optional<Estabelecimento> estabelecimentoOptional = estabelecimentoRepository.findById(id);
-        if (estabelecimentoOptional.isEmpty()) {
-            throw new NoSuchElementException();
-        }
-        Estabelecimento estabelecimento = estabelecimentoOptional.get();
-        estabelecimento.setNome(estabelecimentoRequestDTO.getNome());
-        estabelecimento.setTelefone(estabelecimentoRequestDTO.getTelefone());
-        estabelecimento.setHorarioAtendimento(estabelecimentoRequestDTO.getHorarioAtendimento());
-        estabelecimento.setNumero(estabelecimentoRequestDTO.getNumero());
-        estabelecimento.setCidade(estabelecimentoRequestDTO.getCidade());
-        estabelecimento.setLogradouro(estabelecimentoRequestDTO.getLogradouro());
-        estabelecimento.setEstado(estabelecimentoRequestDTO.getEstado());
-        estabelecimento.setCnpj(estabelecimentoRequestDTO.getCnpj());
         estabelecimentoRepository.save(estabelecimento);
 
-        return estabelecimentoMapper.estabelecimentoParaEstabelecimentoResponse(estabelecimento);
+        return new EstabelecimentoDTO(
+                estabelecimento.getId(),
+                estabelecimento.getNome(),
+                estabelecimento.getTelefone(),
+                estabelecimento.getHorarioAtendimento(),
+                estabelecimento.getNumero(),
+                estabelecimento.getCidade(),
+                estabelecimento.getLogradouro(),
+                estabelecimento.getEstado(),
+                estabelecimento.getCnpj(),
+                estabelecimento.getUsuario().getId()
+        );
     }
 
-  
 
+    public EstabelecimentoDTO editar(EstabelecimentoAtualizacao dados, Long id) {
+        Estabelecimento estabelecimento = estabelecimentoRepository.findById(id)
+                .orElseThrow(() -> new NoSuchElementException());
+
+        Usuario usuario = usuarioRepository.findById(dados.idUsuario())
+                .orElseThrow(NoSuchElementException::new);
+
+        estabelecimento.setUsuario(usuario);
+        estabelecimento.setNome(dados.nome());
+        estabelecimento.setTelefone(dados.telefone());
+        estabelecimento.setHorarioAtendimento(dados.horarioAtendimento());
+        estabelecimento.setNumero(dados.numero());
+        estabelecimento.setCidade(dados.cidade());
+        estabelecimento.setLogradouro(dados.logradouro());
+        estabelecimento.setEstado(dados.estado());
+        estabelecimento.setCnpj(dados.cnpj());
+
+        estabelecimentoRepository.save(estabelecimento);
+
+        return new EstabelecimentoDTO(
+                estabelecimento.getId(),
+                estabelecimento.getNome(),
+                estabelecimento.getTelefone(),
+                estabelecimento.getHorarioAtendimento(),
+                estabelecimento.getNumero(),
+                estabelecimento.getCidade(),
+                estabelecimento.getLogradouro(),
+                estabelecimento.getEstado(),
+                estabelecimento.getCnpj(),
+                dados.idUsuario()
+        );
+    }
 }

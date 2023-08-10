@@ -4,7 +4,7 @@ import java.util.List;
 
 import org.springframework.data.repository.CrudRepository;
 
-import br.com.prime.prime.models.Estabelecimento;
+import br.com.prime.prime.dominio.estabelecimento.Estabelecimento;
 
 public interface EstabelecimentoRepository extends
         CrudRepository<Estabelecimento, Long> {

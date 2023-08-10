@@ -31,7 +31,7 @@ import com.fasterxml.jackson.databind.ObjectWriter;
 import br.com.prime.prime.Builders.UsuarioBuilder;
 import br.com.prime.prime.dto.UsuarioRequestDTO;
 import br.com.prime.prime.dto.UsuarioResponseDTO;
-import br.com.prime.prime.models.Usuario;
+import br.com.prime.prime.dominio.Usuario;
 import br.com.prime.prime.repository.UsuarioRepository;
 
 

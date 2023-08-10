@@ -1,9 +1,9 @@
 package br.com.prime.prime.Builders;
 
-import br.com.prime.prime.models.Categoria;
-import br.com.prime.prime.models.Estabelecimento;
-import br.com.prime.prime.models.PrecoInvalidoException;
-import br.com.prime.prime.models.Produto;
+import br.com.prime.prime.dominio.Categoria;
+import br.com.prime.prime.dominio.estabelecimento.Estabelecimento;
+import br.com.prime.prime.dominio.PrecoInvalidoException;
+import br.com.prime.prime.dominio.Produto;
 
 public class ProdutoBuilder {
 

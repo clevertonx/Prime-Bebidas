@@ -1,7 +1,7 @@
 package br.com.prime.prime.Builders;
 
-import br.com.prime.prime.models.Estabelecimento;
-import br.com.prime.prime.models.Usuario;
+import br.com.prime.prime.dominio.estabelecimento.Estabelecimento;
+import br.com.prime.prime.dominio.Usuario;
 
 public class EstabelecimentoBuilder {
     String nome = "Comper";

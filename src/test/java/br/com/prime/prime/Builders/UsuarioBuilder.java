@@ -1,6 +1,6 @@
 package br.com.prime.prime.Builders;
 
-import br.com.prime.prime.models.Usuario;
+import br.com.prime.prime.dominio.Usuario;
 
 public class UsuarioBuilder {
     String email = "test@gmail.com";

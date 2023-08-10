@@ -11,8 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 
 import br.com.prime.prime.Builders.EstabelecimentoBuilder;
-import br.com.prime.prime.models.Estabelecimento;
-import br.com.prime.prime.models.Usuario;
+import br.com.prime.prime.dominio.estabelecimento.Estabelecimento;
+import br.com.prime.prime.dominio.Usuario;
 
 @DataJpaTest
 public class EstabelecimentoRepositoryTest {

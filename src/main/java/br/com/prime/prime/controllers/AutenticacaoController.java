@@ -1,7 +1,7 @@
 package br.com.prime.prime.controllers;
 
 import br.com.prime.prime.dto.DadosAutenticacao;
-import br.com.prime.prime.models.Usuario;
+import br.com.prime.prime.dominio.Usuario;
 import br.com.prime.prime.security.TokenService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
