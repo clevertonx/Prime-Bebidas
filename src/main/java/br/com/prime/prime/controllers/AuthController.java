@@ -32,7 +32,6 @@ public class AuthController {
 
     @Autowired
     private UsuarioService usuarioService;
-
     @Operation(summary = "Logar usuario")
     @ApiResponse(responseCode = "201")
     @PostMapping("/usuario/login")
