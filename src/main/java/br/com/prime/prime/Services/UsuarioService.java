@@ -10,6 +10,9 @@ import br.com.prime.prime.dto.UsuarioResponseDTO;
 import br.com.prime.prime.models.Usuario;
 import br.com.prime.prime.repository.EstabelecimentoRepository;
 import br.com.prime.prime.repository.UsuarioRepository;
+import br.com.prime.prime.security.password.PasswordResetTokenService;
+import br.com.prime.prime.token.VerificationToken;
+import br.com.prime.prime.token.VerificationTokenRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -39,6 +42,13 @@ public class UsuarioService {
 
     @Autowired
     PasswordEncoder passwordEncoder;
+
+    @Autowired
+    PasswordResetTokenService passwordResetTokenService;
+
+    @Autowired
+    VerificationTokenRepository tokenRepository;
+
 
     public void removerPorId(Long id) {
         usuarioRepository.deleteById(id);
@@ -77,5 +87,17 @@ public class UsuarioService {
         return estabelecimentoMapper
                 .estabelecimentosParaEstabelecimentosUsuariosResponse(usuario.getEstabelecimentos());
     }
-    
+
+    public Optional<Usuario> findByEmail(String email) {
+        return usuarioRepository.findByEmail(email);
+    }
+
+    public void createPasswordResetTokenForUser(Usuario user, String passwordToken) {
+        passwordResetTokenService.createPasswordResetForUser(user, passwordToken);
+    }
+
+    public void saveUserVerificationToken(Usuario theUser, String token) {
+        var verificationToken = new VerificationToken(token, theUser);
+        tokenRepository.save(verificationToken);
+    }
 }
