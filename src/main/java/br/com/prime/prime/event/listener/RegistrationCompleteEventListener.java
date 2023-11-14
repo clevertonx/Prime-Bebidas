@@ -2,11 +2,15 @@ package br.com.prime.prime.event.listener;
 
 import br.com.prime.prime.Services.UsuarioService;
 import br.com.prime.prime.models.Usuario;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationListener;
+import org.springframework.mail.javamail.JavaMailSender;
+import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
-
 
 import java.io.UnsupportedEncodingException;
 import java.util.UUID;
@@ -16,7 +20,9 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class RegistrationCompleteEventListener implements ApplicationListener<RegistrationCompleteEvent> {
     private final UsuarioService usuarioService;
-    private final JavaMailSen mailSender;
+
+    @Autowired
+    private final JavaMailSender mailSender;
     private Usuario theUser;
 
     @Override
@@ -24,9 +30,9 @@ public class RegistrationCompleteEventListener implements ApplicationListener<Re
         theUser = event.getUser();
         String verificationToken = UUID.randomUUID().toString();
         usuarioService.saveUserVerificationToken(theUser, verificationToken);
-        String url = event.getApplicationUrl()+"/register/verifyEmail?token="+verificationToken;
+        String url = event.getApplicationUrl() + "/register/verifyEmail?token=" + verificationToken;
         try {
-            sendVerificationEmail(url);
+            sendPasswordResetVerificationEmail(url);
         } catch (MessagingException | UnsupportedEncodingException e) {
             throw new RuntimeException(e);
         }

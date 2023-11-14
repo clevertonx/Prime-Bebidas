@@ -10,6 +10,7 @@ import br.com.prime.prime.security.TokenService;
 import br.com.prime.prime.security.password.PasswordResetRequest;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,11 +23,13 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 
+import lombok.extern.slf4j.Slf4j;
 import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 import java.util.UUID;
 
 
+@Slf4j
 @RestController
 @CrossOrigin("*")
 public class AuthController {
@@ -42,6 +45,7 @@ public class AuthController {
 
     @Autowired
     private RegistrationCompleteEventListener eventListener;
+
     @Operation(summary = "Logar usuario")
     @ApiResponse(responseCode = "201")
     @PostMapping("/usuario/login")
@@ -62,10 +66,10 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioResponse);
     }
 
-    public String resetPasswordRequest(@RequestBody PasswordResetRequest passwordResetRequest, final HttpServletRequest request) throws UnsupportedEncodingException {
+    public String resetPasswordRequest(@RequestBody PasswordResetRequest passwordResetRequest, final HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
         Optional<Usuario> user = usuarioService.findByEmail(passwordResetRequest.getEmail());
         String passwordResetUrl = "";
-        if (user.isPresent()){
+        if (user.isPresent()) {
             String passwordResetToken = UUID.randomUUID().toString();
             usuarioService.createPasswordResetTokenForUser(user.get(), passwordResetToken);
             passwordResetUrl = passwordResetEmailLink(user.get(), applicationUrl(request), passwordResetToken);
@@ -73,15 +77,15 @@ public class AuthController {
         return passwordResetUrl;
     }
 
-    private String passwordResetEmailLink(Usuario usuario, String applicationUrl, String passwordResetToken) throws UnsupportedEncodingException {
-        String url = applicationUrl+"/usuario/reset-password?token="+passwordResetToken;
+    private String passwordResetEmailLink(Usuario usuario, String applicationUrl, String passwordResetToken) throws UnsupportedEncodingException, MessagingException {
+        String url = applicationUrl + "/usuario/reset-password?token=" + passwordResetToken;
         eventListener.sendPasswordResetVerificationEmail(url);
         log.info("Click the link to reset your password :  {}", url);
         return url;
     }
 
     public String applicationUrl(HttpServletRequest request) {
-        return "http://"+request.getServerName()+":"
-                +request.getServerPort()+request.getContextPath();
+        return "http://" + request.getServerName() + ":"
+                + request.getServerPort() + request.getContextPath();
     }
 }
