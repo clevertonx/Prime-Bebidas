@@ -35,5 +35,10 @@ public class PasswordResetTokenService {
     public Optional<Usuario> findByPasswordToken(String passwordToken){
         return Optional.ofNullable(passwordResetTokenRepository.findByToken(passwordToken).getUser());
     }
+
+    public Optional<Usuario> findUserByPasswordToken(String passwordResetToken) {
+        return Optional.ofNullable(passwordResetTokenRepository.findByToken(passwordResetToken).getUser());
+    }
+
 }
 

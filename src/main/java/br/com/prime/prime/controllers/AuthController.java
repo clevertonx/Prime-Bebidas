@@ -18,12 +18,10 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import lombok.extern.slf4j.Slf4j;
+
 import java.io.UnsupportedEncodingException;
 import java.util.Optional;
 import java.util.UUID;
@@ -66,6 +64,7 @@ public class AuthController {
         return ResponseEntity.status(HttpStatus.CREATED).body(usuarioResponse);
     }
 
+    @PostMapping("/usuario/password-reset-request")
     public String resetPasswordRequest(@RequestBody PasswordResetRequest passwordResetRequest, final HttpServletRequest request) throws UnsupportedEncodingException, MessagingException {
         Optional<Usuario> user = usuarioService.findByEmail(passwordResetRequest.getEmail());
         String passwordResetUrl = "";
@@ -82,6 +81,19 @@ public class AuthController {
         eventListener.sendPasswordResetVerificationEmail(url);
         log.info("Click the link to reset your password :  {}", url);
         return url;
+    }
+    @PostMapping("/usuario/reset-password")
+    public String resetPassword(@RequestBody PasswordResetRequest passwordResetRequest, @RequestParam("token") String passwordResetToken) {
+        String tokenValidationResult = usuarioService.validatePasswordReseToken(passwordResetToken);
+        if (!tokenValidationResult.equalsIgnoreCase("valid")) {
+            return "Invalid password reset token";
+        }
+        Usuario user = usuarioService.findUserByPasswordToken(passwordResetToken);
+        if (user != null) {
+            usuarioService.resetUserPassword(user, passwordResetRequest.getNewPassword());
+            return "Password has been successfully";
+        }
+        return "Invalid password reset token";
     }
 
     public String applicationUrl(HttpServletRequest request) {

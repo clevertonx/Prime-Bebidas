@@ -100,4 +100,12 @@ public class UsuarioService {
         var verificationToken = new VerificationToken(token, theUser);
         tokenRepository.save(verificationToken);
     }
+
+    public String validatePasswordReseToken(String passwordResetToken) {
+        return passwordResetTokenService.validatePasswordResetToken(passwordResetToken);
+    }
+
+    public Usuario findUserByPasswordToken(String passwordResetToken) {
+        return passwordResetTokenService.findUserByPasswordToken(passwordResetToken).get();
+    }
 }
