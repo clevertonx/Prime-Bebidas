@@ -12,22 +12,22 @@ public interface IUserService {
 
     List<Usuario> getUsers();
 
-    Usuario registerUser(RegistrationRequest request);
+    Usuario registrarUsuario(RegistrationRequest request);
 
     Optional<Usuario> findByEmail(String email);
 
-    void saveUserVerificationToken(Usuario theUser, String verificationToken);
+    void salvarTokenDeVerificacaoDoUsuario(Usuario theUser, String verificationToken);
 
-    String validateToken(String theToken);
+    String validarToken(String theToken);
 
-    VerificationToken generateNewVerificationToken(String oldToken);
-    void changePassword(Usuario theUser, String newPassword);
+    VerificationToken gerarNovoTokenDeVerificacao(String oldToken);
+    void alterarSenha(Usuario theUser, String newPassword);
 
-    String validatePasswordResetToken(String token);
+    String validarTokenDeRedefinicaoDeSenha(String token);
 
-    Usuario findUserByPasswordToken(String token);
+    Usuario encontrarUsuarioPorTokenDeSenha(String token);
 
-    void createPasswordResetTokenForUser(Usuario user, String passwordResetToken);
+    void criarTokenDeRedefinicaoDeSenhaParaUsuario(Usuario user, String passwordResetToken);
 
     boolean oldPasswordIsValid(Usuario user, String oldPassword);
 }

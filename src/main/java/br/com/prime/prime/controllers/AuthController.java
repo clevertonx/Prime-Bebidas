@@ -51,13 +51,4 @@ public class AuthController {
         return ResponseEntity.ok(new LoginTokenJWTDTO(tokenJWT));
     }
 
-    @Operation(summary = "Cadastrar um novo usuario")
-    @ApiResponse(responseCode = "201")
-    @PostMapping(path = "/usuario/cadastro", consumes = {"application/json"})
-    public ResponseEntity<UsuarioResponseDTO> cadastrarUsuario(@RequestBody @Valid UsuarioRequestDTO novoUsuario, HttpServletRequest request) throws Exception {
-        UsuarioResponseDTO usuarioResponse = usuarioService.criar(novoUsuario);
-        return ResponseEntity.status(HttpStatus.CREATED).body(usuarioResponse);
-    }
-
-
 }

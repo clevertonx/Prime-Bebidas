@@ -33,11 +33,11 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public Usuario registerUser(RegistrationRequest request) {
+    public Usuario registrarUsuario(RegistrationRequest request) {
         Optional<Usuario> user = this.findByEmail(request.email());
         if (user.isPresent()){
             throw new UserAlreadyExistsException(
-                    "User with email "+request.email() + " already exists");
+                    "Usuário com e-mail "+request.email() + " já existe");
         }
         var newUser = new Usuario();
         newUser.setEmail(request.email());
@@ -51,21 +51,21 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public void saveUserVerificationToken(Usuario theUser, String token) {
+    public void salvarTokenDeVerificacaoDoUsuario(Usuario theUser, String token) {
         var verificationToken = new VerificationToken(token, theUser);
         tokenRepository.save(verificationToken);
     }
     @Override
-    public String validateToken(String theToken) {
+    public String validarToken(String theToken) {
         VerificationToken token = tokenRepository.findByToken(theToken);
         if(token == null){
-            return "Invalid verification token";
+            return "Token de verificação inválido";
         }
         Usuario user = token.getUser();
         Calendar calendar = Calendar.getInstance();
         if ((token.getExpirationTime().getTime()-calendar.getTime().getTime())<= 0){
-            return "Verification link already expired," +
-                    " Please, click the link below to receive a new verification link";
+            return "O link de verificação já expirou," +
+                    " Por favor, clique no link abaixo para receber um novo link de verificação";
         }
         user.setEnabled(true);
         userRepository.save(user);
@@ -73,7 +73,7 @@ public class UserService implements IUserService {
     }
 
     @Override
-    public VerificationToken generateNewVerificationToken(String oldToken) {
+    public VerificationToken gerarNovoTokenDeVerificacao(String oldToken) {
         VerificationToken verificationToken = tokenRepository.findByToken(oldToken);
         var verificationTokenTime = new VerificationToken();
         verificationToken.setToken(UUID.randomUUID().toString());
@@ -81,24 +81,24 @@ public class UserService implements IUserService {
         return tokenRepository.save(verificationToken);
     }
 
-    public void changePassword(Usuario theUser, String newPassword) {
+    public void alterarSenha(Usuario theUser, String newPassword) {
         theUser.setSenha(passwordEncoder.encode(newPassword));
         userRepository.save(theUser);
     }
 
     @Override
-    public String validatePasswordResetToken(String token) {
-        return passwordResetTokenService.validatePasswordResetToken(token);
+    public String validarTokenDeRedefinicaoDeSenha(String token) {
+        return passwordResetTokenService.validarTokenDeRedefinicaoDeSenha(token);
     }
 
     @Override
-    public Usuario findUserByPasswordToken(String token) {
-        return passwordResetTokenService.findUserByPasswordToken(token).get();
+    public Usuario encontrarUsuarioPorTokenDeSenha(String token) {
+        return passwordResetTokenService.encontrarUsuarioPorTokenDeSenha(token).get();
     }
 
     @Override
-    public void createPasswordResetTokenForUser(Usuario user, String passwordResetToken) {
-        passwordResetTokenService.createPasswordResetTokenForUser(user, passwordResetToken);
+    public void criarTokenDeRedefinicaoDeSenhaParaUsuario(Usuario user, String passwordResetToken) {
+        passwordResetTokenService.criarTokenDeRedefinicaoDeSenhaParaUsuario(user, passwordResetToken);
     }
     @Override
     public boolean oldPasswordIsValid(Usuario user, String oldPassword){
