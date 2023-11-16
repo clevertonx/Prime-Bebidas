@@ -1,5 +1,7 @@
 package br.com.prime.prime.Services;
 
+import br.com.prime.prime.Exceptions.UserAlreadyExistsException;
+import br.com.prime.prime.dto.RegistrationRequest;
 import br.com.prime.prime.models.Usuario;
 import br.com.prime.prime.repository.UserRepository;
 import br.com.prime.prime.repository.UsuarioRepository;
@@ -11,6 +13,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import user.IUserService;
 
+import java.util.Calendar;
+import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -24,7 +28,25 @@ public class UserService implements IUserService {
 
 
     @Override
-    public Optional<Usuario> findByEmailOptional(String email) {
+    public List<Usuario> getUsers() {
+        return userRepository.findAll();
+    }
+
+    @Override
+    public Usuario registerUser(RegistrationRequest request) {
+        Optional<Usuario> user = this.findByEmail(request.email());
+        if (user.isPresent()){
+            throw new UserAlreadyExistsException(
+                    "User with email "+request.email() + " already exists");
+        }
+        var newUser = new Usuario();
+        newUser.setEmail(request.email());
+        newUser.setSenha(passwordEncoder.encode(request.senha()));
+        return userRepository.save(newUser);
+    }
+
+    @Override
+    public Optional<Usuario> findByEmail(String email) {
         return userRepository.findByEmail(email);
     }
 
@@ -33,7 +55,22 @@ public class UserService implements IUserService {
         var verificationToken = new VerificationToken(token, theUser);
         tokenRepository.save(verificationToken);
     }
-
+    @Override
+    public String validateToken(String theToken) {
+        VerificationToken token = tokenRepository.findByToken(theToken);
+        if(token == null){
+            return "Invalid verification token";
+        }
+        Usuario user = token.getUser();
+        Calendar calendar = Calendar.getInstance();
+        if ((token.getExpirationTime().getTime()-calendar.getTime().getTime())<= 0){
+            return "Verification link already expired," +
+                    " Please, click the link below to receive a new verification link";
+        }
+        user.setEnabled(true);
+        userRepository.save(user);
+        return "valid";
+    }
 
     @Override
     public VerificationToken generateNewVerificationToken(String oldToken) {
@@ -63,9 +100,8 @@ public class UserService implements IUserService {
     public void createPasswordResetTokenForUser(Usuario user, String passwordResetToken) {
         passwordResetTokenService.createPasswordResetTokenForUser(user, passwordResetToken);
     }
-
     @Override
-    public boolean oldPasswordIsValid(Usuario user, String oldPassword) {
+    public boolean oldPasswordIsValid(Usuario user, String oldPassword){
         return passwordEncoder.matches(oldPassword, user.getPassword());
     }
 }

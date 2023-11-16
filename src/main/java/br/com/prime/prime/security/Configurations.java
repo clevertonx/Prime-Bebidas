@@ -37,6 +37,8 @@ public class Configurations {
                     req.requestMatchers(HttpMethod.POST, "/usuario/login").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/usuario/cadastro").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/register/**").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "/register/**").permitAll();
+                    req.requestMatchers(HttpMethod.POST, "/users").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/usuario/password-reset-request").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/usuario/reset-password").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/estabelecimento").permitAll();

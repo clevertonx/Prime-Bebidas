@@ -33,6 +33,8 @@ public class Usuario implements UserDetails {
     @NaturalId(mutable = true)
     private String email;
     private String senha;
+    private boolean isEnabled = false;
+
 
 
     @OneToMany(mappedBy = "usuario")
@@ -76,6 +78,6 @@ public class Usuario implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true;
+        return isEnabled;
     }
 }

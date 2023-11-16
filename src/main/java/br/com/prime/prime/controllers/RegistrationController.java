@@ -1,8 +1,11 @@
 package br.com.prime.prime.controllers;
 
+import br.com.prime.prime.dto.RegistrationRequest;
+import br.com.prime.prime.event.listener.RegistrationCompleteEvent;
 import br.com.prime.prime.event.listener.RegistrationCompleteEventListener;
 import br.com.prime.prime.models.Usuario;
 import br.com.prime.prime.security.password.PasswordRequestUtil;
+import br.com.prime.prime.token.VerificationToken;
 import br.com.prime.prime.token.VerificationTokenRepository;
 import jakarta.mail.MessagingException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -28,68 +31,95 @@ public class RegistrationController {
     private final RegistrationCompleteEventListener eventListener;
     private final HttpServletRequest servletRequest;
 
+    @PostMapping
+    public String registerUser(@RequestBody RegistrationRequest registrationRequest, final HttpServletRequest request){
+        Usuario user = userService.registerUser(registrationRequest);
+        publisher.publishEvent(new RegistrationCompleteEvent(user, applicationUrl(request)));
+        return "Sucesso! Por favor, verifique seu e-mail para concluir seu cadastro";
+    }
+
+    @GetMapping("/verifyEmail")
+    public String sendVerificationToken(@RequestParam("token") String token){
+
+        String url = applicationUrl(servletRequest)+"/register/resend-verification-token?token="+token;
+
+        VerificationToken theToken = tokenRepository.findByToken(token);
+        if (theToken.getUser().isEnabled()){
+            return "\n" +
+                    "Esta conta já foi verificada, por favor, faça login.";
+        }
+        String verificationResult = userService.validateToken(token);
+        if (verificationResult.equalsIgnoreCase("valid")){
+            return "\n" +
+                    "E-mail verificado com sucesso. Agora você pode acessar sua conta";
+        }
+        return "\n" +
+                "Link de verificação inválido, <a href=\"" +url+"\"> Obtenha um novo link de verificação. </a>";
+    }
+    @GetMapping("/resend-verification-token")
+    public String resendVerificationToken(@RequestParam("token") String oldToken,
+                                          final HttpServletRequest request) throws MessagingException, UnsupportedEncodingException {
+        VerificationToken verificationToken = userService.generateNewVerificationToken(oldToken);
+        Usuario theUser = verificationToken.getUser();
+        resendRegistrationVerificationTokenEmail(theUser, applicationUrl(request), verificationToken);
+        return "Um novo link de verificação foi enviado para seu e-mail," +
+                " por favor, cheque o email para ativar sua conta";
+    }
+    private void resendRegistrationVerificationTokenEmail(Usuario theUser, String applicationUrl,
+                                                          VerificationToken verificationToken) throws MessagingException, UnsupportedEncodingException {
+        String url = applicationUrl+"/register/verifyEmail?token="+verificationToken.getToken();
+        eventListener.sendVerificationEmail(url);
+        log.info("Clique no link para verificar seu cadastro :  {}", url);
+    }
 
     @PostMapping("/password-reset-request")
     public String resetPasswordRequest(@RequestBody PasswordRequestUtil passwordRequestUtil,
                                        final HttpServletRequest servletRequest)
             throws MessagingException, UnsupportedEncodingException {
 
-        Optional<Usuario> user = userService.findByEmailOptional(passwordRequestUtil.getEmail());
+        Optional<Usuario> user = userService.findByEmail(passwordRequestUtil.getEmail());
         String passwordResetUrl = "";
-
         if (user.isPresent()) {
             String passwordResetToken = UUID.randomUUID().toString();
-
-            // Log the generated token
-            log.info("Generated password reset token for user {}: {}", user.get().getEmail(), passwordResetToken);
-
-            try {
-                userService.createPasswordResetTokenForUser(user.get(), passwordResetToken);
-                passwordResetUrl = passwordResetEmailLink(user.get(), applicationUrl(servletRequest), passwordResetToken);
-            } catch (Exception e) {
-                // Log the exception for further investigation
-                log.error("Error creating password reset token for user {}: {}", user.get().getEmail(), e.getMessage(), e);
-            }
+            userService.createPasswordResetTokenForUser(user.get(), passwordResetToken);
+            passwordResetUrl = passwordResetEmailLink(user.get(), applicationUrl(servletRequest), passwordResetToken);
         }
-
         return passwordResetUrl;
     }
 
     private String passwordResetEmailLink(Usuario user, String applicationUrl,
                                           String passwordToken) throws MessagingException, UnsupportedEncodingException {
-        String url = applicationUrl + "/register/reset-password?token=" + passwordToken;
+        String url = applicationUrl+"/register/reset-password?token="+passwordToken;
         eventListener.sendPasswordResetVerificationEmail(url);
-        log.info("Click the link to reset your password :  {}", url);
+        log.info("Clique no link para redefinir sua senha :  {}", url);
         return url;
     }
-
     @PostMapping("/reset-password")
     public String resetPassword(@RequestBody PasswordRequestUtil passwordRequestUtil,
-                                @RequestParam("token") String token) {
+                                @RequestParam("token") String token){
         String tokenVerificationResult = userService.validatePasswordResetToken(token);
         if (!tokenVerificationResult.equalsIgnoreCase("valid")) {
-            return "Invalid token password reset token";
+            return "Token de redefinição de senha de token inválido";
         }
         Optional<Usuario> theUser = Optional.ofNullable(userService.findUserByPasswordToken(token));
         if (theUser.isPresent()) {
             userService.changePassword(theUser.get(), passwordRequestUtil.getNewPassword());
-            return "Password has been reset successfully";
+            return "A senha foi redefinida com sucesso";
         }
-        return "Invalid password reset token";
+        return "Token de redefinição de senha inválido";
     }
-
     @PostMapping("/change-password")
-    public String changePassword(@RequestBody PasswordRequestUtil requestUtil) {
-        Usuario user = userService.findByEmailOptional(requestUtil.getEmail()).get();
-        if (!userService.oldPasswordIsValid(user, requestUtil.getOldPassword())) {
-            return "Incorrect old password";
+    public String changePassword(@RequestBody PasswordRequestUtil requestUtil){
+        Usuario user = userService.findByEmail(requestUtil.getEmail()).get();
+        if (!userService.oldPasswordIsValid(user, requestUtil.getOldPassword())){
+            return "Senha antiga incorreta";
         }
         userService.changePassword(user, requestUtil.getNewPassword());
-        return "Password changed successfully";
+        return "Senha alterada com sucesso";
     }
 
     public String applicationUrl(HttpServletRequest request) {
-        return "http://" + request.getServerName() + ":"
-                + request.getServerPort() + request.getContextPath();
+        return "http://"+request.getServerName()+":"
+                +request.getServerPort()+request.getContextPath();
     }
 }
