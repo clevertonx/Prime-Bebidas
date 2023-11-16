@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface UsuarioRepository extends CrudRepository<Usuario, Long> {
     List<Usuario> findByEmailContainingIgnoreCase(String email);
 
-
-    Optional<Usuario> findByEmail(String email);
+    Usuario findByEmail(String email);
+    Optional<Usuario> findOptionalByEmail(String email);
 
 }

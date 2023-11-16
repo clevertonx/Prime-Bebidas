@@ -31,7 +31,8 @@ public class Usuario implements UserDetails {
     @Column(unique = true)
     private String email;
     private String senha;
-    
+
+
     @OneToMany(mappedBy = "usuario")
     @Cascade(CascadeType.PERSIST)
     private List<Estabelecimento> estabelecimentos;

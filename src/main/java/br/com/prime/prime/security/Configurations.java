@@ -36,6 +36,8 @@ public class Configurations {
                 .authorizeHttpRequests(req -> {
                     req.requestMatchers(HttpMethod.POST, "/usuario/login").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/usuario/cadastro").permitAll();
+                    req.requestMatchers(HttpMethod.POST, "/usuario/password-reset-request").permitAll();
+                    req.requestMatchers(HttpMethod.POST, "/usuario/reset-password").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/estabelecimento").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/estabelecimento/buscarEstabelecimentoPorNome").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/swagger-ui/**", "/v3/api-docs/**").permitAll();

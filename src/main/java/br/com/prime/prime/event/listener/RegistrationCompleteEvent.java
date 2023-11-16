@@ -1,5 +1,6 @@
 package br.com.prime.prime.event.listener;
 
+import br.com.prime.prime.dto.UsuarioResponseDTO;
 import br.com.prime.prime.models.Usuario;
 import lombok.Getter;
 import lombok.Setter;

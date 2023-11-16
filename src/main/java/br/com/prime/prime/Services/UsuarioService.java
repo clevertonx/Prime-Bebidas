@@ -89,7 +89,7 @@ public class UsuarioService {
     }
 
     public Optional<Usuario> findByEmail(String email) {
-        return usuarioRepository.findByEmail(email);
+        return usuarioRepository.findOptionalByEmail(email);
     }
 
     public void createPasswordResetTokenForUser(Usuario user, String passwordToken) {
@@ -101,11 +101,17 @@ public class UsuarioService {
         tokenRepository.save(verificationToken);
     }
 
-    public String validatePasswordReseToken(String passwordResetToken) {
+    public String validatePasswordResetToken(String passwordResetToken) {
         return passwordResetTokenService.validatePasswordResetToken(passwordResetToken);
     }
 
     public Usuario findUserByPasswordToken(String passwordResetToken) {
         return passwordResetTokenService.findUserByPasswordToken(passwordResetToken).get();
     }
+
+    public void resetUserPassword(Usuario user, String newPassword) {
+        user.setSenha(passwordEncoder.encode(newPassword));
+        usuarioRepository.save(user);
+    }
+
 }

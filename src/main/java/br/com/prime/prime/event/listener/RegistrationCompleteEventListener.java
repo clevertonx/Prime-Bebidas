@@ -1,6 +1,7 @@
 package br.com.prime.prime.event.listener;
 
 import br.com.prime.prime.Services.UsuarioService;
+import br.com.prime.prime.dto.UsuarioResponseDTO;
 import br.com.prime.prime.models.Usuario;
 import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
@@ -19,9 +20,8 @@ import java.util.UUID;
 @Component
 @RequiredArgsConstructor
 public class RegistrationCompleteEventListener implements ApplicationListener<RegistrationCompleteEvent> {
-    private final UsuarioService usuarioService;
 
-    @Autowired
+    private final UsuarioService usuarioService;
     private final JavaMailSender mailSender;
     private Usuario theUser;
 
