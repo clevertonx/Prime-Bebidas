@@ -17,19 +17,17 @@ public class PasswordResetTokenService {
         passwordResetTokenRepository.save(passwordResetToken);
     }
 
-    public String validatePasswordResetToken(String theToken) {
-
-        PasswordResetToken token = passwordResetTokenRepository.findByToken(theToken);
-        if (token == null) {
-            return "Token de redefinição de senha inválido";
+    public String validatePasswordResetToken(String passwordResetToken) {
+        PasswordResetToken passwordToken = passwordResetTokenRepository.findByToken(passwordResetToken);
+        if(passwordToken == null){
+            return "Invalid verification token";
         }
-        Usuario user = token.getUser();
+        Usuario user = passwordToken.getUser();
         Calendar calendar = Calendar.getInstance();
-        if ((token.getExpirationTime().getTime() - calendar.getTime().getTime()) <= 0) {
-            return "Link já expirou, reenvie link" +
-                    "Por favor, clique no link abaixo para receber um novo link de verificação";
+        if ((passwordToken.getExpirationTime().getTime()-calendar.getTime().getTime())<= 0){
+            return "Link already expired, resend link";
         }
-        return "válido";
+        return "valid";
     }
 
     public Optional<Usuario> findByPasswordToken(String passwordToken){
@@ -38,6 +36,10 @@ public class PasswordResetTokenService {
 
     public Optional<Usuario> findUserByPasswordToken(String passwordResetToken) {
         return Optional.ofNullable(passwordResetTokenRepository.findByToken(passwordResetToken).getUser());
+    }
+
+    public PasswordResetToken findPasswordResetToken(String token){
+        return passwordResetTokenRepository.findByToken(token);
     }
 
 }
