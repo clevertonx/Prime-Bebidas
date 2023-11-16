@@ -44,7 +44,7 @@ public class UsuarioService {
     PasswordEncoder passwordEncoder;
 
     @Autowired
-    PasswordResetTokenService passwordResetTokenService;
+    static PasswordResetTokenService passwordResetTokenService;
 
     @Autowired
     VerificationTokenRepository tokenRepository;
@@ -86,32 +86,6 @@ public class UsuarioService {
         Usuario usuario = usuarioOptional.get();
         return estabelecimentoMapper
                 .estabelecimentosParaEstabelecimentosUsuariosResponse(usuario.getEstabelecimentos());
-    }
-
-    public Optional<Usuario> findByEmail(String email) {
-        return usuarioRepository.findOptionalByEmail(email);
-    }
-
-    public void createPasswordResetTokenForUser(Usuario user, String passwordToken) {
-        passwordResetTokenService.createPasswordResetForUser(user, passwordToken);
-    }
-
-    public void saveUserVerificationToken(Usuario theUser, String token) {
-        var verificationToken = new VerificationToken(token, theUser);
-        tokenRepository.save(verificationToken);
-    }
-
-    public String validatePasswordResetToken(String passwordResetToken) {
-        return passwordResetTokenService.validatePasswordResetToken(passwordResetToken);
-    }
-
-    public Usuario findUserByPasswordToken(String passwordResetToken) {
-        return passwordResetTokenService.findUserByPasswordToken(passwordResetToken).get();
-    }
-
-    public void resetUserPassword(Usuario user, String newPassword) {
-        user.setSenha(passwordEncoder.encode(newPassword));
-        usuarioRepository.save(user);
     }
 
 }

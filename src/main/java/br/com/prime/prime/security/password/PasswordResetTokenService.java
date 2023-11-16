@@ -7,14 +7,15 @@ import org.springframework.stereotype.Service;
 import java.util.Calendar;
 import java.util.Optional;
 
-@RequiredArgsConstructor
 @Service
+@RequiredArgsConstructor
 public class PasswordResetTokenService {
     private final PasswordResetTokenRepository passwordResetTokenRepository;
 
-    public void createPasswordResetForUser(Usuario user, String passwordToken) {
-        PasswordResetToken passwordResetToken = new PasswordResetToken(passwordToken, user);
-        passwordResetTokenRepository.save(passwordResetToken);
+
+    public void createPasswordResetTokenForUser(Usuario user, String passwordToken) {
+        PasswordResetToken passwordRestToken = new PasswordResetToken(passwordToken, user);
+        passwordResetTokenRepository.save(passwordRestToken);
     }
 
     public String validatePasswordResetToken(String passwordResetToken) {
@@ -29,11 +30,6 @@ public class PasswordResetTokenService {
         }
         return "valid";
     }
-
-    public Optional<Usuario> findByPasswordToken(String passwordToken){
-        return Optional.ofNullable(passwordResetTokenRepository.findByToken(passwordToken).getUser());
-    }
-
     public Optional<Usuario> findUserByPasswordToken(String passwordResetToken) {
         return Optional.ofNullable(passwordResetTokenRepository.findByToken(passwordResetToken).getUser());
     }
@@ -41,6 +37,5 @@ public class PasswordResetTokenService {
     public PasswordResetToken findPasswordResetToken(String token){
         return passwordResetTokenRepository.findByToken(token);
     }
-
 }
 
