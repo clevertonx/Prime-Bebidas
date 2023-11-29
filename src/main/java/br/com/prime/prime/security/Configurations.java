@@ -53,7 +53,7 @@ public class Configurations {
                 })
                 .addFilterBefore(filter, UsernamePasswordAuthenticationFilter.class)
                 .build();
-    }
+    } 
 
     @Bean
     public AuthenticationManager authenticationManager

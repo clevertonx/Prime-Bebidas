@@ -25,6 +25,7 @@ import java.util.UUID;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/register")
+@CrossOrigin("*")
 public class RegistrationController {
 
     private final UserService userService;
