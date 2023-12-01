@@ -24,7 +24,7 @@ public class TokenService {
                     .withSubject(usuario.getEmail())
                     .withClaim("id", usuario.getId())
                     .withExpiresAt(LocalDateTime.now()
-                            .plusMinutes(5)
+                            .plusHours(5)
                             .toInstant(ZoneOffset.of("-03:00"))
                     ).sign(algoritmo);
         } catch (JWTCreationException exception) {
