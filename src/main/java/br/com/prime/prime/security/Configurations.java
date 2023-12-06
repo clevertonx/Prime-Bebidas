@@ -37,6 +37,7 @@ public class Configurations {
                     req.requestMatchers(HttpMethod.POST, "/usuario/login").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/usuario/cadastro").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/register/**").permitAll();
+                    req.requestMatchers(HttpMethod.POST, "/register/reset-password/**").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/register/**").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/users").permitAll();
                     req.requestMatchers(HttpMethod.POST, "/usuario/password-reset-request").permitAll();
@@ -48,6 +49,8 @@ public class Configurations {
                     req.requestMatchers(HttpMethod.GET, "/produto/categoria").permitAll();
                     req.requestMatchers(HttpMethod.GET, "/produto/buscarPorNome").permitAll();
                     req.requestMatchers(HttpMethod.GET, "http://localhost:3000").permitAll();
+                    req.requestMatchers(HttpMethod.GET, "http://127.0.0.1:5501/**").permitAll();
+                    req.requestMatchers(HttpMethod.POST, "http://127.0.0.1:5501/**").permitAll();
                     req.requestMatchers(HttpMethod.OPTIONS, "/**").permitAll();
                     req.anyRequest().authenticated();
                 })

@@ -33,33 +33,35 @@ public class RegistrationController {
     private final VerificationTokenRepository tokenRepository;
     private final RegistrationCompleteEventListener eventListener;
     private final HttpServletRequest servletRequest;
+
     @Operation(summary = "Cadastrar um novo usuario")
     @ApiResponse(responseCode = "201")
     @PostMapping
-    public String registrarUsuario(@RequestBody RegistrationRequest registrationRequest, final HttpServletRequest request){
+    public String registrarUsuario(@RequestBody RegistrationRequest registrationRequest, final HttpServletRequest request) {
         Usuario user = userService.registrarUsuario(registrationRequest);
         publisher.publishEvent(new RegistrationCompleteEvent(user, applicationUrl(request)));
         return "Sucesso! Por favor, verifique seu e-mail para concluir seu cadastro";
     }
+
     @Operation(summary = "Verificar Email")
     @ApiResponse(responseCode = "200")
     @GetMapping("/verifyEmail")
-    public String sendVerificationToken(@RequestParam("token") String token){
+    public String sendVerificationToken(@RequestParam("token") String token) {
 
-        String url = applicationUrl(servletRequest)+"/register/resend-verification-token?token="+token;
+        String url = applicationUrl(servletRequest) + "/register/resend-verification-token?token=" + token;
 
         VerificationToken theToken = tokenRepository.findByToken(token);
-        if (theToken.getUser().isEnabled()){
+        if (theToken.getUser().isEnabled()) {
             return "\n" +
                     "Esta conta já foi verificada, por favor, faça login.";
         }
         String verificationResult = userService.validarToken(token);
-        if (verificationResult.equalsIgnoreCase("valid")){
+        if (verificationResult.equalsIgnoreCase("valid")) {
             return "\n" +
                     "E-mail verificado com sucesso. Agora você pode acessar sua conta";
         }
         return "\n" +
-                "Link de verificação inválido, <a href=\"" +url+"\"> Obtenha um novo link de verificação. </a>";
+                "Link de verificação inválido, <a href=\"" + url + "\"> Obtenha um novo link de verificação. </a>";
     }
 
     @Operation(summary = "reenviar token de verificação")
@@ -73,9 +75,10 @@ public class RegistrationController {
         return "Um novo link de verificação foi enviado para seu e-mail," +
                 " por favor, cheque o email para ativar sua conta";
     }
+
     private void reenviarEmailDoTokenDeVerificacaoDeRegistro(Usuario theUser, String applicationUrl,
-                                                          VerificationToken verificationToken) throws MessagingException, UnsupportedEncodingException {
-        String url = applicationUrl+"/register/verifyEmail?token="+verificationToken.getToken();
+                                                             VerificationToken verificationToken) throws MessagingException, UnsupportedEncodingException {
+        String url = applicationUrl + "/register/verifyEmail?token=" + verificationToken.getToken();
         eventListener.sendVerificationEmail(url);
         log.info("Clique no link para verificar seu cadastro :  {}", url);
     }
@@ -97,18 +100,20 @@ public class RegistrationController {
         return passwordResetUrl;
     }
 
+    // INTEGRADOR
     private String LinkDeEmailParaRedefinicaoDeSenha(Usuario user, String applicationUrl,
-                                          String passwordToken) throws MessagingException, UnsupportedEncodingException {
-        String url = applicationUrl+"/register/reset-password?token="+passwordToken;
+                                                     String passwordToken) throws MessagingException, UnsupportedEncodingException {
+        String url = "http://127.0.0.1:5501/reset-password.html?token=" + passwordToken;
         eventListener.sendPasswordResetVerificationEmail(url);
         log.info("Clique no link para redefinir sua senha :  {}", url);
         return url;
     }
+
     @Operation(summary = "redefinir senha")
     @ApiResponse(responseCode = "201")
-    @PostMapping("/reset-password")
+    @PostMapping("/reset-password/{token}")
     public String resetPassword(@RequestBody PasswordRequestUtil passwordRequestUtil,
-                                @RequestParam("token") String token){
+                                @RequestParam("token") String token) {
         String tokenVerificationResult = userService.validarTokenDeRedefinicaoDeSenha(token);
         if (!tokenVerificationResult.equalsIgnoreCase("valid")) {
             return "Token de redefinição de senha de token inválido";
@@ -120,12 +125,13 @@ public class RegistrationController {
         }
         return "Token de redefinição de senha inválido";
     }
+
     @Operation(summary = "Alterar Senha")
     @ApiResponse(responseCode = "201")
     @PostMapping("/change-password")
-    public String changePassword(@RequestBody PasswordRequestUtil requestUtil){
+    public String changePassword(@RequestBody PasswordRequestUtil requestUtil) {
         Usuario user = userService.findByEmail(requestUtil.getEmail()).get();
-        if (!userService.oldPasswordIsValid(user, requestUtil.getOldPassword())){
+        if (!userService.oldPasswordIsValid(user, requestUtil.getOldPassword())) {
             return "Senha antiga incorreta";
         }
         userService.alterarSenha(user, requestUtil.getNewPassword());
@@ -133,7 +139,7 @@ public class RegistrationController {
     }
 
     public String applicationUrl(HttpServletRequest request) {
-        return "http://"+request.getServerName()+":"
-                +request.getServerPort()+request.getContextPath();
+        return "http://" + request.getServerName() + ":"
+                + request.getServerPort() + request.getContextPath();
     }
 }
