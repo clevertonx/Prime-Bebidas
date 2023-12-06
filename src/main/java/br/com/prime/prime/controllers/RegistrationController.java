@@ -85,7 +85,7 @@ public class RegistrationController {
 
     @Operation(summary = "solicitação de redefinição de senha")
     @ApiResponse(responseCode = "201")
-    @PostMapping("/password-reset-request")
+    @PostMapping(path = "/password-reset-request")
     public String resetPasswordRequest(@RequestBody PasswordRequestUtil passwordRequestUtil,
                                        final HttpServletRequest servletRequest)
             throws MessagingException, UnsupportedEncodingException {
@@ -111,7 +111,7 @@ public class RegistrationController {
 
     @Operation(summary = "redefinir senha")
     @ApiResponse(responseCode = "201")
-    @PostMapping("/reset-password/{token}")
+    @PostMapping(path= "/reset-password" , consumes = "application/json")
     public String resetPassword(@RequestBody PasswordRequestUtil passwordRequestUtil,
                                 @RequestParam("token") String token) {
         String tokenVerificationResult = userService.validarTokenDeRedefinicaoDeSenha(token);
@@ -120,7 +120,7 @@ public class RegistrationController {
         }
         Optional<Usuario> theUser = Optional.ofNullable(userService.encontrarUsuarioPorTokenDeSenha(token));
         if (theUser.isPresent()) {
-            userService.alterarSenha(theUser.get(), passwordRequestUtil.getNewPassword());
+            userService.alterarSenha(theUser.get(), passwordRequestUtil.getSenhaNova());
             return "A senha foi redefinida com sucesso";
         }
         return "Token de redefinição de senha inválido";
@@ -134,7 +134,7 @@ public class RegistrationController {
         if (!userService.oldPasswordIsValid(user, requestUtil.getOldPassword())) {
             return "Senha antiga incorreta";
         }
-        userService.alterarSenha(user, requestUtil.getNewPassword());
+        userService.alterarSenha(user, requestUtil.getSenhaNova());
         return "Senha alterada com sucesso";
     }
 
