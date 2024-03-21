@@ -14,6 +14,8 @@ public interface EstabelecimentoRepository extends
 
     List<Estabelecimento> findByLogradouroContainingIgnoreCase(String logradouro);
 
+    List<Estabelecimento> findByCepContainingIgnoreCase(String cep);
+
     List<Estabelecimento> findByCidadeContainingIgnoreCase(String cidade);
 
     List<Estabelecimento> findByEstadoContainingIgnoreCase(String estado);

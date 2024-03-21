@@ -46,9 +46,11 @@ public class EstabelecimentoService {
         estabelecimento.setNome(estabelecimentoRequestDTO.getNome());
         estabelecimento.setTelefone(estabelecimentoRequestDTO.getTelefone());
         estabelecimento.setHorarioAtendimento(estabelecimentoRequestDTO.getHorarioAtendimento());
+        estabelecimento.setCep(estabelecimentoRequestDTO.getCep());
         estabelecimento.setNumero(estabelecimentoRequestDTO.getNumero());
         estabelecimento.setCidade(estabelecimentoRequestDTO.getCidade());
         estabelecimento.setLogradouro(estabelecimentoRequestDTO.getLogradouro());
+        estabelecimento.setBairro(estabelecimentoRequestDTO.getBairro());
         estabelecimento.setEstado(estabelecimentoRequestDTO.getEstado());
         estabelecimento.setCnpj(estabelecimentoRequestDTO.getCnpj());
         estabelecimentoRepository.save(estabelecimento);
@@ -71,8 +73,9 @@ public class EstabelecimentoService {
             estabelecimentosRetornados.add(new EstabelecimentoResponseDTO(
                     estabelecimento.getId(), estabelecimento.getNome(),
                     estabelecimento.getTelefone(), estabelecimento.getHorarioAtendimento(),
+                    estabelecimento.getCep(),
                     estabelecimento.getNumero(), estabelecimento.getCidade(),
-                    estabelecimento.getLogradouro(), estabelecimento.getEstado(),
+                    estabelecimento.getLogradouro(), estabelecimento.getBairro(), estabelecimento.getEstado(),
                     estabelecimento.getCnpj(), estabelecimento.getUsuario().getId())
             );
         }

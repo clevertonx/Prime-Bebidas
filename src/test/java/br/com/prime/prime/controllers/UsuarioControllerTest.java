@@ -17,6 +17,7 @@ import br.com.prime.prime.security.AuthenticationService;
 import br.com.prime.prime.security.Configurations;
 import br.com.prime.prime.security.FilterToken;
 import br.com.prime.prime.security.TokenService;
+import config.Config;
 import org.assertj.core.api.Assertions;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -29,9 +30,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
+import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.context.ContextConfiguration;
 import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,6 +49,7 @@ import br.com.prime.prime.repository.UsuarioRepository;
 
 @SpringBootTest
 @AutoConfigureMockMvc
+@ContextConfiguration(classes = Config.class)
 public class UsuarioControllerTest {
 
     private ObjectMapper objectMapper = new ObjectMapper();
@@ -61,6 +65,9 @@ public class UsuarioControllerTest {
 
     @Autowired
     private AuthenticationManager authenticationManager;
+
+    @Autowired
+    private JavaMailSender javaMailSender;
 
 
     @BeforeEach

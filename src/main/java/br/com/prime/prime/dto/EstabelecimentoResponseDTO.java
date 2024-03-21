@@ -13,9 +13,11 @@ public class EstabelecimentoResponseDTO {
     private String nome;
     private String telefone;
     private String horarioAtendimento;
+    private String cep;
     private int numero;
     private String cidade;
     private String logradouro;
+    private String bairro;
     private String estado;
     private String cnpj;
     private Long idUsuario;

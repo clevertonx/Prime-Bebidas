@@ -27,8 +27,9 @@ public class EstabelecimentoMapperImpl implements EstabelecimentoMapper {
                 .get();
         return new Estabelecimento(estabelecimentoRequestDTO.getNome(), estabelecimentoRequestDTO.getTelefone(),
                 estabelecimentoRequestDTO.getHorarioAtendimento(),
+                estabelecimentoRequestDTO.getCep(),
                 estabelecimentoRequestDTO.getNumero(), estabelecimentoRequestDTO.getCidade(),
-                estabelecimentoRequestDTO.getLogradouro(), estabelecimentoRequestDTO.getEstado(),
+                estabelecimentoRequestDTO.getLogradouro(), estabelecimentoRequestDTO.getBairro(), estabelecimentoRequestDTO.getEstado(),
                 estabelecimentoRequestDTO.getCnpj(),
                 usuario);
     }
@@ -37,7 +38,8 @@ public class EstabelecimentoMapperImpl implements EstabelecimentoMapper {
     public EstabelecimentoResponseDTO estabelecimentoParaEstabelecimentoResponse(Estabelecimento estabelecimento) {
         return new EstabelecimentoResponseDTO(estabelecimento.getId(), estabelecimento.getNome(),
                 estabelecimento.getTelefone(), estabelecimento.getHorarioAtendimento(),
-                estabelecimento.getNumero(), estabelecimento.getCidade(), estabelecimento.getLogradouro(),
+                estabelecimento.getCep(),
+                estabelecimento.getNumero(), estabelecimento.getCidade(), estabelecimento.getLogradouro(), estabelecimento.getBairro(),
                 estabelecimento.getEstado(), estabelecimento.getCnpj(), estabelecimento.getUsuario().getId());
     }
 

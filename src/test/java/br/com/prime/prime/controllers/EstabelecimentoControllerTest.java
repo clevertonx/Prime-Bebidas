@@ -80,8 +80,8 @@ public class EstabelecimentoControllerTest {
 
         usuarioRepository.save(usuario);
 
-        Estabelecimento estabelecimento = new Estabelecimento("Teste", "67991333993", "8 as 9",
-                2024, "cg", "rua teste", "ms", "67.596.818/0001-90", usuario);
+        Estabelecimento estabelecimento = new Estabelecimento("Teste", "67991333993", "8 as 9", "79063540",
+                2024, "cg", "rua teste", "bairro teste", "ms", "67.596.818/0001-90", usuario);
         estabelecimentoRepository.save(estabelecimento);
 
         long estabelecimentoId = estabelecimento.getId();
@@ -98,7 +98,7 @@ public class EstabelecimentoControllerTest {
         usuarioRepository.save(usuario);
 
         EstabelecimentoRequestDTO estabelecimentoRequestDTO = new EstabelecimentoRequestDTO("teste"
-                , "67991333993", "8 as 9", 1035, "cg", "rua teste", "ms", "67596818000190", usuario.getId());
+                , "67991333993", "8 as 9", "79063540", 1035, "cg", "rua teste", "bairro teste" , "ms", "67596818000190", usuario.getId());
 
 
         mockMvc.perform(post("/estabelecimento")
@@ -109,9 +109,11 @@ public class EstabelecimentoControllerTest {
                 .andExpect(jsonPath("$.nome").value(estabelecimentoRequestDTO.getNome()))
                 .andExpect(jsonPath("$.telefone").value(estabelecimentoRequestDTO.getTelefone()))
                 .andExpect(jsonPath("$.horarioAtendimento").value(estabelecimentoRequestDTO.getHorarioAtendimento()))
+                .andExpect(jsonPath("$.cep").value(estabelecimentoRequestDTO.getCep()))
                 .andExpect(jsonPath("$.numero").value(estabelecimentoRequestDTO.getNumero()))
                 .andExpect(jsonPath("$.cidade").value(estabelecimentoRequestDTO.getCidade()))
                 .andExpect(jsonPath("$.logradouro").value(estabelecimentoRequestDTO.getLogradouro()))
+                .andExpect(jsonPath("$.bairro").value(estabelecimentoRequestDTO.getBairro()))
                 .andExpect(jsonPath("$.estado").value(estabelecimentoRequestDTO.getEstado()))
                 .andExpect(jsonPath("$.cnpj").value(estabelecimentoRequestDTO.getCnpj()))
                 .andExpect(jsonPath("$.idUsuario").value(usuario.getId()))
@@ -122,9 +124,11 @@ public class EstabelecimentoControllerTest {
                     assertThat(responseDTO.getNome()).isEqualTo("teste");
                     assertThat(responseDTO.getTelefone()).isEqualTo("67991333993");
                     assertThat(responseDTO.getHorarioAtendimento()).isEqualTo("8 as 9");
+                    assertThat(responseDTO.getHorarioAtendimento()).isEqualTo("79063540");
                     assertThat(responseDTO.getNumero()).isEqualTo(1035);
                     assertThat(responseDTO.getCidade()).isEqualTo("cg");
                     assertThat(responseDTO.getLogradouro()).isEqualTo("rua teste");
+                    assertThat(responseDTO.getBairro()).isEqualTo("bairro teste");
                     assertThat(responseDTO.getEstado()).isEqualTo("ms");
                     assertThat(responseDTO.getCnpj()).isEqualTo("67596818000190");
                     assertThat(responseDTO.getIdUsuario()).isEqualTo(usuario.getId());
@@ -141,14 +145,14 @@ public class EstabelecimentoControllerTest {
 
         usuarioRepository.save(usuario);
 
-        Estabelecimento estabelecimento = new Estabelecimento("Teste", "67991333993", "8 as 9",
-                2024, "cg", "rua teste", "ms", "67.596.818/0001-90", usuario);
+        Estabelecimento estabelecimento = new Estabelecimento("Teste", "67991333993", "8 as 9", "79063540",
+                2024, "cg", "rua teste", "bairro teste", "ms", "67.596.818/0001-90", usuario);
 
         estabelecimentoRepository.save(estabelecimento);
 
         EstabelecimentoRequestDTO estabelecimentoDTO = new EstabelecimentoRequestDTO("Estabelecimento Alterado",
                 "987654321",
-                "9-18", 2024, "Nova Cidade", "Nova Rua", "Novo Estado", "67.987.654/0001-90",
+                "9-18", "79063540", 2024, "Nova Cidade", "Nova Rua", "Novo Bairro", "Novo Estado", "67.987.654/0001-90",
                 usuario.getId());
 
         mockMvc.perform(put("/estabelecimento/{id}", estabelecimento.getId())
@@ -162,9 +166,11 @@ public class EstabelecimentoControllerTest {
         assertEquals("Estabelecimento Alterado", estabelecimentoAlterado.getNome());
         assertEquals("987654321", estabelecimentoAlterado.getTelefone());
         assertEquals("9-18", estabelecimentoAlterado.getHorarioAtendimento());
+        assertEquals("79063540", estabelecimentoAlterado.getCep());
         assertEquals(2024, estabelecimentoAlterado.getNumero());
         assertEquals("Nova Cidade", estabelecimentoAlterado.getCidade());
         assertEquals("Nova Rua", estabelecimentoAlterado.getLogradouro());
+        assertEquals("Novo Bairro", estabelecimentoAlterado.getBairro());
         assertEquals("Novo Estado", estabelecimentoAlterado.getEstado());
         assertEquals("67.987.654/0001-90", estabelecimentoAlterado.getCnpj());
         assertEquals(usuario.getId(), estabelecimentoAlterado.getUsuario().getId());

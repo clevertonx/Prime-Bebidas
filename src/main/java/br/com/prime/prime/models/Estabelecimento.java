@@ -29,8 +29,10 @@ public class Estabelecimento {
     private String telefone;
     private String horarioAtendimento;
     private int numero;
+    private String cep;
     private String cidade;
     private String logradouro;
+    private String bairro;
     private String estado;
     private String cnpj;
 
@@ -44,15 +46,17 @@ public class Estabelecimento {
     @Cascade(CascadeType.PERSIST)
     private List<Produto> produtos;
 
-    public Estabelecimento(String nome, String telefone, String horarioAtendimento, int numero, String cidade,
-            String logradouro, String estado, String cnpj, Usuario usuario) {
+    public Estabelecimento(String nome, String telefone, String horarioAtendimento, String cep, int numero, String cidade,
+            String logradouro, String bairro, String estado, String cnpj, Usuario usuario) {
 
         this.nome = nome;
         this.telefone = telefone;
         this.horarioAtendimento = horarioAtendimento;
+        this.cep = cep;
         this.numero = numero;
         this.cidade = cidade;
         this.logradouro = logradouro;
+        this.bairro = bairro;
         this.estado = estado;
         this.cnpj = cnpj;
         this.usuario = usuario;

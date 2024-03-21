@@ -26,13 +26,15 @@ public class EstabelecimentoRepositoryTest {
         String nome = "Comper";
         String telefone = "6733886075";
         String horarioAtendimento = "8hr às 20hr";
+        String cep = "79063550";
         int numero = 2023;
         String cidade = "Campo Grande";
         String logradouro = "Rua tchudusbangu";
+        String bairro = "bairro teste";
         String estado = "MS";
         String cnpj = "67.596.818/0001-90";
         Usuario usuario = new Usuario();
-        Estabelecimento estabelecimento = new Estabelecimento(nome, telefone, horarioAtendimento, numero, cidade, logradouro, estado, cnpj, usuario);
+        Estabelecimento estabelecimento = new Estabelecimento(nome, telefone, horarioAtendimento, cep, numero, cidade, logradouro, bairro, estado, cnpj, usuario);
         estabelecimentoRepository.save(estabelecimento);
 
         Estabelecimento estabelecimentoRetornado = estabelecimentoRepository.findById(estabelecimento.getId()).orElse(null);

@@ -13,9 +13,11 @@ public class EstabelecimentoTest {
         String nome = "Comper";
         String telefone = "6733886075";
         String horarioAtendimento = "8hr às 20hr";
+        String cep = "79063550";
         int numero = 2023;
         String cidade = "Campo Grande";
         String logradouro = "Rua tchudusbangu";
+        String bairro = "bairro teste";
         String estado = "MS";
         String cnpj = "67.596.818/0001-90";
 
@@ -24,9 +26,11 @@ public class EstabelecimentoTest {
         assertThat(estabelecimento.getNome()).isEqualTo(nome);
         assertThat(estabelecimento.getTelefone()).isEqualTo(telefone);
         assertThat(estabelecimento.getHorarioAtendimento()).isEqualTo(horarioAtendimento);
+        assertThat(estabelecimento.getCep()).isEqualTo(cep);
         assertThat(estabelecimento.getNumero()).isEqualTo(numero);
         assertThat(estabelecimento.getCidade()).isEqualTo(cidade);
         assertThat(estabelecimento.getLogradouro()).isEqualTo(logradouro);
+        assertThat(estabelecimento.getBairro()).isEqualTo(bairro);
         assertThat(estabelecimento.getEstado()).isEqualTo(estado);
         assertThat(estabelecimento.getCnpj()).isEqualTo(cnpj);
     }

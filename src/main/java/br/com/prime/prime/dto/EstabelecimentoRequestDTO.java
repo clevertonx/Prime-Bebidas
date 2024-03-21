@@ -19,11 +19,15 @@ public class EstabelecimentoRequestDTO {
     private String telefone;
     @NotBlank(message = "Horario de atendimento não informado")
     private String horarioAtendimento;
+    @NotBlank(message = "cep obrigatório")
+    private String cep;
     private int numero;
     @NotBlank(message = "Cidade não informada")
     private String cidade;
     @NotBlank(message = "Logradouro não informado")
     private String logradouro;
+    @NotBlank(message = "Bairro não informado")
+    private String bairro;
     @NotBlank(message = "Estado não informado")
     private String estado;
     @CNPJ(message = "Campo inválido")
