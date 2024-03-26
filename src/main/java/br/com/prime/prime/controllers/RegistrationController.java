@@ -37,7 +37,7 @@ public class RegistrationController {
 
     @Operation(summary = "Cadastrar um novo usuario")
     @ApiResponse(responseCode = "201")
-    @PostMapping
+    @PostMapping("/registrarUsuario")
     public String registrarUsuario(@RequestBody RegistrationRequest registrationRequest, final HttpServletRequest request) {
         Usuario user = userService.registrarUsuario(registrationRequest);
         publisher.publishEvent(new RegistrationCompleteEvent(user, applicationUrl(request)));
@@ -104,7 +104,7 @@ public class RegistrationController {
     // INTEGRADOR
     private String LinkDeEmailParaRedefinicaoDeSenha(Usuario user, String applicationUrl,
                                                      String passwordToken) throws MessagingException, UnsupportedEncodingException {
-        String url = "http://127.0.0.1:5501/reset-password.html?token=" + passwordToken;
+        String url = "http://127.0.0.1:5502/reset-password.html?token=" + passwordToken;
         eventListener.sendPasswordResetVerificationEmail(url);
         log.info("Clique no link para redefinir sua senha :  {}", url);
         return url;
